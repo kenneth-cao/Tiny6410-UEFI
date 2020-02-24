@@ -86,11 +86,11 @@
   CpuExceptionHandlerLib|MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.inf
   PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
 
-  SerialPortLib|S3C641xPkg/Library/SerialPortLib/SerialPortLib.inf
+  SerialPortLib|S3c6410Pkg/Library/SerialPortLib/SerialPortLib.inf
   SerialPortExtLib|EmbeddedPkg/Library/TemplateSerialPortExtLib/TemplateSerialPortExtLib.inf
   SemihostLib|ArmPkg/Library/SemihostLib/SemihostLib.inf
 
-  RealTimeClockLib|S3C641xPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
+  RealTimeClockLib|S3c6410Pkg/Library/RealTimeClockLib/RealTimeClockLib.inf
 
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
 
@@ -116,12 +116,12 @@
 
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
-  TimerLib|S3C641xPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
-  OmapLib|S3C641xPkg/Library/OmapLib/OmapLib.inf
-  OmapDmaLib|S3C641xPkg/Library/OmapDmaLib/OmapDmaLib.inf
-  DebugAgentTimerLib|S3C641xPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
+  TimerLib|S3c6410Pkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
+  OmapLib|S3c6410Pkg/Library/OmapLib/OmapLib.inf
+  OmapDmaLib|S3c6410Pkg/Library/OmapDmaLib/OmapDmaLib.inf
+  DebugAgentTimerLib|S3c6410Pkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
 
-  GdbSerialLib|S3C641xPkg/Library/GdbSerialLib/GdbSerialLib.inf
+  GdbSerialLib|S3c6410Pkg/Library/GdbSerialLib/GdbSerialLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
   DmaLib|ArmPkg/Library/ArmDmaLib/ArmDmaLib.inf
@@ -429,7 +429,7 @@
   #
   # USB
   #
-  S3C641xPkg/PciEmulation/PciEmulation.inf
+  S3c6410Pkg/PciEmulation/PciEmulation.inf
 
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf {
     <PcdsFixedAtBuild>
@@ -442,31 +442,31 @@
   #
   # Nand Flash
   #
-  S3C641xPkg/Flash/Flash.inf
+  S3c6410Pkg/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  S3C641xPkg/MmcHostDxe/MmcHostDxe.inf
+  S3c6410Pkg/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  S3C641xPkg/SmbusDxe/Smbus.inf
+  S3c6410Pkg/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  S3C641xPkg/Gpio/Gpio.inf
-  S3C641xPkg/InterruptDxe/InterruptDxe.inf
-  S3C641xPkg/TimerDxe/TimerDxe.inf
-  S3C641xPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  S3c6410Pkg/Gpio/Gpio.inf
+  S3c6410Pkg/InterruptDxe/InterruptDxe.inf
+  S3c6410Pkg/TimerDxe/TimerDxe.inf
+  S3c6410Pkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  S3C641xPkg/TPS65950Dxe/TPS65950.inf
+  S3c6410Pkg/TPS65950Dxe/TPS65950.inf
 
   #
   # Bds

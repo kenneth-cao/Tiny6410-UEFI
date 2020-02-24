@@ -118,31 +118,31 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   #
   # Nand Flash
   #
-  INF S3C641xPkg/Flash/Flash.inf
+  INF S3c6410Pkg/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   INF EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  INF S3C641xPkg/MmcHostDxe/MmcHostDxe.inf
+  INF S3c6410Pkg/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  INF S3C641xPkg/SmbusDxe/Smbus.inf
+  INF S3c6410Pkg/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  INF S3C641xPkg/Gpio/Gpio.inf
-  INF S3C641xPkg/InterruptDxe/InterruptDxe.inf
-  INF S3C641xPkg/TimerDxe/TimerDxe.inf
-  INF S3C641xPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  INF S3c6410Pkg/Gpio/Gpio.inf
+  INF S3c6410Pkg/InterruptDxe/InterruptDxe.inf
+  INF S3c6410Pkg/TimerDxe/TimerDxe.inf
+  INF S3c6410Pkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  INF S3C641xPkg/TPS65950Dxe/TPS65950.inf
+  INF S3c6410Pkg/TPS65950Dxe/TPS65950.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning
@@ -156,7 +156,7 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   # USB Support
   #
 
-  INF S3C641xPkg/PciEmulation/PciEmulation.inf
+  INF S3c6410Pkg/PciEmulation/PciEmulation.inf
 
   INF MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
