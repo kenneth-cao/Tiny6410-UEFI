@@ -212,7 +212,7 @@ ASM_PFX(ArmCallWFI):
   bx      lr
 
 ASM_PFX(ArmReadMpidr):
-  mrc     p15, 0, r0, c0, c0, 5       @ read MPIDR
+  mrc     p15, 0, r0, c0, c0, 0       @ read MPIDR
   bx      lr
 
 ASM_PFX(ArmEnableFiq):

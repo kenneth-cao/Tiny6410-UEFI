@@ -1,0 +1,228 @@
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BdsEntry	Bds/BdsEntry.c	/^BdsEntry ($/;"	f
+BdsInitialize	Bds/BdsEntry.c	/^BdsInitialize ($/;"	f
+gBdsProtocol	Bds/BdsEntry.c	/^EFI_BDS_ARCH_PROTOCOL  gBdsProtocol = {$/;"	v
+gConsolePresent	Bds/BdsEntry.c	/^BOOLEAN     gConsolePresent = FALSE;$/;"	v
+__BDS_ENTRY_H__	Bds/BdsEntry.h	16;"	d
+FindApplicationMatchingUiSection	Bds/FirmwareVolume.c	/^FindApplicationMatchingUiSection ($/;"	f
+FvFileDevicePath	Bds/FirmwareVolume.c	/^FvFileDevicePath ($/;"	f
+LoadPeCoffSectionFromFv	Bds/FirmwareVolume.c	/^LoadPeCoffSectionFromFv ($/;"	f
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+BEAGLEBOARD_REVISION	Include/Tiny6410.h	/^} BEAGLEBOARD_REVISION;$/;"	t	typeref:enum:__anon1
+DDR_ATTRIBUTES_CACHED	Include/Tiny6410.h	20;"	d
+DDR_ATTRIBUTES_UNCACHED	Include/Tiny6410.h	21;"	d
+REVISION_AB	Include/Tiny6410.h	/^  REVISION_AB,$/;"	e	enum:__anon1
+REVISION_C123	Include/Tiny6410.h	/^  REVISION_C123,$/;"	e	enum:__anon1
+REVISION_C4	Include/Tiny6410.h	/^  REVISION_C4,$/;"	e	enum:__anon1
+REVISION_UNKNOWN0	Include/Tiny6410.h	/^  REVISION_UNKNOWN0,$/;"	e	enum:__anon1
+REVISION_UNKNOWN1	Include/Tiny6410.h	/^  REVISION_UNKNOWN1,$/;"	e	enum:__anon1
+REVISION_UNKNOWN2	Include/Tiny6410.h	/^  REVISION_UNKNOWN2,$/;"	e	enum:__anon1
+REVISION_UNKNOWN3	Include/Tiny6410.h	/^  REVISION_UNKNOWN3,$/;"	e	enum:__anon1
+REVISION_XM	Include/Tiny6410.h	/^  REVISION_XM,$/;"	e	enum:__anon1
+SOC_REGISTERS_L3_ATTRIBUTES	Include/Tiny6410.h	26;"	d
+SOC_REGISTERS_L3_PHYSICAL_BASE	Include/Tiny6410.h	24;"	d
+SOC_REGISTERS_L3_PHYSICAL_LENGTH	Include/Tiny6410.h	25;"	d
+SOC_REGISTERS_L4_ATTRIBUTES	Include/Tiny6410.h	31;"	d
+SOC_REGISTERS_L4_PHYSICAL_BASE	Include/Tiny6410.h	29;"	d
+SOC_REGISTERS_L4_PHYSICAL_LENGTH	Include/Tiny6410.h	30;"	d
+__BEAGLEBOARD_PLATFORM_H__	Include/Tiny6410.h	17;"	d
+EblDisassembler	Library/EblCmdLib/EblCmdLib.c	/^EblDisassembler ($/;"	f
+EblInitializeExternalCmd	Library/EblCmdLib/EblCmdLib.c	/^EblInitializeExternalCmd ($/;"	f
+EblPerformance	Library/EblCmdLib/EblCmdLib.c	/^EblPerformance ($/;"	f
+EblSymbolTable	Library/EblCmdLib/EblCmdLib.c	/^EblSymbolTable ($/;"	f
+ImageHandleToPdbFileName	Library/EblCmdLib/EblCmdLib.c	/^ImageHandleToPdbFileName ($/;"	f
+mLibCmdTemplate	Library/EblCmdLib/EblCmdLib.c	/^GLOBAL_REMOVE_IF_UNREFERENCED const EBL_COMMAND_TABLE mLibCmdTemplate[] =$/;"	v
+mTokenList	Library/EblCmdLib/EblCmdLib.c	/^CHAR8 *mTokenList[] = {$/;"	v
+GdbGetChar	Library/GdbSerialLib/GdbSerialLib.c	/^GdbGetChar ($/;"	f
+GdbIsCharAvailable	Library/GdbSerialLib/GdbSerialLib.c	/^GdbIsCharAvailable ($/;"	f
+GdbPutChar	Library/GdbSerialLib/GdbSerialLib.c	/^GdbPutChar ($/;"	f
+GdbPutString	Library/GdbSerialLib/GdbSerialLib.c	/^GdbPutString ($/;"	f
+GdbSerialInit	Library/GdbSerialLib/GdbSerialLib.c	/^GdbSerialInit ($/;"	f
+GdbSerialLibConstructor	Library/GdbSerialLib/GdbSerialLib.c	/^GdbSerialLibConstructor ($/;"	f
+CALL_STUB	Library/ResetSystemLib/ResetSystemLib.c	/^(EFIAPI *CALL_STUB)($/;"	t	file:
+LibInitializeResetSystem	Library/ResetSystemLib/ResetSystemLib.c	/^LibInitializeResetSystem ($/;"	f
+LibResetSystem	Library/ResetSystemLib/ResetSystemLib.c	/^LibResetSystem ($/;"	f
+ShutdownEfi	Library/ResetSystemLib/ResetSystemLib.c	/^ShutdownEfi ($/;"	f
+ClockInit	Library/Tiny6410Lib/Clock.c	/^ClockInit ($/;"	f
+NUM_PINS_ABC	Library/Tiny6410Lib/PadConfiguration.c	22;"	d	file:
+NUM_PINS_SHARED	Library/Tiny6410Lib/PadConfiguration.c	21;"	d	file:
+NUM_PINS_XM	Library/Tiny6410Lib/PadConfiguration.c	23;"	d	file:
+PadConfiguration	Library/Tiny6410Lib/PadConfiguration.c	/^PadConfiguration ($/;"	f
+PadConfigurationTableAbc	Library/Tiny6410Lib/PadConfiguration.c	/^PAD_CONFIGURATION PadConfigurationTableAbc[] = {$/;"	v
+PadConfigurationTableShared	Library/Tiny6410Lib/PadConfiguration.c	/^PAD_CONFIGURATION PadConfigurationTableShared[] = {$/;"	v
+PadConfigurationTableXm	Library/Tiny6410Lib/PadConfiguration.c	/^PAD_CONFIGURATION PadConfigurationTableXm[] = {$/;"	v
+ASM_FUNCTION_REMOVE_IF_UNREFERENCED	Library/Tiny6410Lib/Tiny6410.S	/^ASM_FUNCTION_REMOVE_IF_UNREFERENCED$/;"	l
+ArmPlatformGetPrimaryCoreMpId	Library/Tiny6410Lib/Tiny6410.asm	/^ArmPlatformGetPrimaryCoreMpId FUNCTION$/;"	l
+ArmPlatformIsPrimaryCore	Library/Tiny6410Lib/Tiny6410.asm	/^ArmPlatformIsPrimaryCore FUNCTION$/;"	l
+ArmPlatformPeiBootAction	Library/Tiny6410Lib/Tiny6410.asm	/^ArmPlatformPeiBootAction FUNCTION$/;"	l
+ArmPlatformGetBootMode	Library/Tiny6410Lib/Tiny6410.c	/^ArmPlatformGetBootMode ($/;"	f
+ArmPlatformGetCorePosition	Library/Tiny6410Lib/Tiny6410.c	/^ArmPlatformGetCorePosition ($/;"	f
+ArmPlatformGetPlatformPpiList	Library/Tiny6410Lib/Tiny6410.c	/^ArmPlatformGetPlatformPpiList ($/;"	f
+ArmPlatformInitialize	Library/Tiny6410Lib/Tiny6410.c	/^ArmPlatformInitialize ($/;"	f
+ArmPlatformInitializeSystemMemory	Library/Tiny6410Lib/Tiny6410.c	/^ArmPlatformInitializeSystemMemory ($/;"	f
+BeagleBoardGetRevision	Library/Tiny6410Lib/Tiny6410.c	/^BeagleBoardGetRevision ($/;"	f
+ArmPlatformGetVirtualMemoryMap	Library/Tiny6410Lib/Tiny6410Mem.c	/^ArmPlatformGetVirtualMemoryMap ($/;"	f
+MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS	Library/Tiny6410Lib/Tiny6410Mem.c	23;"	d	file:
+ArchInitialize	PrePi/Arm/ArchPrePi.c	/^ArchInitialize ($/;"	f
+StartupAddr	PrePi/Arm/ModuleEntryPoint.S	/^StartupAddr:       .word  CEntryPoint$/;"	l
+_GetBaseUefiMemory	PrePi/Arm/ModuleEntryPoint.S	/^_GetBaseUefiMemory:$/;"	l
+_GetStackBase	PrePi/Arm/ModuleEntryPoint.S	/^_GetStackBase:$/;"	l
+_NeverReturn	PrePi/Arm/ModuleEntryPoint.S	/^_NeverReturn:$/;"	l
+_PrepareArguments	PrePi/Arm/ModuleEntryPoint.S	/^_PrepareArguments:$/;"	l
+_ReserveGlobalVariable	PrePi/Arm/ModuleEntryPoint.S	/^_ReserveGlobalVariable:$/;"	l
+_SetSVCMode	PrePi/Arm/ModuleEntryPoint.S	/^_SetSVCMode:$/;"	l
+_SetupAlignedStack	PrePi/Arm/ModuleEntryPoint.S	/^_SetupAlignedStack:$/;"	l
+_SetupOverflowStack	PrePi/Arm/ModuleEntryPoint.S	/^_SetupOverflowStack:$/;"	l
+_SetupStack	PrePi/Arm/ModuleEntryPoint.S	/^_SetupStack:$/;"	l
+_SetupStackPosition	PrePi/Arm/ModuleEntryPoint.S	/^_SetupStackPosition:$/;"	l
+_SystemMemoryEndInit	PrePi/Arm/ModuleEntryPoint.S	/^_SystemMemoryEndInit:$/;"	l
+mSystemMemoryEnd	PrePi/Arm/ModuleEntryPoint.S	/^mSystemMemoryEnd:  .8byte 0$/;"	l
+StartupAddr	PrePi/Arm/ModuleEntryPoint.asm	/^StartupAddr        DCD      CEntryPoint$/;"	l
+_GetBaseUefiMemory	PrePi/Arm/ModuleEntryPoint.asm	/^_GetBaseUefiMemory$/;"	l
+_GetStackBase	PrePi/Arm/ModuleEntryPoint.asm	/^_GetStackBase$/;"	l
+_ModuleEntryPoint	PrePi/Arm/ModuleEntryPoint.asm	/^_ModuleEntryPoint$/;"	l
+_NeverReturn	PrePi/Arm/ModuleEntryPoint.asm	/^_NeverReturn$/;"	l
+_PrepareArguments	PrePi/Arm/ModuleEntryPoint.asm	/^_PrepareArguments$/;"	l
+_ReserveGlobalVariable	PrePi/Arm/ModuleEntryPoint.asm	/^_ReserveGlobalVariable$/;"	l
+_SetSVCMode	PrePi/Arm/ModuleEntryPoint.asm	/^_SetSVCMode$/;"	l
+_SetupAlignedStack	PrePi/Arm/ModuleEntryPoint.asm	/^_SetupAlignedStack$/;"	l
+_SetupOverflowStack	PrePi/Arm/ModuleEntryPoint.asm	/^_SetupOverflowStack$/;"	l
+_SetupStack	PrePi/Arm/ModuleEntryPoint.asm	/^_SetupStack$/;"	l
+_SetupStackPosition	PrePi/Arm/ModuleEntryPoint.asm	/^_SetupStackPosition$/;"	l
+_SystemMemoryEndInit	PrePi/Arm/ModuleEntryPoint.asm	/^_SystemMemoryEndInit$/;"	l
+mSystemMemoryEnd	PrePi/Arm/ModuleEntryPoint.asm	/^mSystemMemoryEnd   DCQ      0$/;"	l
+__LZMA_DECOMPRESS_H___	PrePi/LzmaDecompress.h	16;"	d
+PrimaryMain	PrePi/MainMPCore.c	/^PrimaryMain ($/;"	f
+SecondaryMain	PrePi/MainMPCore.c	/^SecondaryMain ($/;"	f
+PrimaryMain	PrePi/MainUniCore.c	/^PrimaryMain ($/;"	f
+SecondaryMain	PrePi/MainUniCore.c	/^SecondaryMain ($/;"	f
+BuildGlobalVariableHob	PrePi/PrePi.c	/^BuildGlobalVariableHob ($/;"	f
+CEntryPoint	PrePi/PrePi.c	/^CEntryPoint ($/;"	f
+GetPlatformPpi	PrePi/PrePi.c	/^GetPlatformPpi ($/;"	f
+IS_XIP	PrePi/PrePi.c	33;"	d	file:
+PrePiMain	PrePi/PrePi.c	/^PrePiMain ($/;"	f
+mGlobalVariableBase	PrePi/PrePi.c	/^UINTN mGlobalVariableBase = 0;$/;"	v
+SerialPrint	PrePi/PrePi.h	30;"	d
+_PREPI_H_	PrePi/PrePi.h	16;"	d
+FillVectors	Sec/Arm/ModuleEntryPoint.S	/^FillVectors:$/;"	l
+ShouldNeverGetHere	Sec/Arm/ModuleEntryPoint.S	/^ShouldNeverGetHere:$/;"	l
+stack_pointer_setup	Sec/Arm/ModuleEntryPoint.S	/^stack_pointer_setup:$/;"	l
+FillVectors	Sec/Arm/ModuleEntryPoint.asm	/^FillVectors$/;"	l
+ShouldNeverGetHere	Sec/Arm/ModuleEntryPoint.asm	/^ShouldNeverGetHere$/;"	l
+_ModuleEntryPoint	Sec/Arm/ModuleEntryPoint.asm	/^_ModuleEntryPoint$/;"	l
+stack_pointer_setup	Sec/Arm/ModuleEntryPoint.asm	/^stack_pointer_setup$/;"	l
+DDR_ATTRIBUTES_CACHED	Sec/Cache.c	22;"	d	file:
+DDR_ATTRIBUTES_UNCACHED	Sec/Cache.c	23;"	d	file:
+InitCache	Sec/Cache.c	/^InitCache ($/;"	f
+SOC_REGISTERS_L3_ATTRIBUTES	Sec/Cache.c	28;"	d	file:
+SOC_REGISTERS_L3_PHYSICAL_BASE	Sec/Cache.c	26;"	d	file:
+SOC_REGISTERS_L3_PHYSICAL_LENGTH	Sec/Cache.c	27;"	d	file:
+SOC_REGISTERS_L4_ATTRIBUTES	Sec/Cache.c	33;"	d	file:
+SOC_REGISTERS_L4_PHYSICAL_BASE	Sec/Cache.c	31;"	d	file:
+SOC_REGISTERS_L4_PHYSICAL_LENGTH	Sec/Cache.c	32;"	d	file:
+ClockInit	Sec/Clock.c	/^ClockInit ($/;"	f
+__LZMA_DECOMPRESS_H___	Sec/LzmaDecompress.h	16;"	d
+NUM_PINS	Sec/PadConfiguration.c	20;"	d	file:
+PadConfiguration	Sec/PadConfiguration.c	/^PadConfiguration ($/;"	f
+PadConfigurationTable	Sec/PadConfiguration.c	/^PAD_CONFIGURATION PadConfigurationTable[NUM_PINS] = {$/;"	v
+CEntryPoint	Sec/Sec.c	/^CEntryPoint ($/;"	f
+TimerInit	Sec/Sec.c	/^TimerInit ($/;"	f
+UartInit	Sec/Sec.c	/^UartInit ($/;"	f
+CC	Tools/GNUmakefile	/^CC     = gcc$/;"	m
+CFLAGS	Tools/GNUmakefile	/^CFLAGS = -g$/;"	m
+CHRAM_DATA	Tools/generate_image.c	/^} CHRAM_DATA;$/;"	t	typeref:struct:__anon4	file:
+CHRAM_SIZE	Tools/generate_image.c	108;"	d	file:
+CHRAM_START	Tools/generate_image.c	107;"	d	file:
+CHSETTINGS_DATA	Tools/generate_image.c	/^} CHSETTINGS_DATA;$/;"	t	typeref:struct:__anon3	file:
+CHSETTINGS_SIZE	Tools/generate_image.c	106;"	d	file:
+CHSETTINGS_START	Tools/generate_image.c	105;"	d	file:
+CLOSING_TOC_ITEM_SIZE	Tools/generate_image.c	109;"	d	file:
+CM_AUTOIDLE_PLL_DPLL3	Tools/generate_image.c	/^  unsigned int   CM_AUTOIDLE_PLL_DPLL3;$/;"	m	struct:__anon3	file:
+CM_AUTOIDLE_PLL_DPLL4	Tools/generate_image.c	/^  unsigned int   CM_AUTOIDLE_PLL_DPLL4;$/;"	m	struct:__anon3	file:
+CM_AUTOIDLE_PLL_MPU	Tools/generate_image.c	/^  unsigned int   CM_AUTOIDLE_PLL_MPU;$/;"	m	struct:__anon3	file:
+CM_CLKEN_PLL_DPLL3	Tools/generate_image.c	/^  unsigned int   CM_CLKEN_PLL_DPLL3;$/;"	m	struct:__anon3	file:
+CM_CLKEN_PLL_DPLL4	Tools/generate_image.c	/^  unsigned int   CM_CLKEN_PLL_DPLL4;$/;"	m	struct:__anon3	file:
+CM_CLKEN_PLL_MPU	Tools/generate_image.c	/^  unsigned int   CM_CLKEN_PLL_MPU;$/;"	m	struct:__anon3	file:
+CM_CLKSEL1_EMU	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL1_EMU;$/;"	m	struct:__anon3	file:
+CM_CLKSEL1_PLL	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL1_PLL;$/;"	m	struct:__anon3	file:
+CM_CLKSEL1_PLL_MPU	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL1_PLL_MPU;$/;"	m	struct:__anon3	file:
+CM_CLKSEL2_PLL	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL2_PLL;$/;"	m	struct:__anon3	file:
+CM_CLKSEL2_PLL_MPU	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL2_PLL_MPU;$/;"	m	struct:__anon3	file:
+CM_CLKSEL3_PLL	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL3_PLL;$/;"	m	struct:__anon3	file:
+CM_CLKSEL_CORE	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL_CORE;$/;"	m	struct:__anon3	file:
+CM_CLKSEL_WKUP	Tools/generate_image.c	/^  unsigned int   CM_CLKSEL_WKUP;$/;"	m	struct:__anon3	file:
+CM_CLKSTCTRL_MPU	Tools/generate_image.c	/^  unsigned int   CM_CLKSTCTRL_MPU;$/;"	m	struct:__anon3	file:
+ConstructImage	Tools/generate_image.c	/^ConstructImage ($/;"	f	file:
+Filename	Tools/generate_image.c	/^  unsigned char Filename[12];$/;"	m	struct:__anon2	file:
+Flags	Tools/generate_image.c	/^  unsigned int   Flags;$/;"	m	struct:__anon3	file:
+Flags	Tools/generate_image.c	/^  unsigned short Flags;$/;"	m	struct:__anon4	file:
+MEMORY_TYPE_CS0	Tools/generate_image.c	/^  unsigned short MEMORY_TYPE_CS0;$/;"	m	struct:__anon4	file:
+MEMORY_TYPE_CS1	Tools/generate_image.c	/^  unsigned short MEMORY_TYPE_CS1;$/;"	m	struct:__anon4	file:
+PRM_CLKSEL	Tools/generate_image.c	/^  unsigned int   PRM_CLKSEL;$/;"	m	struct:__anon3	file:
+PRM_CLKSRC_CTRL	Tools/generate_image.c	/^  unsigned int   PRM_CLKSRC_CTRL;$/;"	m	struct:__anon3	file:
+PopulateCHRAMData	Tools/generate_image.c	/^PopulateCHRAMData ($/;"	f	file:
+PopulateCHSETTINGSData	Tools/generate_image.c	/^PopulateCHSETTINGSData ($/;"	f	file:
+PrepareConfigurationHeader	Tools/generate_image.c	/^PrepareConfigurationHeader ($/;"	f	file:
+PrintUsage	Tools/generate_image.c	/^PrintUsage ($/;"	f	file:
+Reserved	Tools/generate_image.c	/^  unsigned short Reserved;$/;"	m	struct:__anon3	file:
+Reserved1	Tools/generate_image.c	/^  unsigned char  Reserved1;$/;"	m	struct:__anon4	file:
+Reserved1	Tools/generate_image.c	/^  unsigned int  Reserved1;$/;"	m	struct:__anon2	file:
+Reserved2	Tools/generate_image.c	/^  unsigned char  Reserved2;$/;"	m	struct:__anon4	file:
+Reserved2	Tools/generate_image.c	/^  unsigned int  Reserved2;$/;"	m	struct:__anon2	file:
+Reserved3	Tools/generate_image.c	/^  unsigned char  Reserved3;$/;"	m	struct:__anon4	file:
+Reserved3	Tools/generate_image.c	/^  unsigned int  Reserved3;$/;"	m	struct:__anon2	file:
+Reserved4	Tools/generate_image.c	/^  unsigned short Reserved4;$/;"	m	struct:__anon4	file:
+Reserved5	Tools/generate_image.c	/^  unsigned short Reserved5;$/;"	m	struct:__anon4	file:
+Reserved6	Tools/generate_image.c	/^  unsigned short Reserved6;$/;"	m	struct:__anon4	file:
+Reserved7	Tools/generate_image.c	/^  unsigned short Reserved7;$/;"	m	struct:__anon4	file:
+Reserved8	Tools/generate_image.c	/^  unsigned int   Reserved8;$/;"	m	struct:__anon4	file:
+Reserved9	Tools/generate_image.c	/^  unsigned short Reserved9;$/;"	m	struct:__anon4	file:
+SDRC_ACTIM_CTRLA_0	Tools/generate_image.c	/^  unsigned int   SDRC_ACTIM_CTRLA_0;$/;"	m	struct:__anon4	file:
+SDRC_ACTIM_CTRLA_1	Tools/generate_image.c	/^  unsigned int   SDRC_ACTIM_CTRLA_1;$/;"	m	struct:__anon4	file:
+SDRC_ACTIM_CTRLB_0	Tools/generate_image.c	/^  unsigned int   SDRC_ACTIM_CTRLB_0;$/;"	m	struct:__anon4	file:
+SDRC_ACTIM_CTRLB_1	Tools/generate_image.c	/^  unsigned int   SDRC_ACTIM_CTRLB_1;$/;"	m	struct:__anon4	file:
+SDRC_CS_CFG_LSB	Tools/generate_image.c	/^  unsigned short SDRC_CS_CFG_LSB;$/;"	m	struct:__anon4	file:
+SDRC_DLLA_CTRL	Tools/generate_image.c	/^  unsigned int   SDRC_DLLA_CTRL;$/;"	m	struct:__anon4	file:
+SDRC_EMR1_0_LSB	Tools/generate_image.c	/^  unsigned short SDRC_EMR1_0_LSB;$/;"	m	struct:__anon4	file:
+SDRC_EMR1_1_LSB	Tools/generate_image.c	/^  unsigned short SDRC_EMR1_1_LSB;$/;"	m	struct:__anon4	file:
+SDRC_EMR2_0_LSB	Tools/generate_image.c	/^  unsigned short SDRC_EMR2_0_LSB;$/;"	m	struct:__anon4	file:
+SDRC_EMR2_1_LSB	Tools/generate_image.c	/^  unsigned short SDRC_EMR2_1_LSB;$/;"	m	struct:__anon4	file:
+SDRC_EMR3_0_LSB	Tools/generate_image.c	/^  unsigned short SDRC_EMR3_0_LSB;$/;"	m	struct:__anon4	file:
+SDRC_EMR3_1_LSB	Tools/generate_image.c	/^  unsigned short SDRC_EMR3_1_LSB;$/;"	m	struct:__anon4	file:
+SDRC_ERR_TYPE_LSB	Tools/generate_image.c	/^  unsigned short SDRC_ERR_TYPE_LSB;$/;"	m	struct:__anon4	file:
+SDRC_MCFG_0	Tools/generate_image.c	/^  unsigned int   SDRC_MCFG_0;$/;"	m	struct:__anon4	file:
+SDRC_MCFG_1	Tools/generate_image.c	/^  unsigned int   SDRC_MCFG_1;$/;"	m	struct:__anon4	file:
+SDRC_MR_0_LSB	Tools/generate_image.c	/^  unsigned short SDRC_MR_0_LSB;$/;"	m	struct:__anon4	file:
+SDRC_MR_1_LSB	Tools/generate_image.c	/^  unsigned short SDRC_MR_1_LSB;$/;"	m	struct:__anon4	file:
+SDRC_POWER	Tools/generate_image.c	/^  unsigned int   SDRC_POWER;$/;"	m	struct:__anon4	file:
+SDRC_RFRCTRL_0	Tools/generate_image.c	/^  unsigned int   SDRC_RFRCTRL_0;$/;"	m	struct:__anon4	file:
+SDRC_RFRCTRL_1	Tools/generate_image.c	/^  unsigned int   SDRC_RFRCTRL_1;$/;"	m	struct:__anon4	file:
+SDRC_SHARING_LSB	Tools/generate_image.c	/^  unsigned short SDRC_SHARING_LSB;$/;"	m	struct:__anon4	file:
+SDRC_SYSCONFIG_LSB	Tools/generate_image.c	/^  unsigned short SDRC_SYSCONFIG_LSB;$/;"	m	struct:__anon4	file:
+SectionKey	Tools/generate_image.c	/^  unsigned int   SectionKey;$/;"	m	struct:__anon3	file:
+SectionKey	Tools/generate_image.c	/^  unsigned int   SectionKey;$/;"	m	struct:__anon4	file:
+Size	Tools/generate_image.c	/^  unsigned int  Size;$/;"	m	struct:__anon2	file:
+Start	Tools/generate_image.c	/^  unsigned int  Start;$/;"	m	struct:__anon2	file:
+TOC_DATA	Tools/generate_image.c	/^} TOC_DATA;$/;"	t	typeref:struct:__anon2	file:
+Valid	Tools/generate_image.c	/^  unsigned char  Valid;$/;"	m	struct:__anon3	file:
+Valid	Tools/generate_image.c	/^  unsigned char  Valid;$/;"	m	struct:__anon4	file:
+Version	Tools/generate_image.c	/^  unsigned char  Version;$/;"	m	struct:__anon3	file:
+gConfigurationHeader	Tools/generate_image.c	/^unsigned char gConfigurationHeader[512];$/;"	v
+gDataFile	Tools/generate_image.c	/^char          *gDataFile = NULL;$/;"	v
+gImageExecutionAddress	Tools/generate_image.c	/^unsigned int  gImageExecutionAddress;$/;"	v
+gInputImageFile	Tools/generate_image.c	/^char          *gInputImageFile = NULL;$/;"	v
+gOutputImageFile	Tools/generate_image.c	/^char          *gOutputImageFile = NULL;$/;"	v
+main	Tools/generate_image.c	/^main ($/;"	f
+FALSE	Tools/replace.c	21;"	d	file:
+MATCH_PAIR	Tools/replace.c	/^} MATCH_PAIR;$/;"	t	typeref:struct:__anon5	file:
+Match	Tools/replace.c	/^  char  *Match;$/;"	m	struct:__anon5	file:
+MatchSize	Tools/replace.c	/^  int   MatchSize;$/;"	m	struct:__anon5	file:
+Replace	Tools/replace.c	/^  char  *Replace;$/;"	m	struct:__anon5	file:
+TRUE	Tools/replace.c	20;"	d	file:
+Usage	Tools/replace.c	/^Usage (char *Name)$/;"	f
+main	Tools/replace.c	/^main (int argc, char **argv)$/;"	f
+process_debug_scripts	build.sh	/^function process_debug_scripts {$/;"	f
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/

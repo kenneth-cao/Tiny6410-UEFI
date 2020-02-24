@@ -1,5 +1,5 @@
 #/** @file
-# Beagle board package.
+#  Tiny6410 package.
 #
 # Copyright (c) 2009 - 2010, Apple Inc. All rights reserved.<BR>
 #
@@ -32,7 +32,7 @@
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/Arm11/Arm11Lib.inf
-  ArmPlatformLib|Tiny6410Pkg/Library/BeagleBoardLib/BeagleBoardLib.inf
+  ArmPlatformLib|Tiny6410Pkg/Library/Tiny6410Lib/Tiny6410Lib.inf
   ArmCpuLib|ArmPkg/Drivers/ArmCpuLib/ArmCortexA8Lib/ArmCortexA8Lib.inf
   ArmPlatformStackLib|ArmPlatformPkg/Library/ArmPlatformStackLib/ArmPlatformStackLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
@@ -259,9 +259,9 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
 
 [PcdsFixedAtBuild.common]
-  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"Beagle Board"
+  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"Tiny6410"
 
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"BeagleEdk2"
+  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"Tiny6410Edk2"
   gEfiMdePkgTokenSpaceGuid.PcdMaximumUnicodeStringLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdMaximumAsciiStringLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdMaximumLinkedListLength|1000000
@@ -329,7 +329,7 @@
 
 
 #
-# Beagle board Specific PCDs
+# Tiny6410 Specific PCDs
 #
   gArmTokenSpaceGuid.PcdVFPEnabled|1
 
