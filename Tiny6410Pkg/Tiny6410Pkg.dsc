@@ -86,11 +86,11 @@
   CpuExceptionHandlerLib|MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.inf
   PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
 
-  SerialPortLib|Omap35xxPkg/Library/SerialPortLib/SerialPortLib.inf
+  SerialPortLib|S3C641xPkg/Library/SerialPortLib/SerialPortLib.inf
   SerialPortExtLib|EmbeddedPkg/Library/TemplateSerialPortExtLib/TemplateSerialPortExtLib.inf
   SemihostLib|ArmPkg/Library/SemihostLib/SemihostLib.inf
 
-  RealTimeClockLib|Omap35xxPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
+  RealTimeClockLib|S3C641xPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
 
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
 
@@ -116,12 +116,12 @@
 
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
-  TimerLib|Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
-  OmapLib|Omap35xxPkg/Library/OmapLib/OmapLib.inf
-  OmapDmaLib|Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
-  DebugAgentTimerLib|Omap35xxPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
+  TimerLib|S3C641xPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
+  OmapLib|S3C641xPkg/Library/OmapLib/OmapLib.inf
+  OmapDmaLib|S3C641xPkg/Library/OmapDmaLib/OmapDmaLib.inf
+  DebugAgentTimerLib|S3C641xPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
 
-  GdbSerialLib|Omap35xxPkg/Library/GdbSerialLib/GdbSerialLib.inf
+  GdbSerialLib|S3C641xPkg/Library/GdbSerialLib/GdbSerialLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
   DmaLib|ArmPkg/Library/ArmDmaLib/ArmDmaLib.inf
@@ -333,8 +333,8 @@
 #
   gArmTokenSpaceGuid.PcdVFPEnabled|1
 
-  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x80000000
-  gArmTokenSpaceGuid.PcdSystemMemorySize|0x08000000
+  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x50000000
+  gArmTokenSpaceGuid.PcdSystemMemorySize|0x10000000
 
   # Size of the region used by UEFI in permanent memory (Reserved 16MB)
   gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x01000000
@@ -429,7 +429,7 @@
   #
   # USB
   #
-  Omap35xxPkg/PciEmulation/PciEmulation.inf
+  S3C641xPkg/PciEmulation/PciEmulation.inf
 
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf {
     <PcdsFixedAtBuild>
@@ -442,31 +442,31 @@
   #
   # Nand Flash
   #
-  Omap35xxPkg/Flash/Flash.inf
+  S3C641xPkg/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
+  S3C641xPkg/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  Omap35xxPkg/SmbusDxe/Smbus.inf
+  S3C641xPkg/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  Omap35xxPkg/Gpio/Gpio.inf
-  Omap35xxPkg/InterruptDxe/InterruptDxe.inf
-  Omap35xxPkg/TimerDxe/TimerDxe.inf
-  Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  S3C641xPkg/Gpio/Gpio.inf
+  S3C641xPkg/InterruptDxe/InterruptDxe.inf
+  S3C641xPkg/TimerDxe/TimerDxe.inf
+  S3C641xPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  Omap35xxPkg/TPS65950Dxe/TPS65950.inf
+  S3C641xPkg/TPS65950Dxe/TPS65950.inf
 
   #
   # Bds

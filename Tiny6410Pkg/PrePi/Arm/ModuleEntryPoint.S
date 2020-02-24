@@ -24,6 +24,7 @@
 GCC_ASM_IMPORT(CEntryPoint)
 GCC_ASM_IMPORT(ArmPlatformIsPrimaryCore)
 GCC_ASM_IMPORT(ArmReadMpidr)
+GCC_ASM_IMPORT(ArmPlatformMemoryInit)
 GCC_ASM_IMPORT(ArmPlatformPeiBootAction)
 GCC_ASM_IMPORT(ArmPlatformStackSet)
 GCC_ASM_EXPORT(_ModuleEntryPoint)
@@ -46,6 +47,11 @@ _SetSVCMode:
   // Enter SVC mode, Disable FIQ and IRQ
   mov     r1, #(CPSR_MODE_SVC | CPSR_IRQ | CPSR_FIQ)
   msr     CPSR_c, r1
+
+_SystemMemoryInit:
+  // Memory Initialization
+  bl ASM_PFX(ArmPlatformMemoryInit)
+
 
 // Check if we can install the stack at the top of the System Memory or if we need
 // to install the stacks at the bottom of the Firmware Device (case the FD is located
@@ -162,6 +168,18 @@ _PrepareArguments:
   //    r2 = StacksBase
   //    r3 = GlobalVariableBase
   blx   r4
+
+#define GPKCON 0x7f008800
+#define GPKDAT 0x7f008808
+light_led:
+  ldr r0, =GPKCON
+  ldr r1, =0x11110000
+  str r1, [r0]
+  
+  ldr r0, =GPKDAT
+  ldr r1, =0xa0
+  str r1, [r0]
+  mov pc, lr
 
 _NeverReturn:
   b _NeverReturn

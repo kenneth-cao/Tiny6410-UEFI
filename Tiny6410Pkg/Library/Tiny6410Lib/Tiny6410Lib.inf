@@ -40,8 +40,6 @@
   Tiny6410Mem.c
   PadConfiguration.c
   Clock.c
-  Tiny6410Helper.S    | GCC
-  Tiny6410Helper.asm  | RVCT
 
 [FeaturePcd]
   gEmbeddedTokenSpaceGuid.PcdCacheEnable

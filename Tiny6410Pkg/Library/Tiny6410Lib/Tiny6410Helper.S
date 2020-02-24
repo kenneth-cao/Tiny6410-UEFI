@@ -20,6 +20,8 @@
 GCC_ASM_EXPORT(ArmPlatformIsPrimaryCore)
 GCC_ASM_EXPORT(ArmPlatformGetPrimaryCoreMpId)
 GCC_ASM_EXPORT(ArmPlatformPeiBootAction)
+GCC_ASM_EXPORT(ArmPlatformMemoryInit)
+
 
 GCC_ASM_IMPORT(ArmReadMpidr)
 
@@ -28,7 +30,7 @@ GCC_ASM_IMPORT(ArmReadMpidr)
 //  IN UINTN MpId
 //  );
 ASM_PFX(ArmPlatformIsPrimaryCore):
-  // BeagleBoard has a single core. We must always return 1.
+  // Tiny6410 has a single core. We must always return 1.
   mov   r0, #1
   bx    lr
 
@@ -40,8 +42,16 @@ ASM_PFX(ArmPlatformPeiBootAction):
 //  VOID
 //  );
 ASM_PFX(ArmPlatformGetPrimaryCoreMpId):
-  // The BeagleBoard is a uniprocessor platform. The MPIDR of primary core is
+  // The Tiny6410 is not initialized at 
   // always the MPIDR of the calling CPU.
   b   ASM_PFX(ArmReadMpidr)
+
+//VOID
+//ArmPlatformMemoryInit (
+//  VOID
+//  );
+ASM_PFX(ArmPlatformMemoryInit):
+  // The system memory of Tiny6410 is not available before instruction
+  bx lr
 
 ASM_FUNCTION_REMOVE_IF_UNREFERENCED
