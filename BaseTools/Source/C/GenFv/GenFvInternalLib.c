@@ -1874,7 +1874,7 @@ Returns:
   if (MachineType == EFI_IMAGE_MACHINE_ARMT) {
     // B SecEntryPoint - signed_immed_24 part +/-32MB offset
     // on ARM, the PC is always 8 ahead, so we're not really jumping from the base address, but from base address + 8
-    ResetVector[0] = (INT32)(SecCorePhysicalAddress - FvInfo->BaseAddress - 8) >> 2;
+    ResetVector[0] = (INT32)((SecCorePhysicalAddress - FvInfo->BaseAddress) >> 2);
 
     if (ResetVector[0] > 0x00FFFFFF) {
       Error (NULL, 0, 3000, "Invalid", "SEC Entry point must be within 32MB of the start of the FV");
