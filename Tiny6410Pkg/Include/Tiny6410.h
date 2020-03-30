@@ -13,8 +13,93 @@
 *
 **/
 
-#ifndef __BEAGLEBOARD_PLATFORM_H__
-#define __BEAGLEBOARD_PLATFORM_H__
+#ifndef __TINY6410_PLATFORM_H__
+#define __TINY6410_PLATFORM_H__
+
+//　Input clock of PLL
+#define CONFIG_SYS_CLK_FREQ            12000000
+
+// LED Config, GPK 4-7
+#define GPKCON_CONFIG                  0x11110000
+#define LED_ON                         0x0
+
+// DDR memory configuration
+
+// Clock
+#define set_pll(mdiv, pdiv, sdiv)	(1<<31 | mdiv<<16 | pdiv<<8 | sdiv)
+/* FIN 12MHz, Fout 532MHz */
+#define APLL_MDIV	266
+#define APLL_PDIV	3
+#define APLL_SDIV	1
+
+#define APLL_VAL	set_pll(APLL_MDIV, APLL_PDIV, APLL_SDIV)
+/* prevent overflow */
+#define Startup_APLL	(CONFIG_SYS_CLK_FREQ/(APLL_PDIV<<APLL_SDIV)*APLL_MDIV)
+
+/* fixed MPLL 533MHz */
+#define MPLL_MDIV	266
+#define MPLL_PDIV	3
+#define MPLL_SDIV	1
+
+#define MPLL_VAL	set_pll(MPLL_MDIV, MPLL_PDIV, MPLL_SDIV)
+/* prevent overflow */
+#define Startup_MPLL	((CONFIG_SYS_CLK_FREQ)/(MPLL_PDIV<<MPLL_SDIV)*MPLL_MDIV)
+
+#define Startup_APLLdiv		0
+#define Startup_HCLKx2div	1
+
+#define	Startup_PCLKdiv		3
+#define Startup_HCLKdiv		1
+#define Startup_MPLLdiv		1
+#define CLK_DIV_VAL	((Startup_PCLKdiv<<12)|(Startup_HCLKx2div<<9)|(Startup_HCLKdiv<<8)|(Startup_MPLLdiv<<4)|Startup_APLLdiv)
+#define Startup_HCLK	(Startup_APLL/(Startup_HCLKx2div+1)/(Startup_HCLKdiv+1))
+
+#define DMC1_MEM_CFG		((1<<30) | (2<<15) | (3<<3) | (2<<0))
+#define DMC1_CHIP0_CFG		0x150F0
+#define PHYS_SDRAM_1_SIZE	0x10000000 /* 256 MB */
+
+
+// Physical Memory Map
+#define DMC1_MEM_CFG2		0xB41
+#define DMC_DDR_32_CFG		0x0 		/* 32bit, DDR */
+
+// DDR Parameters
+#define DDR_tREFRESH		7800		/* ns */
+#define DDR_tRAS		45		/* ns (min: 45ns)*/
+#define DDR_tRC 		68		/* ns (min: 67.5ns)*/
+#define DDR_tRCD		23		/* ns (min: 22.5ns)*/
+#define DDR_tRFC		80		/* ns (min: 80ns)*/
+#define DDR_tRP 		23		/* ns (min: 22.5ns)*/
+#define DDR_tRRD		15		/* ns (min: 15ns)*/
+#define DDR_tWR 		15		/* ns (min: 15ns)*/
+#define DDR_tXSR		120		/* ns (min: 120ns)*/
+#define DDR_CASL		3		/* CAS Latency 3 */
+
+// mDDR memory configuration
+#define DMC_DDR_BA_EMRS 	2
+#define DMC_DDR_MEM_CASLAT	3
+#define DMC_DDR_CAS_LATENCY	(DDR_CASL<<1)						//6   Set Cas Latency to 3
+#define DMC_DDR_t_DQSS		1							// Min 0.75 ~ 1.25
+#define DMC_DDR_t_MRD		2							//Min 2 tck
+#define DMC_DDR_t_RAS		(((Startup_HCLK / 1000 * DDR_tRAS) - 1) / 1000000 + 1)	//7, Min 45ns
+#define DMC_DDR_t_RC		(((Startup_HCLK / 1000 * DDR_tRC) - 1) / 1000000 + 1) 	//10, Min 67.5ns
+#define DMC_DDR_t_RCD		(((Startup_HCLK / 1000 * DDR_tRCD) - 1) / 1000000 + 1) 	//4,5(TRM), Min 22.5ns
+#define DMC_DDR_schedule_RCD	((DMC_DDR_t_RCD - 3) << 3)
+#define DMC_DDR_t_RFC		(((Startup_HCLK / 1000 * DDR_tRFC) - 1) / 1000000 + 1) 	//11,18(TRM) Min 80ns
+#define DMC_DDR_schedule_RFC	((DMC_DDR_t_RFC - 3) << 5)
+#define DMC_DDR_t_RP		(((Startup_HCLK / 1000 * DDR_tRP) - 1) / 1000000 + 1) 	//4, 5(TRM) Min 22.5ns
+#define DMC_DDR_schedule_RP	((DMC_DDR_t_RP - 3) << 3)
+#define DMC_DDR_t_RRD		(((Startup_HCLK / 1000 * DDR_tRRD) - 1) / 1000000 + 1)	//3, Min 15ns
+#define DMC_DDR_t_WR		(((Startup_HCLK / 1000 * DDR_tWR) - 1) / 1000000 + 1)	//Min 15ns
+#define DMC_DDR_t_WTR		2
+#define DMC_DDR_t_XP		2							//1tck + tIS(1.5ns)
+#define DMC_DDR_t_XSR		(((Startup_HCLK / 1000 * DDR_tXSR) - 1) / 1000000 + 1)	//17, Min 120ns
+#define DMC_DDR_t_ESR		DMC_DDR_t_XSR
+#define DMC_DDR_REFRESH_PRD	(((Startup_HCLK / 1000 * DDR_tREFRESH) - 1) / 1000000) 	// TRM 2656
+#define DMC_DDR_USER_CONFIG	1							// 2b01 : mDDR
+
+#define CONFIG_NR_DRAM_BANKS	1	   /* we have 2 bank of DRAM */
+#define PHYS_SDRAM_1		MEMORY_BASE_ADDRESS /* SDRAM Bank #1 */
 
 // DDR attributes
 #define DDR_ATTRIBUTES_CACHED                ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK
@@ -29,151 +114,5 @@
 #define SOC_REGISTERS_L4_PHYSICAL_BASE       0x48000000
 #define SOC_REGISTERS_L4_PHYSICAL_LENGTH     0x08000000
 #define SOC_REGISTERS_L4_ATTRIBUTES          ARM_MEMORY_REGION_ATTRIBUTE_DEVICE
-
-
-#if 0
-/*******************************************
-// Platform Memory Map
-*******************************************/
-
-// Can be NOR, DOC, DRAM, SRAM
-#define ARM_EB_REMAP_BASE                     0x00000000
-#define ARM_EB_REMAP_SZ                       0x04000000
-
-// Motherboard Peripheral and On-chip peripheral
-#define ARM_EB_SMB_MB_ON_CHIP_PERIPH_BASE     0x10000000
-#define ARM_EB_SMB_MB_ON_CHIP_PERIPH_SZ       0x00100000
-#define ARM_EB_BOARD_PERIPH_BASE              0x10000000
-//#define ARM_EB_CHIP_PERIPH_BASE             0x10020000
-
-// SMC
-#define ARM_EB_SMC_BASE                       0x40000000
-#define ARM_EB_SMC_SZ                         0x20000000
-
-// NOR Flash 1
-#define ARM_EB_SMB_NOR_BASE                   0x40000000
-#define ARM_EB_SMB_NOR_SZ                     0x04000000 /* 64 MB */
-// DOC Flash
-#define ARM_EB_SMB_DOC_BASE                   0x44000000
-#define ARM_EB_SMB_DOC_SZ                     0x04000000 /* 64 MB */
-// SRAM
-#define ARM_EB_SMB_SRAM_BASE                  0x48000000
-#define ARM_EB_SMB_SRAM_SZ                    0x02000000 /* 32 MB */
-// USB, Ethernet, VRAM
-#define ARM_EB_SMB_PERIPH_BASE                0x4E000000
-//#define ARM_EB_SMB_PERIPH_VRAM              0x4C000000
-#define ARM_EB_SMB_PERIPH_SZ                  0x02000000 /* 32 MB */
-
-// DRAM
-#define ARM_EB_DRAM_BASE                      0x70000000
-#define ARM_EB_DRAM_SZ                        0x10000000
-
-// Logic Tile
-#define ARM_EB_LOGIC_TILE_BASE                0xC0000000
-#define ARM_EB_LOGIC_TILE_SZ                  0x40000000
-
-/*******************************************
-// Motherboard peripherals
-*******************************************/
-
-// Define MotherBoard SYS flags offsets (from ARM_EB_BOARD_PERIPH_BASE)
-#define ARM_EB_SYS_FLAGS_REG                  (ARM_EB_BOARD_PERIPH_BASE + 0x00030)
-#define ARM_EB_SYS_FLAGS_SET_REG              (ARM_EB_BOARD_PERIPH_BASE + 0x00030)
-#define ARM_EB_SYS_FLAGS_CLR_REG              (ARM_EB_BOARD_PERIPH_BASE + 0x00034)
-#define ARM_EB_SYS_FLAGS_NV_REG               (ARM_EB_BOARD_PERIPH_BASE + 0x00038)
-#define ARM_EB_SYS_FLAGS_NV_SET_REG           (ARM_EB_BOARD_PERIPH_BASE + 0x00038)
-#define ARM_EB_SYS_FLAGS_NV_CLR_REG           (ARM_EB_BOARD_PERIPH_BASE + 0x0003C)
-#define ARM_EB_SYS_CLCD                       (ARM_EB_BOARD_PERIPH_BASE + 0x00050)
-#define ARM_EB_SYS_PROCID0_REG                (ARM_EB_BOARD_PERIPH_BASE + 0x00084)
-#define ARM_EB_SYS_PROCID1_REG                (ARM_EB_BOARD_PERIPH_BASE + 0x00088)
-#define ARM_EB_SYS_CFGDATA_REG                (ARM_EB_BOARD_PERIPH_BASE + 0x000A0)
-#define ARM_EB_SYS_CFGCTRL_REG                (ARM_EB_BOARD_PERIPH_BASE + 0x000A4)
-#define ARM_EB_SYS_CFGSTAT_REG                (ARM_EB_BOARD_PERIPH_BASE + 0x000A8)
-
-// SP810 Controller
-#define SP810_CTRL_BASE                       (ARM_EB_BOARD_PERIPH_BASE + 0x01000)
-
-// SYSTRCL Register
-#define ARM_EB_SYSCTRL                        0x10001000
-
-// Uart0
-#define PL011_CONSOLE_UART_BASE               (ARM_EB_BOARD_PERIPH_BASE + 0x09000)
-#define PL011_CONSOLE_UART_SPEED              115200
-
-// SP804 Timer Bases
-#define SP804_TIMER0_BASE                     (ARM_EB_BOARD_PERIPH_BASE + 0x11000)
-#define SP804_TIMER1_BASE                     (ARM_EB_BOARD_PERIPH_BASE + 0x11020)
-#define SP804_TIMER2_BASE                     (ARM_EB_BOARD_PERIPH_BASE + 0x12000)
-#define SP804_TIMER3_BASE                     (ARM_EB_BOARD_PERIPH_BASE + 0x12020)
-
-// PL301 RTC
-#define PL031_RTC_BASE                        (ARM_EB_BOARD_PERIPH_BASE + 0x17000)
-
-// Dynamic Memory Controller Base
-#define ARM_EB_DMC_BASE                       0x10018000
-
-// Static Memory Controller Base
-#define ARM_EB_SMC_CTRL_BASE                  0x10080000
-
-#define PL111_CLCD_BASE                       0x10020000
-//TODO: FIXME ... Reserved the memory in UEFI !!! Otherwise risk of corruption
-#define PL111_CLCD_VRAM_BASE                  0x78000000
-
-#define ARM_EB_SYS_OSCCLK4                    0x1000001C
-
-
-/*// System Configuration Controller register Base addresses
-//#define ARM_EB_SYS_CFG_CTRL_BASE                0x100E2000
-#define ARM_EB_SYS_CFGRW0_REG                   0x100E2000
-#define ARM_EB_SYS_CFGRW1_REG                   0x100E2004
-#define ARM_EB_SYS_CFGRW2_REG                   0x100E2008
-
-#define ARM_EB_CFGRW1_REMAP_NOR0                0
-#define ARM_EB_CFGRW1_REMAP_NOR1                (1 << 28)
-#define ARM_EB_CFGRW1_REMAP_EXT_AXI             (1 << 29)
-#define ARM_EB_CFGRW1_REMAP_DRAM                (1 << 30)
-
-// PL301 Fast AXI Base Address
-#define ARM_EB_FAXI_BASE                        0x100E9000
-
-// L2x0 Cache Controller Base Address
-//#define ARM_EB_L2x0_CTLR_BASE                   0x1E00A000*/
-
-
-// PL031 RTC - Other settings
-#define PL031_PPM_ACCURACY                      300000000
-
-/*******************************************
-// Interrupt Map
-*******************************************/
-
-// Timer Interrupts
-#define TIMER01_INTERRUPT_NUM                34
-#define TIMER23_INTERRUPT_NUM                35
-
-
-/*******************************************
-// EFI Memory Map in Permanent Memory (DRAM)
-*******************************************/
-
-// This region is allocated at the bottom of the DRAM. It will be used
-// for fixed address allocations such as Vector Table
-#define ARM_EB_EFI_FIX_ADDRESS_REGION_SZ        SIZE_8MB
-
-// This region is the memory declared to PEI as permanent memory for PEI
-// and DXE. EFI stacks and heaps will be declared in this region.
-#define ARM_EB_EFI_MEMORY_REGION_SZ             0x1000000
-#endif
-
-typedef enum {
-  REVISION_XM,
-  REVISION_UNKNOWN0,
-  REVISION_UNKNOWN1,
-  REVISION_UNKNOWN2,
-  REVISION_UNKNOWN3,
-  REVISION_C4,
-  REVISION_C123,
-  REVISION_AB,
-} BEAGLEBOARD_REVISION;
 
 #endif

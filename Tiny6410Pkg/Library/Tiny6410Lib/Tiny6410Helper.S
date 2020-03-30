@@ -19,10 +19,6 @@
 
 GCC_ASM_EXPORT(ArmPlatformIsPrimaryCore)
 GCC_ASM_EXPORT(ArmPlatformGetPrimaryCoreMpId)
-GCC_ASM_EXPORT(ArmPlatformPeiBootAction)
-GCC_ASM_EXPORT(ArmPlatformMemoryInit)
-
-
 GCC_ASM_IMPORT(ArmReadMpidr)
 
 //UINTN
@@ -42,16 +38,9 @@ ASM_PFX(ArmPlatformPeiBootAction):
 //  VOID
 //  );
 ASM_PFX(ArmPlatformGetPrimaryCoreMpId):
-  // The Tiny6410 is not initialized at 
+  // The Tiny6410 is a uniprocessor platform. The MPIDR of primary core is
   // always the MPIDR of the calling CPU.
   b   ASM_PFX(ArmReadMpidr)
 
-//VOID
-//ArmPlatformMemoryInit (
-//  VOID
-//  );
-ASM_PFX(ArmPlatformMemoryInit):
-  // The system memory of Tiny6410 is not available before instruction
-  bx lr
 
 ASM_FUNCTION_REMOVE_IF_UNREFERENCED

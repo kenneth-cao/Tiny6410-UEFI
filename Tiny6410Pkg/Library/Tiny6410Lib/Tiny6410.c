@@ -16,43 +16,8 @@
 #include <Library/ArmPlatformLib.h>
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
-
-#include <Omap3530/Omap3530.h>
 #include <Tiny6410.h>
 
-VOID
-PadConfiguration (
-  BEAGLEBOARD_REVISION Revision
-  );
-
-VOID
-ClockInit (
-  VOID
-  );
-
-/**
-  Detect board revision
-
-  @return Board revision
-**/
-BEAGLEBOARD_REVISION
-BeagleBoardGetRevision (
-  VOID
-  )
-{
-  UINT32 OldPinDir;
-  UINT32 Revision;
-
-  // Read GPIO 171, 172, 173
-  OldPinDir = MmioRead32 (GPIO6_BASE + GPIO_OE);
-  MmioWrite32(GPIO6_BASE + GPIO_OE, (OldPinDir | BIT11 | BIT12 | BIT13));
-  Revision = MmioRead32 (GPIO6_BASE + GPIO_DATAIN);
-
-  // Restore I/O settings
-  MmioWrite32 (GPIO6_BASE + GPIO_OE, OldPinDir);
-
-  return (BEAGLEBOARD_REVISION)((Revision >> 11) & 0x7);
-}
 
 /**
   Return the current Boot Mode
@@ -80,24 +45,6 @@ ArmPlatformInitialize (
   IN  UINTN                     MpId
   )
 {
-  BEAGLEBOARD_REVISION Revision;
-
-  Revision = BeagleBoardGetRevision();
-
-  // Set up Pin muxing.
-  PadConfiguration (Revision);
-
-  // Set up system clocking
-  ClockInit ();
-
-  // Turn off the functional clock for Timer 3
-  MmioAnd32 (CM_FCLKEN_PER, 0xFFFFFFFF ^ CM_ICLKEN_PER_EN_GPT3_ENABLE );
-  ArmDataSyncronizationBarrier ();
-
-  // Clear IRQs
-  MmioWrite32 (INTCPS_CONTROL, INTCPS_CONTROL_NEWIRQAGR);
-  ArmDataSyncronizationBarrier ();
-
   return RETURN_SUCCESS;
 }
 
