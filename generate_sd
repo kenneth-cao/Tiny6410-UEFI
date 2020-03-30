@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# fdisk -l /dev/sdc
+# Disk /dev/sdc: 1.9 GiB, 2002780160 bytes, 3911680 sectors
+# Units: sectors of 1 * 512 = 512 bytes
+# Sector size (logical/physical): 512 bytes / 512 bytes
+# I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+#useage: ./generate_sd /dev/sdx
+
+FM_PATH=Build/Tiny6410/DEBUG_GCC49/FV
+FIRMWARE=$FM_PATH/TINY6410_EFI.fd
+
+size=$(fdisk -l $1 | grep -o '[0-9]\+ sectors')
+size=${size%% sectors}
+echo "SD card size is $size"
+
+if [ $size -gt 4194304 ]; then 
+        BL1=$((size-1025-1-16))
+        BL2=$((size-1025-1-16-1408))
+        echo "SDHC-> BL1:$BL1, BL2:$BL2"
+else
+        BL1=$((size-1-1-16))
+        BL2=$((size-1-1-16-1408))
+        echo "SD-> BL1:$BL1, BL2:$BL2"
+fi
+
+dd if=/dev/zero of=$1 seek=$BL1 count=18
+
+split -b 8k $FIRMWARE TinyPrefix
+dd if=TinyPrefixaa of=$1 seek=$BL1 count=16
+dd if=$FIRMWARE of=$1 seek=$BL2 count=1408
+
+rm -rf TinyPrefix*
+
