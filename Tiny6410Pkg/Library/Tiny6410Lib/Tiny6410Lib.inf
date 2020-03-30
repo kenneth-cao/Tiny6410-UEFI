@@ -25,8 +25,9 @@
   EmbeddedPkg/EmbeddedPkg.dec
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  S3c6410Pkg/S3c6410Pkg.dec
   Tiny6410Pkg/Tiny6410Pkg.dec
+  Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   IoLib
@@ -34,12 +35,9 @@
   MemoryAllocationLib
 
 [Sources.common]
-  Tiny6410Helper.asm  | RVCT
   Tiny6410Helper.S    | GCC
   Tiny6410.c
   Tiny6410Mem.c
-  PadConfiguration.c
-  Clock.c
 
 [FeaturePcd]
   gEmbeddedTokenSpaceGuid.PcdCacheEnable

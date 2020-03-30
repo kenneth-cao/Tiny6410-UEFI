@@ -33,8 +33,7 @@
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/Arm11/Arm11Lib.inf
   ArmPlatformLib|Tiny6410Pkg/Library/Tiny6410Lib/Tiny6410Lib.inf
-  ArmCpuLib|ArmPkg/Drivers/ArmCpuLib/ArmCortexA8Lib/ArmCortexA8Lib.inf
-  ArmPlatformStackLib|ArmPlatformPkg/Library/ArmPlatformStackLib/ArmPlatformStackLib.inf
+  ArmCpuLib|ArmPkg/Drivers/ArmCpuLib/Arm11MpCoreLib/Arm11MpCoreLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
   HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
@@ -116,9 +115,9 @@
 
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
-  TimerLib|S3c6410Pkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
-  OmapLib|S3c6410Pkg/Library/OmapLib/OmapLib.inf
-  OmapDmaLib|S3c6410Pkg/Library/OmapDmaLib/OmapDmaLib.inf
+  TimerLib|S3c6410Pkg/Library/TimerLib/TimerLib.inf
+  S3c6410Lib|S3c6410Pkg/Library/S3c6410Lib/S3c6410Lib.inf
+  S3c6410DmaLib|S3c6410Pkg/Library/S3c6410DmaLib/S3c6410DmaLib.inf
   DebugAgentTimerLib|S3c6410Pkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
 
   GdbSerialLib|S3c6410Pkg/Library/GdbSerialLib/GdbSerialLib.inf
@@ -216,7 +215,7 @@
 [BuildOptions]
   XCODE:*_*_ARM_PLATFORM_FLAGS == -arch armv7
 
-  GCC:*_*_ARM_PLATFORM_FLAGS == -mtune=arm1176jz-s -march=armv6
+  GCC:*_*_ARM_PLATFORM_FLAGS == -mtune=arm1176jzf-s -march=armv6 -mfpu=vfp
 
   RVCT:*_*_ARM_PLATFORM_FLAGS == --cpu Cortex-A8
 
