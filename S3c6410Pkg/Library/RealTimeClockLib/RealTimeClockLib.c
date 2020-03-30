@@ -23,7 +23,7 @@
 #include <Protocol/RealTimeClock.h>
 #include <Protocol/EmbeddedExternalDevice.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 #include <TPS65950.h>
 
 

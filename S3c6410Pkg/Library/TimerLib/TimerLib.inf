@@ -35,11 +35,11 @@
 
 [LibraryClasses]
   DebugLib
-  OmapLib
+  S3c6410Lib
   IoLib
 
 [Pcd]
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterFrequencyInHz
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxFreeTimer
+  gS3c6410TokenSpaceGuid.PcdS3c6410FreeTimer
 

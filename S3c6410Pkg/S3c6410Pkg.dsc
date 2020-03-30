@@ -49,8 +49,8 @@
   RealTimeClockLib|EmbeddedPkg/Library/TemplateRealTimeClockLib/TemplateRealTimeClockLib.inf
 
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
-  OmapLib|S3c6410Pkg/Library/OmapLib/OmapLib.inf
-  OmapDmaLib|S3c6410Pkg/Library/OmapDmaLib/OmapDmaLib.inf
+  S3c6410Lib|S3c6410Pkg/Library/S3c6410Lib/S3c6410Lib.inf
+  S3c6410DmaLib|S3c6410Pkg/Library/S3c6410DmaLib/S3c6410DmaLib.inf
 
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
@@ -148,15 +148,15 @@
   gArmTokenSpaceGuid.PcdCpuVectorBaseAddress|0x80000000
   gArmTokenSpaceGuid.PcdCpuResetAddress|0x80008000
 
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxGpmcOffset|0x6E000000
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxMMCHS1Base|0x4809C000
+  gS3c6410TokenSpaceGuid.PcdS3c6410GpmcOffset|0x6E000000
+  gS3c6410TokenSpaceGuid.PcdS3c6410MMCHS1Base|0x4809C000
 
   # Console
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxConsoleUart|3
+  gS3c6410TokenSpaceGuid.PcdS3c6410ConsoleUart|3
 
   # Timers
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxArchTimer|3
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxFreeTimer|4
+  gS3c6410TokenSpaceGuid.PcdS3c6410ArchTimer|3
+  gS3c6410TokenSpaceGuid.PcdS3c6410FreeTimer|4
   gEmbeddedTokenSpaceGuid.PcdTimerPeriod|100000
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds|77
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterFrequencyInHz|13000000
@@ -172,9 +172,9 @@
 #
 ################################################################################
 [Components.common]
-  S3c6410Pkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
-  S3c6410Pkg/Library/OmapLib/OmapLib.inf
-  S3c6410Pkg/Library/OmapDmaLib/OmapDmaLib.inf
+  S3c6410Pkg/Library/TimerLib/TimerLib.inf
+  S3c6410Pkg/Library/S3c6410Lib/S3c6410Lib.inf
+  S3c6410Pkg/Library/S3c6410DmaLib/S3c6410DmaLib.inf
 
   S3c6410Pkg/Flash/Flash.inf
   S3c6410Pkg/MMCHSDxe/MMCHS.inf

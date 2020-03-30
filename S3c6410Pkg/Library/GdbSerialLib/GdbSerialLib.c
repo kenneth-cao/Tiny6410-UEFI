@@ -18,8 +18,8 @@
 #include <Library/PcdLib.h>
 #include <Library/IoLib.h>
 #include <Library/DebugLib.h>
-#include <Library/OmapLib.h>
-#include <Omap3530/Omap3530.h>
+#include <Library/S3c6410Lib.h>
+#include <S3c6410/S3c6410.h>
 
 RETURN_STATUS
 EFIAPI

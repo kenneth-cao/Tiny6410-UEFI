@@ -32,7 +32,7 @@
 [LibraryClasses]
   IoLib
   UefiDriverEntryPoint
-  OmapLib
+  S3c6410Lib
 
 [Guids]
 

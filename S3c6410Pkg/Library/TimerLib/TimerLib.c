@@ -19,9 +19,9 @@
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
 #include <Library/IoLib.h>
-#include <Library/OmapLib.h>
+#include <Library/S3c6410Lib.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 RETURN_STATUS
 EFIAPI
@@ -29,7 +29,7 @@ TimerConstructor (
   VOID
   )
 {
-  UINTN  Timer            = PcdGet32(PcdOmap35xxFreeTimer);
+  UINTN  Timer            = PcdGet32(PcdS3c6410FreeTimer);
   UINT32 TimerBaseAddress = TimerBase(Timer);
 
   if ((MmioRead32 (TimerBaseAddress + GPTIMER_TCLR) & TCLR_ST_ON) == 0) {
@@ -88,7 +88,7 @@ NanoSecondDelay (
 
   Delay = (NanoSeconds / PcdGet32(PcdEmbeddedPerformanceCounterPeriodInNanoseconds)) + 1;
 
-  TimerCountRegister = TimerBase(PcdGet32(PcdOmap35xxFreeTimer)) + GPTIMER_TCRR;
+  TimerCountRegister = TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + GPTIMER_TCRR;
 
   StartTime = MmioRead32 (TimerCountRegister);
 
@@ -109,7 +109,7 @@ GetPerformanceCounter (
   VOID
   )
 {
-  return (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdOmap35xxFreeTimer)) + GPTIMER_TCRR);
+  return (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + GPTIMER_TCRR);
 }
 
 UINT64
@@ -121,7 +121,7 @@ GetPerformanceCounterProperties (
 {
   if (StartValue != NULL) {
     // Timer starts with the reload value
-    *StartValue = (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdOmap35xxFreeTimer)) + GPTIMER_TLDR);
+    *StartValue = (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + GPTIMER_TLDR);
   }
 
   if (EndValue != NULL) {

@@ -38,7 +38,7 @@
 [LibraryClasses]
   BaseLib
   IoLib
-  OmapLib
+  S3c6410Lib
   ArmLib
 
 [Pcd]

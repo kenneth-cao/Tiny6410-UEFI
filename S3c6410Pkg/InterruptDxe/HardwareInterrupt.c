@@ -26,7 +26,7 @@
 #include <Protocol/Cpu.h>
 #include <Protocol/HardwareInterrupt.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 //
 // Notifications

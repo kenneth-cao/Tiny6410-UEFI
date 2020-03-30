@@ -15,11 +15,11 @@
 #include <Base.h>
 #include <Library/BaseLib.h>
 #include <Library/IoLib.h>
-#include <Library/OmapLib.h>
+#include <Library/S3c6410Lib.h>
 #include <Library/ArmLib.h>
 #include <Library/PcdLib.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 
 volatile UINT32 gVector;

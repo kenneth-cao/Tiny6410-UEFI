@@ -19,8 +19,8 @@
 #include <Library/SerialPortLib.h>
 #include <Library/PcdLib.h>
 #include <Library/IoLib.h>
-#include <Library/OmapLib.h>
-#include <Omap3530/Omap3530.h>
+#include <Library/S3c6410Lib.h>
+#include <S3c6410/S3c6410.h>
 
 /*
 
@@ -56,8 +56,8 @@ SerialPortWrite (
   IN UINTN     NumberOfBytes
 )
 {
-  UINT32  LSR = UartBase(PcdGet32(PcdOmap35xxConsoleUart)) + UART_LSR_REG;
-  UINT32  THR = UartBase(PcdGet32(PcdOmap35xxConsoleUart)) + UART_THR_REG;
+  UINT32  LSR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_LSR_REG;
+  UINT32  THR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_THR_REG;
   UINTN   Count;
 
   for (Count = 0; Count < NumberOfBytes; Count++, Buffer++) {
@@ -86,8 +86,8 @@ SerialPortRead (
   IN  UINTN     NumberOfBytes
 )
 {
-  UINT32  LSR = UartBase(PcdGet32(PcdOmap35xxConsoleUart)) + UART_LSR_REG;
-  UINT32  RBR = UartBase(PcdGet32(PcdOmap35xxConsoleUart)) + UART_RBR_REG;
+  UINT32  LSR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_LSR_REG;
+  UINT32  RBR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_RBR_REG;
   UINTN   Count;
 
   for (Count = 0; Count < NumberOfBytes; Count++, Buffer++) {
@@ -113,7 +113,7 @@ SerialPortPoll (
   VOID
   )
 {
-  UINT32 LSR = UartBase(PcdGet32(PcdOmap35xxConsoleUart)) + UART_LSR_REG;
+  UINT32 LSR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_LSR_REG;
 
   if ((MmioRead8(LSR) & UART_LSR_RX_FIFO_E_MASK) == UART_LSR_RX_FIFO_E_NOT_EMPTY) {
     return TRUE;

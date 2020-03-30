@@ -25,8 +25,8 @@
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/BaseMemoryLib.h>
-#include <Library/OmapLib.h>
-#include <Library/OmapDmaLib.h>
+#include <Library/S3c6410Lib.h>
+#include <Library/S3c6410DmaLib.h>
 #include <Library/DmaLib.h>
 
 #include <Protocol/EmbeddedExternalDevice.h>
@@ -34,7 +34,7 @@
 #include <Protocol/DevicePath.h>
 #include <Protocol/MmcHost.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 #include <TPS65950.h>
 
 #define MAX_RETRY_COUNT  (100*5)

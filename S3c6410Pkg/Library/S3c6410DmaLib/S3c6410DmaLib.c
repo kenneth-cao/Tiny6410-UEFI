@@ -16,10 +16,10 @@
 
 #include <Base.h>
 #include <Library/DebugLib.h>
-#include <Library/OmapDmaLib.h>
+#include <Library/S3c6410DmaLib.h>
 #include <Library/IoLib.h>
 #include <Library/BaseMemoryLib.h>
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 
 /**

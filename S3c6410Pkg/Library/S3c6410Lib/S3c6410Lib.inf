@@ -13,38 +13,25 @@
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = OmapDmaLib
-  FILE_GUID                      = 09B17D99-BB07-49a8-B0D2-06D6AFCBE3AB
+  BASE_NAME                      = OmapLib
+  FILE_GUID                      = d035f5c2-1b92-4746-9f6c-5ff6202970df
   MODULE_TYPE                    = UEFI_DRIVER
   VERSION_STRING                 = 1.0
-  LIBRARY_CLASS                  = OmapDmaLib
-
+  LIBRARY_CLASS                  = OmapLib
 
 [Sources.common]
-  OmapDmaLib.c
+  S3c6410Lib.c
 
 [Packages]
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
-  ArmPkg/ArmPkg.dec
   S3c6410Pkg/S3c6410Pkg.dec
 
 [LibraryClasses]
   DebugLib
-  UefiBootServicesTableLib
-  MemoryAllocationLib
-  UncachedMemoryAllocationLib
-  IoLib
-  BaseMemoryLib
-  ArmLib
-
 
 [Protocols]
-  gEfiCpuArchProtocolGuid
 
 [Guids]
 
 [Pcd]
-
-[Depex]
-  gEfiCpuArchProtocolGuid

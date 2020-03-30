@@ -28,7 +28,7 @@
 #include <Library/PciLib.h>
 #include <Library/UefiLib.h>
 #include <Library/UefiBootServicesTableLib.h>
-#include <Library/OmapDmaLib.h>
+#include <Library/S3c6410DmaLib.h>
 #include <Library/DmaLib.h>
 
 #include <Protocol/EmbeddedExternalDevice.h>
@@ -40,7 +40,7 @@
 #include <IndustryStandard/Pci22.h>
 #include <IndustryStandard/Acpi.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 
 

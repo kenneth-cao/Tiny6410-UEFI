@@ -14,8 +14,8 @@
 
 #include <Base.h>
 #include <Library/DebugLib.h>
-#include <Library/OmapLib.h>
-#include <Omap3530/Omap3530.h>
+#include <Library/S3c6410Lib.h>
+#include <S3c6410/S3c6410.h>
 
 UINT32
 GpioBase (

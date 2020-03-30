@@ -28,7 +28,7 @@
 
 #include <Protocol/BlockIo.h>
 #include <Protocol/Cpu.h>
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 #define PAGE_SIZE(x)             ((x) & 0x01)
 #define PAGE_SIZE_2K_VAL         (0x01UL)

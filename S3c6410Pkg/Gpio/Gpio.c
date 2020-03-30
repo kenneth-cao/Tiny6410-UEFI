@@ -15,12 +15,12 @@
 #include <Uefi.h>
 
 #include <Library/IoLib.h>
-#include <Library/OmapLib.h>
+#include <Library/S3c6410Lib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
 #include <Protocol/EmbeddedGpio.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 EFI_STATUS
 Get (

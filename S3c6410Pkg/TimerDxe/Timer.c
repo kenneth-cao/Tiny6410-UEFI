@@ -23,12 +23,12 @@
 #include <Library/UefiLib.h>
 #include <Library/PcdLib.h>
 #include <Library/IoLib.h>
-#include <Library/OmapLib.h>
+#include <Library/S3c6410Lib.h>
 
 #include <Protocol/Timer.h>
 #include <Protocol/HardwareInterrupt.h>
 
-#include <Omap3530/Omap3530.h>
+#include <S3c6410/S3c6410.h>
 
 
 // The notification function to call on every timer interrupt.
@@ -340,7 +340,7 @@ TimerInitialize (
   ASSERT_EFI_ERROR (Status);
 
   // Set up the timer registers
-  TimerBaseAddress = TimerBase (FixedPcdGet32(PcdOmap35xxArchTimer));
+  TimerBaseAddress = TimerBase (FixedPcdGet32(PcdS3c6410ArchTimer));
   TISR = TimerBaseAddress + GPTIMER_TISR;
   TCLR = TimerBaseAddress + GPTIMER_TCLR;
   TLDR = TimerBaseAddress + GPTIMER_TLDR;
@@ -352,7 +352,7 @@ TimerInitialize (
   ASSERT_EFI_ERROR (Status);
 
   // Install interrupt handler
-  gVector = InterruptVectorForTimer (FixedPcdGet32(PcdOmap35xxArchTimer));
+  gVector = InterruptVectorForTimer (FixedPcdGet32(PcdS3c6410ArchTimer));
   Status = gInterrupt->RegisterInterruptSource (gInterrupt, gVector, TimerInterruptHandler);
   ASSERT_EFI_ERROR (Status);
 

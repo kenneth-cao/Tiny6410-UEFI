@@ -40,7 +40,7 @@
   DebugLib
   UefiDriverEntryPoint
   IoLib
-  OmapLib
+  S3c6410Lib
 
 [Guids]
 
@@ -51,7 +51,7 @@
 [Pcd.common]
   gEmbeddedTokenSpaceGuid.PcdTimerPeriod
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxArchTimer
+  gS3c6410TokenSpaceGuid.PcdS3c6410ArchTimer
 
 [Depex]
   gHardwareInterruptProtocolGuid
