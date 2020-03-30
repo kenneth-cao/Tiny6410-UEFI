@@ -1,0 +1,11 @@
+set -e
+
+export GCC49_ARM_PREFIX=arm-linux-gnueabihf-
+
+rm -rf Conf
+mkdir Conf
+make -C BaseTools
+echo $EDK_TOOLS_PATH
+. edksetup.sh BaseTools
+
+build -a ARM -t GCC49 -p Tiny6410Pkg/Tiny6410Pkg.dsc
