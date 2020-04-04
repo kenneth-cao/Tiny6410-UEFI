@@ -41,7 +41,7 @@ Get (
   Port    = GPIO_PORT(Gpio);
   Pin     = GPIO_PIN(Gpio);
 
-  DataInRegister = GpioBase(Port) + GPIO_DATAIN;
+  DataInRegister = GpioBase((CHAR8)Port) + GPIO_DATAIN;
 
   if (MmioRead32 (DataInRegister) & GPIO_DATAIN_MASK(Pin)) {
     *Value = 1;

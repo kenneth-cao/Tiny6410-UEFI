@@ -12,8 +12,13 @@
 
 **/
 
-#ifndef __OMAP3530SDIO_H__
-#define __OMAP3530SDIO_H__
+#ifndef __S3C6410SDIO_H__
+#define __S3C6410SDIO_H__
+
+
+// SDMMC
+#define CONTROL4_0 0x7C20008C
+
 
 //MMC/SD/SDIO1 register definitions.
 #define MMCHS1BASE        0x4809C000
@@ -211,4 +216,4 @@
 #define ACMD6             (INDX(6) | RSP_TYPE_48BITS)
 #define ACMD6_INT_EN      (CERR_EN | CIE_EN | CCRC_EN | CC_EN | CEB_EN | CTO_EN)
 
-#endif //__OMAP3530SDIO_H__
+#endif // __S3C6410SDIO_H__

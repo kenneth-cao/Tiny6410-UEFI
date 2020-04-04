@@ -32,11 +32,11 @@
   Include                        # Root include for the package
 
 [LibraryClasses]
-  ##  @libraryclass  Abstract location of basic OMAP components
+  ##  @libraryclass  Abstract location of basic S3C6410 components
   ##
   S3c6410Lib|Include/Library/S3c6410Lib.h
 
-  ##  @libraryclass  Abstract OMAP and ARM DMA, modeled after PCI IO protocol
+  ##  @libraryclass  Abstract S3C6410 and ARM DMA, modeled after PCI IO protocol
   ##
   S3c6410DmaLib|Include/Library/S3c6410DmaLib.h
 
@@ -47,12 +47,12 @@
 [PcdsFeatureFlag.common]
 
 [PcdsFixedAtBuild.common]
-  gS3c6410TokenSpaceGuid.PcdS3c6410ConsoleUart|3|UINT32|0x00000202
+  gS3c6410TokenSpaceGuid.PcdS3c6410ConsoleUart|0|UINT32|0x00000202
   gS3c6410TokenSpaceGuid.PcdS3c6410GpmcOffset|0x00000000|UINT32|0x00000203
   gS3c6410TokenSpaceGuid.PcdS3c6410MMCHS1Base|0x00000000|UINT32|0x00000204
-  gS3c6410TokenSpaceGuid.PcdS3c6410ArchTimer|3|UINT32|0x00000205
-  gS3c6410TokenSpaceGuid.PcdS3c6410FreeTimer|4|UINT32|0x00000206
-  gS3c6410TokenSpaceGuid.PcdS3c6410DebugAgentTimer|5|UINT32|0x00000207
+  gS3c6410TokenSpaceGuid.PcdS3c6410ArchTimer|2|UINT32|0x00000205
+  gS3c6410TokenSpaceGuid.PcdS3c6410FreeTimer|3|UINT32|0x00000206
+  gS3c6410TokenSpaceGuid.PcdS3c6410DebugAgentTimer|4|UINT32|0x00000207
   gS3c6410TokenSpaceGuid.PcdDebugAgentTimerFreqNanoSeconds|77|UINT32|0x00000208
   gS3c6410TokenSpaceGuid.PcdMmchsTimerFreq100NanoSeconds|1000000|UINT32|0x00000209
 

@@ -12,8 +12,8 @@
 
 **/
 
-#ifndef __OMAP3530I2C_H__
-#define __OMAP3530I2C_H__
+#ifndef __S3C6410I2C_H__
+#define __S3C6410I2C_H__
 
 //I2C register definitions.
 #define I2C1BASE        0x48070000
@@ -59,4 +59,4 @@
 #define I2C_ACTOA       (I2C1BASE + 0x50)
 #define I2C_SBLOCK      (I2C1BASE + 0x54)
 
-#endif //__OMAP3530I2C_H__
+#endif // __S3C6410I2C_H__

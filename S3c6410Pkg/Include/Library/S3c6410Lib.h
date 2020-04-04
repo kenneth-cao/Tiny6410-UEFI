@@ -18,7 +18,7 @@
 UINT32
 EFIAPI
 GpioBase (
-  IN  UINTN Port
+  IN  CHAR8 Port
   );
 
 UINT32

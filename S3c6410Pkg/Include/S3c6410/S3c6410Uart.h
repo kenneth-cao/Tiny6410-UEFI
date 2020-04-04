@@ -12,12 +12,29 @@
 
 **/
 
-#ifndef __OMAP3530UART_H__
-#define __OMAP3530UART_H__
+#ifndef __S3C6410UART_H__
+#define __S3C6410UART_H__
 
-#define UART1_BASE  (0x4806A000)
-#define UART2_BASE  (0x4806C000)
-#define UART3_BASE  (0x49020000)
+#define UART0_BASE  0x7F005000
+#define UART1_BASE  0x7F005400
+#define UART2_BASE  0x7F005800
+#define UART3_BASE  0x7F005C00
+
+#define UART_LCON      0x00
+#define UART_CON       0x04
+#define UART_FCON      0x08
+#define UART_MCON      0x0C
+#define UART_TRSTAT    0x10
+#define UART_ERSTAT    0x14
+#define UART_FSTAT     0x18
+#define UART_MSTAT     0x1C
+#define UART_TXH       0x20
+#define UART_RXH       0x24
+#define UART_BRDIV     0x28
+#define UART_DIVSLOT   0x2C
+#define UART_INTP      0x30
+#define UART_INTSP     0x34
+#define UART_INTM      0x38
 
 #define UART_DLL_REG  (0x0000)
 #define UART_RBR_REG  (0x0000)
@@ -51,4 +68,4 @@
 #define UART_MDR1_MODE_SELECT_DISABLE   (7UL)
 #define UART_MDR1_MODE_SELECT_UART_16X  (0UL)
 
-#endif // __OMAP3530UART_H__
+#endif // __S3C6410UART_H__

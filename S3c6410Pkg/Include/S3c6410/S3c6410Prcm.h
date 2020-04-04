@@ -12,8 +12,8 @@
 
 **/
 
-#ifndef __OMAP3530PRCM_H__
-#define __OMAP3530PRCM_H__
+#ifndef __S3C6410PRCM_H__
+#define __S3C6410PRCM_H__
 
 #define CM_FCLKEN1_CORE   (0x48004A00)
 #define CM_FCLKEN3_CORE   (0x48004A08)
@@ -161,5 +161,5 @@
 #define GLOBAL_SW_RST     BIT1
 #define GLOBAL_COLD_RST   (0x0UL << 0)
 
-#endif // __OMAP3530PRCM_H__
+#endif // __S3C6410PRCM_H__
 

@@ -19,16 +19,27 @@
 
 UINT32
 GpioBase (
-  IN  UINTN Port
+  IN  CHAR8 Port
   )
 {
   switch (Port) {
-  case 1:  return GPIO1_BASE;
-  case 2:  return GPIO2_BASE;
-  case 3:  return GPIO3_BASE;
-  case 4:  return GPIO4_BASE;
-  case 5:  return GPIO5_BASE;
-  case 6:  return GPIO6_BASE;
+  case 'A':  return GPIOA_BASE;
+  case 'B':  return GPIOB_BASE;
+  case 'C':  return GPIOC_BASE;
+  case 'D':  return GPIOD_BASE;
+  case 'E':  return GPIOE_BASE;
+  case 'F':  return GPIOF_BASE;
+  case 'G':  return GPIOG_BASE;
+  case 'H':  return GPIOH_BASE;
+  case 'I':  return GPIOI_BASE;
+  case 'J':  return GPIOJ_BASE;
+  case 'K':  return GPIOK_BASE;
+  case 'L':  return GPIOL_BASE;
+  case 'M':  return GPIOM_BASE;
+  case 'N':  return GPION_BASE;
+  case 'O':  return GPIOO_BASE;
+  case 'P':  return GPIOP_BASE;
+  case 'Q':  return GPIOQ_BASE;
   default: ASSERT(FALSE); return 0;
   }
 }
@@ -39,18 +50,11 @@ TimerBase (
   )
 {
   switch (Timer) {
-  case  1: return GPTIMER1_BASE;
-  case  2: return GPTIMER2_BASE;
-  case  3: return GPTIMER3_BASE;
-  case  4: return GPTIMER4_BASE;
-  case  5: return GPTIMER5_BASE;
-  case  6: return GPTIMER6_BASE;
-  case  7: return GPTIMER7_BASE;
-  case  8: return GPTIMER8_BASE;
-  case  9: return GPTIMER9_BASE;
-  case 10: return GPTIMER10_BASE;
-  case 11: return GPTIMER11_BASE;
-  case 12: return GPTIMER12_BASE;
+  case  0: return TIMER0_BASE;
+  case  1: return TIMER1_BASE;
+  case  2: return TIMER2_BASE;
+  case  3: return TIMER3_BASE;
+  case  4: return TIMER4_BASE;
   default: return 0;
   }
 }
@@ -60,7 +64,7 @@ InterruptVectorForTimer (
   IN  UINTN Timer
   )
 {
-  if ((Timer < 1) || (Timer > 12)) {
+  if (Timer > 4) {
     ASSERT(FALSE);
     return 0xFFFFFFFF;
   }
@@ -74,6 +78,7 @@ UartBase (
   )
 {
   switch (Uart) {
+  case 0:  return UART0_BASE;
   case 1:  return UART1_BASE;
   case 2:  return UART2_BASE;
   case 3:  return UART3_BASE;

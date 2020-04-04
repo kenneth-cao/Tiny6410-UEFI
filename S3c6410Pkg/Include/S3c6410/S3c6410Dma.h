@@ -12,8 +12,8 @@
 
 **/
 
-#ifndef __OMAP3530DMA_H__
-#define __OMAP3530DMA_H__
+#ifndef __S3C6410DMA_H__
+#define __S3C6410DMA_H__
 
 
 #define DMA4_MAX_CHANNEL 31
@@ -125,6 +125,4 @@
 // same mapping as CSR except for SYNC. Enable all since we are polling
 #define DMA4_CICR_ENABLE_ALL              0x1FBE
 
-
-#endif
-
+#endif // __S3C6410DMA_H__

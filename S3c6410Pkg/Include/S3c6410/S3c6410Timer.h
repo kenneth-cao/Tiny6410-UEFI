@@ -12,13 +12,24 @@
 
 **/
 
-#ifndef __OMAP3530TIMER_H__
-#define __OMAP3530TIMER_H__
+#ifndef __S3C6410TIMER_H__
+#define __S3C6410TIMER_H__
 
-#define GPTIMER1_BASE   (0x48313000)
-#define GPTIMER2_BASE   (0x49032000)
-#define GPTIMER3_BASE   (0x49034000)
-#define GPTIMER4_BASE   (0x49036000)
+#define TIMER0_TCFG        0x7F006000
+#define TIMER1_TCFG        0x7F006004
+#define TIMER_TCON         0x7F006008
+#define TIMER_TINT_CSTAT   0x7F006044
+
+#define TIMER0_BASE      0x7F00600C
+#define TIMER1_BASE      0x7F006018
+#define TIMER2_BASE      0x7F006024
+#define TIMER3_BASE      0x7F006030
+#define TIMER4_BASE      0x7F00603c
+
+#define TIMER_CNTB     0x0
+#define TIMER_COMPB    0x4
+#define TIMER_CONTO    0x8
+
 #define GPTIMER5_BASE   (0x49038000)
 #define GPTIMER6_BASE   (0x4903A000)
 #define GPTIMER7_BASE   (0x4903C000)
@@ -78,5 +89,5 @@
 #define TIER_MAT_IT_ENABLE      BIT0
 #define TIER_MAT_IT_DISABLE     (0UL << 0)
 
-#endif // __OMAP3530TIMER_H__
+#endif // __S3C6410TIMER_H__
 

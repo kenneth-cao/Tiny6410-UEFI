@@ -12,8 +12,8 @@
 
 **/
 
-#ifndef __OMAP3530GPMC_H__
-#define __OMAP3530GPMC_H__
+#ifndef __S3C6410GPMC_H__
+#define __S3C6410GPMC_H__
 
 #define GPMC_BASE             (0x6E000000)
 
@@ -104,4 +104,4 @@
 #define GPMC_ECC8_RESULT      (GPMC_BASE + 0x21C)
 #define GPMC_ECC9_RESULT      (GPMC_BASE + 0x220)
 
-#endif //__OMAP3530GPMC_H__
+#endif // __S3C6410GPMC_H__
