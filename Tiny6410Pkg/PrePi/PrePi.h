@@ -29,7 +29,7 @@
 
 #define SerialPrint(txt)  SerialPortWrite (txt, AsciiStrLen(txt)+1);
 
-extern UINT64 mSystemMemoryEnd;
+extern UINT32 mSystemMemoryEnd;
 
 RETURN_STATUS
 EFIAPI

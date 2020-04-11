@@ -31,6 +31,7 @@ ASM_PFX(_ModuleEntryPoint):
 
 StartupAddr:       .word  CEntryPoint
 mSystemMemoryEnd:  .word 0
+_SystemMemoryEnd:  .word mSystemMemoryEnd
 
 _Reset:
   // Enter SVC mode, Disable FIQ and IRQ
@@ -74,7 +75,8 @@ _Reset:
 // to install the stacks at the bottom of the Firmware Device (case the FD is located
 // at the top of the DRAM)
 _SystemMemoryEndInit:
-  ldr   r1, mSystemMemoryEnd
+  ldr   r3, _SystemMemoryEnd
+  ldr   r1, [r3]
 
   // Is mSystemMemoryEnd initialized?
   cmp   r1, #0
@@ -85,8 +87,7 @@ _SystemMemoryEndInit:
   sub   r2, r2, #1
   add   r1, r1, r2
   // Update the global variable
-  ldr   r2, mSystemMemoryEnd
-  str   r1, [r2]
+  str   r1, [r3]
 
 _SetupStackPosition:
   // r1 = SystemMemoryTop
