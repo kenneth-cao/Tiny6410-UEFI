@@ -29,8 +29,6 @@
 #include "S3c6410ClkPower.h"
 #include "S3c6410Dramc.h"
 
-#define REG(x) (*(volatile UINT32*)(x))
-
 // Device Copy Function Pointer
 #define GLOBAL_BLOCK_CNT    0x0C003FFC
 #define COPY_MMC_TO_MEM     0x0C004008

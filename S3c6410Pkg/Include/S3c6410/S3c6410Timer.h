@@ -15,10 +15,10 @@
 #ifndef __S3C6410TIMER_H__
 #define __S3C6410TIMER_H__
 
-#define TIMER0_TCFG        0x7F006000
-#define TIMER1_TCFG        0x7F006004
-#define TIMER_TCON         0x7F006008
-#define TIMER_TINT_CSTAT   0x7F006044
+#define TIMER_CFG0         0x7F006000
+#define TIMER_CFG1         0x7F006004
+#define TIMER_CON          0x7F006008
+#define TIMER_INT_CSTAT    0x7F006044
 
 #define TIMER0_BASE      0x7F00600C
 #define TIMER1_BASE      0x7F006018
@@ -29,6 +29,9 @@
 #define TIMER_CNTB     0x0
 #define TIMER_COMPB    0x4
 #define TIMER_CONTO    0x8
+
+#define TCFG0_PRESCALER        4
+#define TCFG1_DIVIDER_1        0
 
 #define GPTIMER5_BASE   (0x49038000)
 #define GPTIMER6_BASE   (0x4903A000)

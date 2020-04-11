@@ -29,27 +29,35 @@ TimerConstructor (
   VOID
   )
 {
-  UINTN  Timer            = PcdGet32(PcdS3c6410FreeTimer);
-  UINT32 TimerBaseAddress = TimerBase(Timer);
+  UINTN  TconBits      = 0;
+  UINTN  Timer         = PcdGet32(PcdS3c6410FreeTimer);
+  UINT32 TimerBaseAddr = TimerBase(Timer);
+  static BOOLEAN IsPrescalerInit = FALSE;
 
-  if ((MmioRead32 (TimerBaseAddress + GPTIMER_TCLR) & TCLR_ST_ON) == 0) {
-    // Set source clock for GPT3 & GPT4 to SYS_CLK
-    MmioOr32 (CM_CLKSEL_PER, CM_CLKSEL_PER_CLKSEL_GPT3_SYS | CM_CLKSEL_PER_CLKSEL_GPT4_SYS);
+  if (Timer > 0) {
+    TconBits = 4 * Timer + 4;
+  }
 
-    // Set count & reload registers
-    MmioWrite32 (TimerBaseAddress + GPTIMER_TCRR, 0x00000000);
-    MmioWrite32 (TimerBaseAddress + GPTIMER_TLDR, 0x00000000);
+  if ((MmioRead32(TIMER_CON) & (1 << TconBits)) == 0) {
 
+    if (!IsPrescalerInit) {
+      IsPrescalerInit = TRUE;
+      MmioWrite32(TIMER_CFG0, (MmioRead32(TIMER_CFG0) & 0xFFFF0000) | (TCFG0_PRESCALER << 8) | TCFG0_PRESCALER);
+    }
+
+    MmioWrite32(TIMER_CFG1, MmioRead32(TIMER_CFG1) & ~(0xF << 4 * Timer));
     // Disable interrupts
-    MmioWrite32 (TimerBaseAddress + GPTIMER_TIER, TIER_TCAR_IT_DISABLE | TIER_OVF_IT_DISABLE | TIER_MAT_IT_DISABLE);
-
-    // Start Timer
-    MmioWrite32 (TimerBaseAddress + GPTIMER_TCLR, TCLR_AR_AUTORELOAD | TCLR_ST_ON);
-
-    // Disable OMAP Watchdog timer (WDT2)
-    MmioWrite32 (WDTIMER2_BASE + WSPR, 0xAAAA);
-    DEBUG ((EFI_D_ERROR, "Magic delay to disable watchdog timers properly.\n"));
-    MmioWrite32 (WDTIMER2_BASE + WSPR, 0x5555);
+    MmioAnd32(TIMER_INT_CSTAT, ~(1 << Timer));
+    MmioWrite32(TimerBaseAddr + TIMER_CNTB, (UINT32)-1);
+    // Enable auto-reload, set manual update
+    if (Timer < 4) {
+      MmioOr32(TIMER_CON, 10 << TconBits);
+    }
+    else {
+      MmioOr32(TIMER_CON, 6 << TconBits);
+    }
+    // Clear manual update and Start Timer
+    MmioWrite32(TIMER_CON, (MmioRead32(TIMER_CON) & ~(3 << TconBits)) | (1 << TconBits));
   }
   return EFI_SUCCESS;
 }
@@ -88,14 +96,14 @@ NanoSecondDelay (
 
   Delay = (NanoSeconds / PcdGet32(PcdEmbeddedPerformanceCounterPeriodInNanoseconds)) + 1;
 
-  TimerCountRegister = TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + GPTIMER_TCRR;
+  TimerCountRegister = TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + TIMER_CONTO;
 
-  StartTime = MmioRead32 (TimerCountRegister);
+  StartTime = MmioRead32(TimerCountRegister);
 
   do
   {
-    CurrentTime = MmioRead32 (TimerCountRegister);
-    ElapsedTime = CurrentTime - StartTime;
+    CurrentTime = MmioRead32(TimerCountRegister);
+    ElapsedTime = StartTime - CurrentTime;
   } while (ElapsedTime < Delay);
 
   NanoSeconds = ElapsedTime * PcdGet32(PcdEmbeddedPerformanceCounterPeriodInNanoseconds);
@@ -109,7 +117,7 @@ GetPerformanceCounter (
   VOID
   )
 {
-  return (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + GPTIMER_TCRR);
+  return (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + TIMER_CONTO);
 }
 
 UINT64
@@ -121,12 +129,12 @@ GetPerformanceCounterProperties (
 {
   if (StartValue != NULL) {
     // Timer starts with the reload value
-    *StartValue = (UINT64)MmioRead32 (TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + GPTIMER_TLDR);
+    *StartValue = 0xFFFFFFFF;
   }
 
   if (EndValue != NULL) {
-    // Timer counts up to 0xFFFFFFFF
-    *EndValue = 0xFFFFFFFF;
+    // Timer counts down to 0
+    *EndValue = 0;
   }
 
   return PcdGet64(PcdEmbeddedPerformanceCounterFrequencyInHz);
