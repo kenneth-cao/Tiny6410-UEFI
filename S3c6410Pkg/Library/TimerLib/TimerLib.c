@@ -129,7 +129,7 @@ GetPerformanceCounterProperties (
 {
   if (StartValue != NULL) {
     // Timer starts with the reload value
-    *StartValue = 0xFFFFFFFF;
+    *StartValue = (UINT64)MmioRead32(TimerBase(PcdGet32(PcdS3c6410FreeTimer)) + TIMER_CNTB);
   }
 
   if (EndValue != NULL) {
