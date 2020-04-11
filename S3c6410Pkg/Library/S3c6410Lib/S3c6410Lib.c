@@ -55,7 +55,7 @@ TimerBase (
   case  2: return TIMER2_BASE;
   case  3: return TIMER3_BASE;
   case  4: return TIMER4_BASE;
-  default: return 0;
+  default: ASSERT(FALSE); return 0;
   }
 }
 
@@ -66,7 +66,7 @@ InterruptVectorForTimer (
 {
   if (Timer > 4) {
     ASSERT(FALSE);
-    return 0xFFFFFFFF;
+    return 0;
   }
 
   return 36 + Timer;
