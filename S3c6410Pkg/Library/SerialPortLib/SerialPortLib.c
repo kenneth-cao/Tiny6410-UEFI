@@ -35,7 +35,25 @@ SerialPortInitialize (
   VOID
   )
 {
-  // assume assembly code at reset vector has setup UART
+  UINT32 Register = CLK_POWER_BASE + CLK_DIV2;
+  // CLKUART(=66.5Mhz) = CLKUART_input(532/2=266Mhz) / (UART_RATIO(3)+1)
+  MmioWrite32(Register, (MmioRead32(Register) & ~(7 << 16)) | (3 << 16));
+  MmioOr32(Register, 1 << 13);
+
+  // Set GPIO to enable UART
+  MmioWrite32(GPIOA_BASE + GPIO_CON, 0x22222222);
+  Register = GPIOB_BASE + GPIO_CON;
+  MmioWrite32(Register, (MmioRead32(Register) & 0xFFFF0000) | 0x2222);
+
+  // Port Init
+  Register = UartBase(PcdGet32(PcdS3c6410ConsoleUart));
+  MmioWrite32(Register + UART_LCON, 0x3);
+  MmioWrite32(Register + UART_FCON, 0x0);
+  MmioWrite32(Register + UART_MCON, 0x0);
+  MmioWrite32(Register + UART_CON, 0x245);
+  MmioWrite32(Register + UART_BRDIV, 0x23);
+  MmioWrite32(Register + UART_DIVSLOT, 0x0080);
+
   return RETURN_SUCCESS;
 }
 
@@ -56,13 +74,13 @@ SerialPortWrite (
   IN UINTN     NumberOfBytes
 )
 {
-  UINT32  LSR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_LSR_REG;
-  UINT32  THR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_THR_REG;
+  UINT32  UTRSTAT = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_TRSTAT;
+  UINT32  UTXH = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_TXH;
   UINTN   Count;
 
   for (Count = 0; Count < NumberOfBytes; Count++, Buffer++) {
-    while ((MmioRead8(LSR) & UART_LSR_TX_FIFO_E_MASK) == UART_LSR_TX_FIFO_E_NOT_EMPTY);
-    MmioWrite8(THR, *Buffer);
+    while (!(MmioRead8(UTRSTAT) & BIT2));
+    MmioWrite8(UTXH, *Buffer);
   }
 
   return NumberOfBytes;
@@ -86,13 +104,13 @@ SerialPortRead (
   IN  UINTN     NumberOfBytes
 )
 {
-  UINT32  LSR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_LSR_REG;
-  UINT32  RBR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_RBR_REG;
+  UINT32  UTRSTAT = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_TRSTAT;
+  UINT32  URXH = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_RXH;
   UINTN   Count;
 
   for (Count = 0; Count < NumberOfBytes; Count++, Buffer++) {
-    while ((MmioRead8(LSR) & UART_LSR_RX_FIFO_E_MASK) == UART_LSR_RX_FIFO_E_EMPTY);
-    *Buffer = MmioRead8(RBR);
+    while (!(MmioRead8(UTRSTAT) & BIT0));
+    *Buffer = MmioRead8(URXH);
   }
 
   return NumberOfBytes;
@@ -113,9 +131,9 @@ SerialPortPoll (
   VOID
   )
 {
-  UINT32 LSR = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_LSR_REG;
+  UINT32  UTRSTAT = UartBase(PcdGet32(PcdS3c6410ConsoleUart)) + UART_TRSTAT;
 
-  if ((MmioRead8(LSR) & UART_LSR_RX_FIFO_E_MASK) == UART_LSR_RX_FIFO_E_NOT_EMPTY) {
+  if (MmioRead8(UTRSTAT) & BIT0) {
     return TRUE;
   } else {
     return FALSE;
