@@ -189,10 +189,10 @@ _NeverReturn:
 
 _ClockInit:
   ldr   r0, =CLK_POWER_BASE
-  ldr   r1, [r0, #OTHERS_OFFSET]
+  ldr   r1, [r0, #OTHERS]
   mov   r2, #0x40
   orr   r1, r1, r2
-  str   r1, [r0, #OTHERS_OFFSET]
+  str   r1, [r0, #OTHERS]
 
   nop
   nop
@@ -202,10 +202,10 @@ _ClockInit:
 
   ldr   r2, =0x80
   orr   r1, r1, r2
-  str   r1, [r0, #OTHERS_OFFSET]
+  str   r1, [r0, #OTHERS]
 
 _CheckSyncack:
-  ldr   r1, [r0, #OTHERS_OFFSET]
+  ldr   r1, [r0, #OTHERS]
   ldr   r2, =0xf00
   and   r1, r1, r2
   cmp   r1, #0xf00
@@ -213,37 +213,33 @@ _CheckSyncack:
 
   mov   r1, #0xff00
   orr   r1, r1, #0xff
-  str   r1, [r0, #APLL_LOCK_OFFSET]
-  str   r1, [r0, #MPLL_LOCK_OFFSET]
-  str   r1, [r0, #EPLL_LOCK_OFFSET]
+  str   r1, [r0, #APLL_LOCK]
+  str   r1, [r0, #MPLL_LOCK]
+  str   r1, [r0, #EPLL_LOCK]
 
-  // CLKUART(=66.5Mhz) = CLKUART_input(532/2=266Mhz) / (UART_RATIO(3)+1)
-  // CLKUART(=50Mhz) = CLKUART_input(400/2=200Mhz) / (UART_RATIO(3)+1)
-  // Now, When you use UART CLK SRC by EXT_UCLK1, We support 532MHz & 400MHz value
-
-  ldr   r1, [r0, #CLK_DIV0_OFFSET]  /*Set Clock Divider*/
+  ldr   r1, [r0, #CLK_DIV0]  /*Set Clock Divider*/
   bic   r1, r1, #0x30000
   bic   r1, r1, #0xff00
   bic   r1, r1, #0xff
   ldr   r2, =CLK_DIV_VAL
   orr   r1, r1, r2
-  str   r1, [r0, #CLK_DIV0_OFFSET]
+  str   r1, [r0, #CLK_DIV0]
 
   ldr   r1, =APLL_VAL
-  str   r1, [r0, #APLL_CON_OFFSET]
+  str   r1, [r0, #APLL_CON]
   ldr   r1, =MPLL_VAL
-  str   r1, [r0, #MPLL_CON_OFFSET]
+  str   r1, [r0, #MPLL_CON]
 
   ldr   r1, =0x80200203     /* FOUT of EPLL is 96MHz */
-  str   r1, [r0, #EPLL_CON0_OFFSET]
+  str   r1, [r0, #EPLL_CON0]
   ldr   r1, =0x0
-  str   r1, [r0, #EPLL_CON1_OFFSET]
+  str   r1, [r0, #EPLL_CON1]
 
-  ldr   r1, [r0, #CLK_SRC_OFFSET] /* APLL, MPLL, EPLL select to Fout */
+  ldr   r1, [r0, #CLK_SRC] /* APLL, MPLL, EPLL select to Fout */
   ldr   r2, =0x7
   orr   r1, r1, r2
 
-  str   r1, [r0, #CLK_SRC_OFFSET]
+  str   r1, [r0, #CLK_SRC]
 
   /* wait at least 200us to stablize all clock */
   mov   r1, #0x10000
@@ -251,9 +247,9 @@ _Wait:
   subs  r1, r1, #1
   bne   _Wait
 
-  ldr   r1, [r0, #OTHERS_OFFSET]
+  ldr   r1, [r0, #OTHERS]
   orr   r1, r1, #0x20
-  str   r1, [r0, #OTHERS_OFFSET]
+  str   r1, [r0, #OTHERS]
 
   bx    lr
 
