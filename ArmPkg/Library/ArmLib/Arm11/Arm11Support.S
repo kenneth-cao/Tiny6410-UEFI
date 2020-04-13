@@ -255,7 +255,7 @@ ASM_PFX(ArmEnableVFP):
   # Set EN bit in FPEXC. The Advanced SIMD and VFP extensions are enabled and operate normally.
   mov     r0, #0x40000000
   #TODO: Fixme - need compilation flag
-  #fmxr    FPEXC, r0
+  fmxr    FPEXC, r0
   bx      lr
 
 ASM_FUNCTION_REMOVE_IF_UNREFERENCED
