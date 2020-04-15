@@ -29,13 +29,13 @@
 [Packages]
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  S3c6410Pkg/S3c6410Pkg.dec
 
 [LibraryClasses]
   DebugLib
   IoLib
-  OmapLib
+  S3c6410Lib
 
 [FixedPcd]
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxConsoleUart
+  gS3c6410TokenSpaceGuid.PcdS3c6410ConsoleUart
 
