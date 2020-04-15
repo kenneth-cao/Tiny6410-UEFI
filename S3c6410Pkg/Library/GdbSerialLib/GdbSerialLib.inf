@@ -37,5 +37,5 @@
   S3c6410Lib
 
 [FixedPcd]
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxConsoleUart
+  gS3c6410TokenSpaceGuid.PcdS3c6410ConsoleUart
 

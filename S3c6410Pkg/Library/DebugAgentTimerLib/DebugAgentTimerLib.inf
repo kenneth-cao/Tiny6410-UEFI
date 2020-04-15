@@ -42,5 +42,5 @@
   ArmLib
 
 [Pcd]
-  gOmap35xxTokenSpaceGuid.PcdOmap35xxDebugAgentTimer
-  gOmap35xxTokenSpaceGuid.PcdDebugAgentTimerFreqNanoSeconds
+  gS3c6410TokenSpaceGuid.PcdS3c6410DebugAgentTimer
+  gS3c6410TokenSpaceGuid.PcdDebugAgentTimerFreqNanoSeconds
