@@ -33,7 +33,7 @@
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/Arm11/Arm11Lib.inf
   ArmPlatformLib|Tiny6410Pkg/Library/Tiny6410Lib/Tiny6410Lib.inf
-  ArmCpuLib|ArmPkg/Drivers/ArmCpuLib/Arm11MpCoreLib/Arm11MpCoreLib.inf
+  #ArmCpuLib|ArmPkg/Drivers/ArmCpuLib/Arm11MpCoreLib/Arm11MpCoreLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
   HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
@@ -48,8 +48,6 @@
 #  UncachedMemoryAllocationLib|ArmPkg/Library/DebugUncachedMemoryAllocationLib/DebugUncachedMemoryAllocationLib.inf
 !endif
   DebugPrintErrorLevelLib|MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
-
-  MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   BaseMemoryLib|ArmPkg/Library/BaseMemoryLibStm/BaseMemoryLibStm.inf

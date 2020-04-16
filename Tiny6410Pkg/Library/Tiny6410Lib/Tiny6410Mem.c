@@ -20,7 +20,7 @@
 
 #include <Tiny6410.h>
 
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS          4
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS          3
 
 /**
   Return the Virtual Memory Map of your platform
@@ -54,23 +54,17 @@ ArmPlatformGetVirtualMemoryMap (
     CacheAttributes = DDR_ATTRIBUTES_UNCACHED;
   }
 
-  // ReMap (Either NOR Flash or DRAM)
+  // ReMap DRAM
   VirtualMemoryTable[Index].PhysicalBase = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].VirtualBase  = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].Length       = PcdGet64 (PcdSystemMemorySize);
   VirtualMemoryTable[Index].Attributes   = CacheAttributes;
 
-  // SOC Registers. L3 interconnects
-  VirtualMemoryTable[++Index].PhysicalBase = SOC_REGISTERS_L3_PHYSICAL_BASE;
-  VirtualMemoryTable[Index].VirtualBase  = SOC_REGISTERS_L3_PHYSICAL_BASE;
-  VirtualMemoryTable[Index].Length       = SOC_REGISTERS_L3_PHYSICAL_LENGTH;
-  VirtualMemoryTable[Index].Attributes   = SOC_REGISTERS_L3_ATTRIBUTES;
-
-  // SOC Registers. L4 interconnects
-  VirtualMemoryTable[++Index].PhysicalBase = SOC_REGISTERS_L4_PHYSICAL_BASE;
-  VirtualMemoryTable[Index].VirtualBase  = SOC_REGISTERS_L4_PHYSICAL_BASE;
-  VirtualMemoryTable[Index].Length       = SOC_REGISTERS_L4_PHYSICAL_LENGTH;
-  VirtualMemoryTable[Index].Attributes   = SOC_REGISTERS_L4_ATTRIBUTES;
+  // SOC Registers
+  VirtualMemoryTable[++Index].PhysicalBase = SOC_REGISTERS_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].VirtualBase  = SOC_REGISTERS_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].Length       = SOC_REGISTERS_PHYSICAL_LENGTH;
+  VirtualMemoryTable[Index].Attributes   = SOC_REGISTERS_ATTRIBUTES;
 
   // End of Table
   VirtualMemoryTable[++Index].PhysicalBase = 0;

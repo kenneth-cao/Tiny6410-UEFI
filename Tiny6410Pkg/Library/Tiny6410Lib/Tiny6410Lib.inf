@@ -27,7 +27,6 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   S3c6410Pkg/S3c6410Pkg.dec
   Tiny6410Pkg/Tiny6410Pkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   IoLib

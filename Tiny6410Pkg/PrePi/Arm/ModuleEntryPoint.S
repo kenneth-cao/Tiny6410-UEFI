@@ -58,7 +58,7 @@ _Reset:
   str   r1, [r0]
 
   // Peripheral Port Memory Remap
-  LoadConstantToReg (PERIPHERAL_PORT_REMAP_BASE, r0)
+  LoadConstantToReg (SOC_REGISTERS_PHYSICAL_BASE, r0)
   orr   r0, r0, #0x13
   mcr   p15,0,r0,c15,c2,4
 
