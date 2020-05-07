@@ -61,8 +61,13 @@ GCC_ASM_EXPORT(CommonCExceptionHandler)
 
 .text
 #if !defined(__APPLE__)
+#if __ARM_ARCH == 7
 .fpu neon    @ makes vpush/vpop assemble
+#elif __ARM_ARCH == 6
+.fpu vfp    @ makes vpush/vpop assemble
 #endif
+#endif
+
 .align 5
 
 

@@ -17,10 +17,11 @@
 #include <Library/PcdLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/IoLib.h>
+#include <Library/HobLib.h>
 
 #include <Tiny6410.h>
 
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS          3
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS          4
 
 /**
   Return the Virtual Memory Map of your platform
@@ -54,8 +55,14 @@ ArmPlatformGetVirtualMemoryMap (
     CacheAttributes = DDR_ATTRIBUTES_UNCACHED;
   }
 
+  // I-RAM, Stepping Store
+  VirtualMemoryTable[Index].PhysicalBase = SOC_STEPPING_STONE_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].VirtualBase  = 0;
+  VirtualMemoryTable[Index].Length       = SOC_STEPPING_STONE_PHYSICAL_LENGTH;
+  VirtualMemoryTable[Index].Attributes   = CacheAttributes;
+
   // ReMap DRAM
-  VirtualMemoryTable[Index].PhysicalBase = PcdGet64 (PcdSystemMemoryBase);
+  VirtualMemoryTable[++Index].PhysicalBase = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].VirtualBase  = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].Length       = PcdGet64 (PcdSystemMemorySize);
   VirtualMemoryTable[Index].Attributes   = CacheAttributes;

@@ -244,7 +244,7 @@
   gEmbeddedTokenSpaceGuid.PcdCacheEnable|TRUE
 
   # Use the Vector Table location in CpuDxe. We will not copy the Vector Table at PcdCpuVectorBaseAddress
-  gArmTokenSpaceGuid.PcdRelocateVectorTable|FALSE
+  gArmTokenSpaceGuid.PcdRelocateVectorTable|TRUE
 
   gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob|TRUE
   gArmTokenSpaceGuid.PcdCpuDxeProduceDebugSupport|FALSE
@@ -339,8 +339,8 @@
   # Size of the region reserved for fixed address allocations (Reserved 32MB)
   gArmTokenSpaceGuid.PcdArmLinuxKernelMaxOffset|0x02000000
 
-  gArmTokenSpaceGuid.PcdCpuVectorBaseAddress|0x80008000
-  gArmTokenSpaceGuid.PcdCpuResetAddress|0x80008000
+  gArmTokenSpaceGuid.PcdCpuVectorBaseAddress|0x00000000
+  gArmTokenSpaceGuid.PcdCpuResetAddress|0x00000000
 
   gEmbeddedTokenSpaceGuid.PcdTimerPeriod|100000
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds|76

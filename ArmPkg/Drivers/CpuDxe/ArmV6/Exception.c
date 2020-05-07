@@ -17,9 +17,6 @@
 
 //FIXME: Will not compile on non-ARMv7 builds
 //#include <Chipset/ArmV7.h>
-#if __ARM_ARCH < 7
-#define ARM_VECTOR_TABLE_ALIGNMENT 0
-#endif 
 
 VOID
 ExceptionHandlersStart (
