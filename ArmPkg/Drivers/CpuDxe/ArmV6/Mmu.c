@@ -33,7 +33,7 @@ SectionToGcdAttributes (
   *GcdAttributes = 0;
 
   // determine cacheability attributes
-  /*switch(SectionAttributes & TT_DESCRIPTOR_SECTION_CACHE_POLICY_MASK) {
+  switch(SectionAttributes & TT_DESCRIPTOR_SECTION_CACHE_POLICY_MASK) {
     case TT_DESCRIPTOR_SECTION_CACHE_POLICY_STRONGLY_ORDERED:
       *GcdAttributes |= EFI_MEMORY_UC;
       break;
@@ -62,7 +62,7 @@ SectionToGcdAttributes (
   // determine protection attributes
   switch(SectionAttributes & TT_DESCRIPTOR_SECTION_AP_MASK) {
     case TT_DESCRIPTOR_SECTION_AP_NO_NO: // no read, no write
-      // *GcdAttributes |= EFI_MEMORY_WP | EFI_MEMORY_RP;
+      //*GcdAttributes |= EFI_MEMORY_WP | EFI_MEMORY_RP;
       break;
 
     case TT_DESCRIPTOR_SECTION_AP_RW_NO:
@@ -83,7 +83,7 @@ SectionToGcdAttributes (
   // now process eXectue Never attribute
   if ((SectionAttributes & TT_DESCRIPTOR_SECTION_XN_MASK) != 0 ) {
     *GcdAttributes |= EFI_MEMORY_XP;
-  }*/
+  }
 
   return EFI_SUCCESS;
 }
@@ -97,7 +97,7 @@ PageToGcdAttributes (
   *GcdAttributes = 0;
 
   // determine cacheability attributes
-  /*switch(PageAttributes & TT_DESCRIPTOR_PAGE_CACHE_POLICY_MASK) {
+  switch(PageAttributes & TT_DESCRIPTOR_PAGE_CACHE_POLICY_MASK) {
     case TT_DESCRIPTOR_PAGE_CACHE_POLICY_STRONGLY_ORDERED:
       *GcdAttributes |= EFI_MEMORY_UC;
       break;
@@ -126,7 +126,7 @@ PageToGcdAttributes (
   // determine protection attributes
   switch(PageAttributes & TT_DESCRIPTOR_PAGE_AP_MASK) {
     case TT_DESCRIPTOR_PAGE_AP_NO_NO: // no read, no write
-      // *GcdAttributes |= EFI_MEMORY_WP | EFI_MEMORY_RP;
+      //*GcdAttributes |= EFI_MEMORY_WP | EFI_MEMORY_RP;
       break;
 
     case TT_DESCRIPTOR_PAGE_AP_RW_NO:
@@ -148,7 +148,7 @@ PageToGcdAttributes (
   if ((PageAttributes & TT_DESCRIPTOR_PAGE_XN_MASK) != 0 ) {
     *GcdAttributes |= EFI_MEMORY_XP;
   }
-  */
+
   return EFI_SUCCESS;
 }
 
@@ -163,7 +163,7 @@ SyncCacheConfigPage (
   IN OUT UINT32                             *NextSectionAttributes
   )
 {
-  /*EFI_STATUS                          Status;
+  EFI_STATUS                          Status;
   UINT32                              i;
   volatile ARM_PAGE_TABLE_ENTRY       *SecondLevelTable;
   UINT32                              NextPageAttributes = 0;
@@ -224,7 +224,7 @@ SyncCacheConfigPage (
   *NextSectionAttributes =
       TT_DESCRIPTOR_CONVERT_TO_SECTION_CACHE_POLICY(NextPageAttributes,0) |
       TT_DESCRIPTOR_CONVERT_TO_SECTION_AP(NextPageAttributes);
-  */
+
   return EFI_SUCCESS;
 }
 
@@ -233,7 +233,7 @@ SyncCacheConfig (
   IN  EFI_CPU_ARCH_PROTOCOL *CpuProtocol
   )
 {
-  /*EFI_STATUS                          Status;
+  EFI_STATUS                          Status;
   UINT32                              i;
   EFI_PHYSICAL_ADDRESS                NextRegionBase;
   UINT64                              NextRegionLength;
@@ -333,7 +333,7 @@ SyncCacheConfig (
   }
 
   FreePool (MemorySpaceMap);
-  */
+
   return EFI_SUCCESS;
 }
 
@@ -347,7 +347,7 @@ UpdatePageEntries (
   IN EFI_PHYSICAL_ADDRESS      VirtualMask
   )
 {
-  /*EFI_STATUS    Status;
+  EFI_STATUS    Status;
   UINT32        EntryValue;
   UINT32        EntryMask;
   UINT32        FirstLevelIdx;
@@ -480,9 +480,8 @@ UpdatePageEntries (
     Offset += TT_DESCRIPTOR_PAGE_SIZE;
 
   } // End first level translation table loop
-  
-  return Status;*/
-  return EFI_SUCCESS;
+
+  return Status;
 }
 
 
@@ -495,7 +494,7 @@ UpdateSectionEntries (
   IN EFI_PHYSICAL_ADDRESS      VirtualMask
   )
 {
-  /*EFI_STATUS    Status = EFI_SUCCESS;
+  EFI_STATUS    Status = EFI_SUCCESS;
   UINT32        EntryMask;
   UINT32        EntryValue;
   UINT32        FirstLevelIdx;
@@ -605,9 +604,8 @@ UpdateSectionEntries (
       Status = EFI_SUCCESS;
     }
   }
-  
-  return Status;*/
-  return EFI_SUCCESS;
+
+  return Status;
 }
 
 EFI_STATUS
@@ -615,7 +613,7 @@ ConvertSectionToPages (
   IN EFI_PHYSICAL_ADDRESS  BaseAddress
   )
 {
-  /*EFI_STATUS              Status;
+  EFI_STATUS              Status;
   EFI_PHYSICAL_ADDRESS    PageTableAddr;
   UINT32                  FirstLevelIdx;
   UINT32                  SectionDescriptor;
@@ -660,7 +658,7 @@ ConvertSectionToPages (
 
   // Write the page table entry out, replacing section entry
   FirstLevelTable[FirstLevelIdx] = PageTableDescriptor;
-  */
+
   return EFI_SUCCESS;
 }
 
@@ -704,7 +702,7 @@ EfiAttributeToArmAttribute (
   IN UINT64                    EfiAttributes
   )
 {
-  /*UINT64 ArmAttributes;
+  UINT64 ArmAttributes;
 
   switch (EfiAttributes & EFI_MEMORY_CACHETYPE_MASK) {
     case EFI_MEMORY_UC:
@@ -750,9 +748,8 @@ EfiAttributeToArmAttribute (
   if (EfiAttributes & EFI_MEMORY_XP) {
     ArmAttributes |= TT_DESCRIPTOR_SECTION_XN_MASK;
   }
-  
-  return ArmAttributes;*/
-  return 0;
+
+  return ArmAttributes;
 }
 
 EFI_STATUS
@@ -763,7 +760,7 @@ GetMemoryRegionPage (
   OUT    UINTN                   *RegionAttributes
   )
 {
-  /*UINT32      PageAttributes;
+  UINT32      PageAttributes;
   UINT32      TableIndex;
   UINT32      PageDescriptor;
 
@@ -795,7 +792,7 @@ GetMemoryRegionPage (
       return EFI_SUCCESS;
     }
   }
-  */
+
   return EFI_NOT_FOUND;
 }
 
@@ -806,7 +803,7 @@ GetMemoryRegion (
   OUT    UINTN                   *RegionAttributes
   )
 {
-  /*EFI_STATUS                  Status;
+  EFI_STATUS                  Status;
   UINT32                      TableIndex;
   UINT32                      PageAttributes;
   UINT32                      PageTableIndex;
@@ -878,6 +875,6 @@ GetMemoryRegion (
       break;
     }
   }
-  */
+
   return EFI_SUCCESS;
 }
