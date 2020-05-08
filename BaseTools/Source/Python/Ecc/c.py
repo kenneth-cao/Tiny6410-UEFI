@@ -1,7 +1,7 @@
 ## @file
 # This file is used to be the c coding style checking of ECC tool
 #
-# Copyright (c) 2009 - 2015, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2009 - 2017, Intel Corporation. All rights reserved.<BR>
 # This program and the accompanying materials
 # are licensed and made available under the terms and conditions of the BSD License
 # which accompanies this distribution.  The full text of the license may be found at
@@ -271,7 +271,7 @@ def GetIdentifierList():
 def StripNonAlnumChars(Str):
     StrippedStr = ''
     for Char in Str:
-        if Char.isalnum():
+        if Char.isalnum() or Char == '_':
             StrippedStr += Char
     return StrippedStr
 
@@ -1271,7 +1271,10 @@ def CheckFuncLayoutReturnType(FullFileName):
         FuncName = Result[5]
         if EccGlobalData.gException.IsException(ERROR_C_FUNCTION_LAYOUT_CHECK_RETURN_TYPE, FuncName):
             continue
-        Index = Result[0].find(TypeStart)
+        Result0 = Result[0]
+        if Result0.upper().startswith('STATIC'):
+            Result0 = Result0[6:].strip()
+        Index = Result0.find(TypeStart)
         if Index != 0 or Result[3] != 0:
             PrintErrorMsg(ERROR_C_FUNCTION_LAYOUT_CHECK_RETURN_TYPE, '[%s] Return Type should appear at the start of line' % FuncName, FileTable, Result[1])
 
@@ -1289,12 +1292,12 @@ def CheckFuncLayoutReturnType(FullFileName):
         FuncName = Result[5]
         if EccGlobalData.gException.IsException(ERROR_C_FUNCTION_LAYOUT_CHECK_RETURN_TYPE, FuncName):
             continue
-        Index = Result[0].find(ReturnType)
+        Result0 = Result[0]
+        if Result0.upper().startswith('STATIC'):
+            Result0 = Result0[6:].strip()
+        Index = Result0.find(ReturnType)
         if Index != 0 or Result[3] != 0:
             PrintErrorMsg(ERROR_C_FUNCTION_LAYOUT_CHECK_RETURN_TYPE, '[%s] Return Type should appear at the start of line' % FuncName, 'Function', Result[1])
-
-        if Result[2] == Result[4]:
-            PrintErrorMsg(ERROR_C_FUNCTION_LAYOUT_CHECK_RETURN_TYPE, '[%s] Return Type should appear on its own line' % FuncName, 'Function', Result[1])
 
 def CheckFuncLayoutModifier(FullFileName):
     ErrorMsgList = []
@@ -1313,9 +1316,10 @@ def CheckFuncLayoutModifier(FullFileName):
     for Result in ResultSet:
         ReturnType = GetDataTypeFromModifier(Result[0])
         TypeStart = ReturnType.split()[0]
-#        if len(ReturnType) == 0:
-#            continue
-        Index = Result[0].find(TypeStart)
+        Result0 = Result[0]
+        if Result0.upper().startswith('STATIC'):
+            Result0 = Result0[6:].strip()
+        Index = Result0.find(TypeStart)
         if Index != 0:
             PrintErrorMsg(ERROR_C_FUNCTION_LAYOUT_CHECK_OPTIONAL_FUNCTIONAL_MODIFIER, '', FileTable, Result[1])
 
@@ -1327,9 +1331,10 @@ def CheckFuncLayoutModifier(FullFileName):
     for Result in ResultSet:
         ReturnType = GetDataTypeFromModifier(Result[0])
         TypeStart = ReturnType.split()[0]
-#        if len(ReturnType) == 0:
-#            continue
-        Index = Result[0].find(TypeStart)
+        Result0 = Result[0]
+        if Result0.upper().startswith('STATIC'):
+            Result0 = Result0[6:].strip()
+        Index = Result0.find(TypeStart)
         if Index != 0:
             PrintErrorMsg(ERROR_C_FUNCTION_LAYOUT_CHECK_OPTIONAL_FUNCTIONAL_MODIFIER, '', 'Function', Result[1])
 
@@ -1563,7 +1568,7 @@ def CheckMemberVariableFormat(Name, Value, FileTable, TdId, ModelId):
     Fields = Value[LBPos + 1 : RBPos]
     Fields = StripComments(Fields).strip()
     NestPos = Fields.find ('struct')
-    if NestPos != -1 and (NestPos + len('struct') < len(Fields)):
+    if NestPos != -1 and (NestPos + len('struct') < len(Fields)) and ModelId != DataClass.MODEL_IDENTIFIER_UNION:
         if not Fields[NestPos + len('struct') + 1].isalnum():
             if not EccGlobalData.gException.IsException(ERROR_DECLARATION_DATA_TYPE_CHECK_NESTED_STRUCTURE, Name):
                 PrintErrorMsg(ERROR_DECLARATION_DATA_TYPE_CHECK_NESTED_STRUCTURE, 'Nested struct in [%s].' % (Name), FileTable, TdId)
@@ -1627,6 +1632,8 @@ def CheckMemberVariableFormat(Name, Value, FileTable, TdId, ModelId):
 
         Field = Field.strip()
         if Field == '':
+            continue
+        if Field.startswith("#"):
             continue
         # Enum could directly assign value to variable
         Field = Field.split('=')[0].strip()
@@ -2209,7 +2216,8 @@ def CheckDoxygenCommand(FullFileName):
                        where Model = %d or Model = %d
                    """ % (FileTable, DataClass.MODEL_IDENTIFIER_COMMENT, DataClass.MODEL_IDENTIFIER_FUNCTION_HEADER)
     ResultSet = Db.TblFile.Exec(SqlStatement)
-    DoxygenCommandList = ['bug', 'todo', 'example', 'file', 'attention', 'param', 'post', 'pre', 'retval', 'return', 'sa', 'since', 'test', 'note', 'par']
+    DoxygenCommandList = ['bug', 'todo', 'example', 'file', 'attention', 'param', 'post', 'pre', 'retval',
+                          'return', 'sa', 'since', 'test', 'note', 'par', 'endcode', 'code']
     for Result in ResultSet:
         CommentStr = Result[0]
         CommentPartList = CommentStr.split()
@@ -2220,6 +2228,10 @@ def CheckDoxygenCommand(FullFileName):
                 PrintErrorMsg(ERROR_DOXYGEN_CHECK_COMMAND, 'ToDo should be marked with doxygen tag @todo', FileTable, Result[1])
             if Part.startswith('@'):
                 if EccGlobalData.gException.IsException(ERROR_DOXYGEN_CHECK_COMMAND, Part):
+                    continue
+                if not Part.replace('@', '').strip():
+                    continue
+                if Part.lstrip('@') in ['{', '}']:
                     continue
                 if Part.lstrip('@').isalpha():
                     if Part.lstrip('@') not in DoxygenCommandList:
