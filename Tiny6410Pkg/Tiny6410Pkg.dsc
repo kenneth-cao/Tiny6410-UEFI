@@ -29,7 +29,6 @@
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = Tiny6410Pkg/Tiny6410Pkg.fdf
 
-
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/Arm11/Arm11Lib.inf
   ArmPlatformLib|Tiny6410Pkg/Library/Tiny6410Lib/Tiny6410Lib.inf
@@ -210,6 +209,9 @@
   # Add support for GCC stack protector
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
+[BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
+  GCC:  *_*_*_DLINK_FLAGS = -z common-page-size=0x1000
+
 [BuildOptions]
   XCODE:*_*_ARM_PLATFORM_FLAGS == -arch armv7
 
@@ -296,7 +298,7 @@
 #  DEBUG_LOADFILE  0x00020000  // UNDI Driver
 #  DEBUG_EVENT     0x00080000  // Event messages
 #  DEBUG_ERROR     0x80000000  // Error
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000000F
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8040000F
 
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
