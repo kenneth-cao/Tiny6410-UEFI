@@ -210,14 +210,10 @@
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
-  GCC:  *_*_*_DLINK_FLAGS = -z common-page-size=0x1000
+  GCC:  *_*_ARM_DLINK_FLAGS = -z common-page-size=0x1000
 
 [BuildOptions]
-  XCODE:*_*_ARM_PLATFORM_FLAGS == -arch armv7
-
   GCC:*_*_ARM_PLATFORM_FLAGS == -mtune=arm1176jzf-s -march=armv6 -mfpu=vfp
-
-  RVCT:*_*_ARM_PLATFORM_FLAGS == --cpu Cortex-A8
 
 ################################################################################
 #
