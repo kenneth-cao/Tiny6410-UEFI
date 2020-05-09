@@ -34,7 +34,6 @@
   ArmPlatformLib|Tiny6410Pkg/Library/Tiny6410Lib/Tiny6410Lib.inf
   #ArmCpuLib|ArmPkg/Drivers/ArmCpuLib/Arm11MpCoreLib/Arm11MpCoreLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
-
   HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
   UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
 
@@ -82,11 +81,11 @@
   CpuExceptionHandlerLib|MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.inf
   PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
 
-  SerialPortLib|S3c6410Pkg/Library/SerialPortLib/SerialPortLib.inf
+  SerialPortLib|Tiny6410Pkg/Library/SerialPortLib/SerialPortLib.inf
   SerialPortExtLib|EmbeddedPkg/Library/TemplateSerialPortExtLib/TemplateSerialPortExtLib.inf
   SemihostLib|ArmPkg/Library/SemihostLib/SemihostLib.inf
 
-  RealTimeClockLib|S3c6410Pkg/Library/RealTimeClockLib/RealTimeClockLib.inf
+  RealTimeClockLib|Tiny6410Pkg/Library/RealTimeClockLib/RealTimeClockLib.inf
 
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
 
@@ -112,12 +111,12 @@
 
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
-  TimerLib|S3c6410Pkg/Library/TimerLib/TimerLib.inf
-  S3c6410Lib|S3c6410Pkg/Library/S3c6410Lib/S3c6410Lib.inf
-  S3c6410DmaLib|S3c6410Pkg/Library/S3c6410DmaLib/S3c6410DmaLib.inf
-  DebugAgentTimerLib|S3c6410Pkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
+  TimerLib|Tiny6410Pkg/Library/TimerLib/TimerLib.inf
+  S3c6410Lib|Tiny6410Pkg/Library/S3c6410Lib/S3c6410Lib.inf
+  S3c6410DmaLib|Tiny6410Pkg/Library/S3c6410DmaLib/S3c6410DmaLib.inf
+  DebugAgentTimerLib|Tiny6410Pkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
 
-  GdbSerialLib|S3c6410Pkg/Library/GdbSerialLib/GdbSerialLib.inf
+  GdbSerialLib|Tiny6410Pkg/Library/GdbSerialLib/GdbSerialLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
   DmaLib|ArmPkg/Library/ArmDmaLib/ArmDmaLib.inf
@@ -302,6 +301,11 @@
   gEmbeddedTokenSpaceGuid.PcdEmbeddedDefaultTextColor|0x07
   gEmbeddedTokenSpaceGuid.PcdEmbeddedMemVariableStoreSize|0x10000
 
+  # Timers
+  gEmbeddedTokenSpaceGuid.PcdTimerPeriod|100000
+  gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds|77
+  gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterFrequencyInHz|13000000
+
 #
 # Optional feature to help prevent EFI memory map fragments
 # Turned on and off via: PcdPrePiProduceMemoryTypeInformationHob
@@ -424,7 +428,7 @@
   #
   # USB
   #
-  S3c6410Pkg/PciEmulation/PciEmulation.inf
+  Tiny6410Pkg/Drivers/PciEmulation/PciEmulation.inf
 
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf {
     <PcdsFixedAtBuild>
@@ -437,31 +441,31 @@
   #
   # Nand Flash
   #
-  S3c6410Pkg/Flash/Flash.inf
+  Tiny6410Pkg/Drivers/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  S3c6410Pkg/MmcHostDxe/MmcHostDxe.inf
+  Tiny6410Pkg/Drivers/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  S3c6410Pkg/SmbusDxe/Smbus.inf
+  Tiny6410Pkg/Drivers/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  S3c6410Pkg/Gpio/Gpio.inf
-  S3c6410Pkg/InterruptDxe/InterruptDxe.inf
-  S3c6410Pkg/TimerDxe/TimerDxe.inf
-  S3c6410Pkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  Tiny6410Pkg/Drivers/Gpio/Gpio.inf
+  Tiny6410Pkg/Drivers/InterruptDxe/InterruptDxe.inf
+  Tiny6410Pkg/Drivers/TimerDxe/TimerDxe.inf
+  Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  S3c6410Pkg/TPS65950Dxe/TPS65950.inf
+  Tiny6410Pkg/Drivers/TPS65950Dxe/TPS65950.inf
 
   #
   # Bds

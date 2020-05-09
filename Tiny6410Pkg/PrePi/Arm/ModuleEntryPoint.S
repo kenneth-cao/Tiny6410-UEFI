@@ -17,7 +17,7 @@
 #include <AutoGen.h>
 #include <Chipset/ArmV7.h>
 #include <Tiny6410.h>
-#include <S3c6410/S3c6410.h>
+#include <S3c6410.h>
 
 .text
 .align 2

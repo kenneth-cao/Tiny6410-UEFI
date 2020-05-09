@@ -1,10 +1,8 @@
-
 #/** @file
 #
-#    Component description file for Bds module
+#    Component description file for Timer module
 #
 #  Copyright (c) 2009, Apple Inc. All rights reserved.<BR>
-#
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
 #  which accompanies this distribution.  The full text of the license may be found at
@@ -17,49 +15,43 @@
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = Tiny6410Bds
-  FILE_GUID                      = 934431fe-5745-402e-913d-17b4434eb0f3
+  BASE_NAME                      = TimerDxe
+  FILE_GUID                      = 6ddbf08b-cfc9-43cc-9e81-0784ba312ca0
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
 
-  ENTRY_POINT                    = BdsInitialize
+  ENTRY_POINT                    = TimerInitialize
 
 [Sources.common]
-  BdsEntry.c
-  FirmwareVolume.c
+  Timer.c
 
 [Packages]
+  Tiny6410Pkg/Tiny6410Pkg.dec
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
+  ArmPkg/ArmPkg.dec
 
 [LibraryClasses]
-  DevicePathLib
   BaseLib
-  HobLib
   UefiRuntimeServicesTableLib
-  ReportStatusCodeLib
-  PerformanceLib
-  DxeServicesTableLib
-  MemoryAllocationLib
   UefiLib
   UefiBootServicesTableLib
   BaseMemoryLib
   DebugLib
-  PrintLib
   UefiDriverEntryPoint
+  IoLib
+  S3c6410Lib
 
 [Guids]
 
-
 [Protocols]
-  gEfiBdsArchProtocolGuid
-  gEfiSimpleTextInProtocolGuid
-  gEfiSimpleTextOutProtocolGuid
-  gEfiSerialIoProtocolGuid
-  gEfiDevicePathProtocolGuid
-  gEfiSimpleFileSystemProtocolGuid
-  gEfiUsbIoProtocolGuid
-  gEfiFirmwareVolume2ProtocolGuid
+  gEfiTimerArchProtocolGuid
+  gHardwareInterruptProtocolGuid
+
+[Pcd.common]
+  gEmbeddedTokenSpaceGuid.PcdTimerPeriod
+  gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds
+  gTiny6410TokenSpaceGuid.PcdTiny6410ArchTimer
 
 [Depex]
-  TRUE
+  gHardwareInterruptProtocolGuid

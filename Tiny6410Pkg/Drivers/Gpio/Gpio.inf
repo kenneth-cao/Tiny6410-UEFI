@@ -13,18 +13,16 @@
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = GdbSerialLib
-  FILE_GUID                      = E2423349-EF5D-439B-95F5-8B8D8E3B443F
-  MODULE_TYPE                    = UEFI_DRIVER
+  BASE_NAME                      = Gpio
+  FILE_GUID                      = E7D9CAE1-6930-46E3-BDF9-0027446E7DF2
+  MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
-  LIBRARY_CLASS                  = GdbSerialLib
 
-  CONSTRUCTOR                    = GdbSerialLibConstructor
+  ENTRY_POINT                    = GpioInitialize
 
 
 [Sources.common]
-  GdbSerialLib.c
-
+  Gpio.c
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -32,10 +30,16 @@
   Tiny6410Pkg/Tiny6410Pkg.dec
 
 [LibraryClasses]
-  DebugLib
   IoLib
-  Tiny6410Lib
+  UefiDriverEntryPoint
+  S3c6410Lib
 
-[FixedPcd]
-  gTiny6410TokenSpaceGuid.PcdTiny6410ConsoleUart
+[Guids]
 
+[Protocols]
+  gEmbeddedGpioProtocolGuid
+
+[Pcd]
+
+[depex]
+  TRUE

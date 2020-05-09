@@ -31,6 +31,24 @@
 [Includes.common]
   Include                        # Root include for the package
 
+[LibraryClasses]
+  ##  @libraryclass  Abstract location of basic S3C6410 components
+  ##
+  S3c6410Lib|Include/Library/S3c6410Lib.h
+
+  ##  @libraryclass  Abstract S3C6410 and ARM DMA, modeled after PCI IO protocol
+  ##
+  S3c6410DmaLib|Include/Library/S3c6410DmaLib.h
+
 [Guids.common]
   gTiny6410TokenSpaceGuid    =  { 0x6834fe45, 0x4aee, 0x4fc6, { 0xbc, 0xb5, 0xff, 0x45, 0xb7, 0xa8, 0x71, 0xe2 } }
 
+[PcdsFixedAtBuild.common]
+  gTiny6410TokenSpaceGuid.PcdTiny6410ConsoleUart|0|UINT32|0x00000202
+  gTiny6410TokenSpaceGuid.PcdTiny6410GpmcOffset|0x00000000|UINT32|0x00000203
+  gTiny6410TokenSpaceGuid.PcdTiny6410MMCHS1Base|0x00000000|UINT32|0x00000204
+  gTiny6410TokenSpaceGuid.PcdTiny6410ArchTimer|2|UINT32|0x00000205
+  gTiny6410TokenSpaceGuid.PcdTiny6410FreeTimer|3|UINT32|0x00000206
+  gTiny6410TokenSpaceGuid.PcdTiny6410DebugAgentTimer|4|UINT32|0x00000207
+  gTiny6410TokenSpaceGuid.PcdTiny6410DebugAgentTimerFreqNanoSeconds|77|UINT32|0x00000208
+  gTiny6410TokenSpaceGuid.PcdTiny6410MmchsTimerFreq100NanoSeconds|1000000|UINT32|0x00000209

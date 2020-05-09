@@ -118,31 +118,31 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   #
   # Nand Flash
   #
-  #INF Tiny6410Pkg/Drivers/Flash/Flash.inf
+  INF Tiny6410Pkg/Drivers/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   INF EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  #INF Tiny6410Pkg/Drivers/MmcHostDxe/MmcHostDxe.inf
+  INF Tiny6410Pkg/Drivers/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  #INF Tiny6410Pkg/Drivers/SmbusDxe/Smbus.inf
+  INF Tiny6410Pkg/Drivers/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  #INF Tiny6410Pkg/Drivers/Gpio/Gpio.inf
-  #INF Tiny6410Pkg/Drivers/InterruptDxe/InterruptDxe.inf
-  #INF Tiny6410Pkg/Drivers/TimerDxe/TimerDxe.inf
-  #INF Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  INF Tiny6410Pkg/Drivers/Gpio/Gpio.inf
+  INF Tiny6410Pkg/Drivers/InterruptDxe/InterruptDxe.inf
+  INF Tiny6410Pkg/Drivers/TimerDxe/TimerDxe.inf
+  INF Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  #INF Tiny6410Pkg/Drivers/TPS65950Dxe/TPS65950.inf
+  INF Tiny6410Pkg/Drivers/TPS65950Dxe/TPS65950.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning
@@ -156,7 +156,7 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   # USB Support
   #
 
-  #INF Tiny6410Pkg/Drivers/PciEmulation/PciEmulation.inf
+  INF Tiny6410Pkg/Drivers/PciEmulation/PciEmulation.inf
 
   INF MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf

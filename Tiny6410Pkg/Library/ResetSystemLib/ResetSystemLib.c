@@ -24,7 +24,7 @@
 #include <Library/DebugLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
-#include <S3c6410/S3c6410.h>
+#include <S3c6410.h>
 
 
 VOID
