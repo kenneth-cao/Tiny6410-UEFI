@@ -50,5 +50,5 @@
   gTiny6410TokenSpaceGuid.PcdTiny6410ArchTimer|2|UINT32|0x00000205
   gTiny6410TokenSpaceGuid.PcdTiny6410FreeTimer|3|UINT32|0x00000206
   gTiny6410TokenSpaceGuid.PcdTiny6410DebugAgentTimer|4|UINT32|0x00000207
-  gTiny6410TokenSpaceGuid.PcdTiny6410DebugAgentTimerFreqNanoSeconds|77|UINT32|0x00000208
+  gTiny6410TokenSpaceGuid.PcdTiny6410DebugAgentTimerFreqNanoSeconds|76|UINT32|0x00000208
   gTiny6410TokenSpaceGuid.PcdTiny6410MmchsTimerFreq100NanoSeconds|1000000|UINT32|0x00000209

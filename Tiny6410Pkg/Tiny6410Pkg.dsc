@@ -293,18 +293,13 @@
 #  DEBUG_LOADFILE  0x00020000  // UNDI Driver
 #  DEBUG_EVENT     0x00080000  // Event messages
 #  DEBUG_ERROR     0x80000000  // Error
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8040000F
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004F
 
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
   gEmbeddedTokenSpaceGuid.PcdEmbeddedAutomaticBootCommand|""
   gEmbeddedTokenSpaceGuid.PcdEmbeddedDefaultTextColor|0x07
   gEmbeddedTokenSpaceGuid.PcdEmbeddedMemVariableStoreSize|0x10000
-
-  # Timers
-  gEmbeddedTokenSpaceGuid.PcdTimerPeriod|100000
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterPeriodInNanoseconds|77
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPerformanceCounterFrequencyInHz|13000000
 
 #
 # Optional feature to help prevent EFI memory map fragments
