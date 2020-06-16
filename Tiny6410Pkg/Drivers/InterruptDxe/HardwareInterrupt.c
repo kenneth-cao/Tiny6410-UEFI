@@ -33,8 +33,7 @@
 //
 EFI_EVENT EfiExitBootServicesEvent      = (EFI_EVENT)NULL;
 
-
-HARDWARE_INTERRUPT_HANDLER  gRegisteredInterruptHandlers[INT_NROF_VECTORS];
+EFI_CPU_ARCH_PROTOCOL   *Cpu;
 
 /**
   Shutdown our hardware
@@ -53,11 +52,11 @@ ExitBootServicesEvent (
   )
 {
   // Disable all interrupts
-  MmioWrite32 (INTCPS_MIR(0), 0xFFFFFFFF);
-  MmioWrite32 (INTCPS_MIR(1), 0xFFFFFFFF);
-  MmioWrite32 (INTCPS_MIR(2), 0xFFFFFFFF);
-  MmioWrite32 (INTCPS_CONTROL, INTCPS_CONTROL_NEWIRQAGR);
-
+  MmioWrite32 (VIC0_BASE + VICxINTENCLEAR, 0xFFFFFFFF);
+  MmioWrite32 (VIC1_BASE + VICxINTENCLEAR, 0xFFFFFFFF);
+  MmioWrite32 (VIC0_BASE + VICxADDRESS, 0);
+  MmioWrite32 (VIC1_BASE + VICxADDRESS, 0);
+  Cpu->DisableInterrupt(Cpu);
   // Add code here to disable all FIQs as debugger may have turned one on
 }
 
@@ -80,12 +79,21 @@ RegisterInterruptSource (
   IN HARDWARE_INTERRUPT_HANDLER         Handler
   )
 {
+  UINT32 VicBaseAddr = VIC0_BASE;
+  UINT32 IntIndex = Source;
+  VOID *VicAddr;
+
   if (Source > MAX_VECTOR) {
     ASSERT(FALSE);
     return EFI_UNSUPPORTED;
   }
 
-  if ((MmioRead32 (INTCPS_ILR(Source)) & INTCPS_ILR_FIQ) == INTCPS_ILR_FIQ) {
+  if (Source > 31) {
+    VicBaseAddr = VIC1_BASE;
+    IntIndex -= 32;
+  }
+
+  if ((MmioRead32 (VicBaseAddr + VICxINTSELECT) >> IntIndex) & BIT0) {
     // This vector has been programmed as FIQ so we can't use it for IRQ
     // EFI does not use FIQ, but the debugger can use it to check for
     // ctrl-c. So this ASSERT means you have a conflict with the debug agent
@@ -93,15 +101,16 @@ RegisterInterruptSource (
     return EFI_UNSUPPORTED;
   }
 
-  if ((Handler == NULL) && (gRegisteredInterruptHandlers[Source] == NULL)) {
+  VicAddr = (VOID*)MmioRead32(VicBaseAddr + VICxVECTADDR(IntIndex));
+  if ((Handler == NULL) && (VicAddr == NULL)) {
     return EFI_INVALID_PARAMETER;
   }
 
-  if ((Handler != NULL) && (gRegisteredInterruptHandlers[Source] != NULL)) {
+  if ((Handler != NULL) && (VicAddr != NULL)) {
     return EFI_ALREADY_STARTED;
   }
 
-  gRegisteredInterruptHandlers[Source] = Handler;
+  MmioWrite32(VicBaseAddr + VICxVECTADDR(IntIndex), (UINT32)Handler);
   return This->EnableInterruptSource(This, Source);
 }
 
@@ -123,18 +132,19 @@ EnableInterruptSource (
   IN HARDWARE_INTERRUPT_SOURCE          Source
   )
 {
-  UINTN Bank;
-  UINTN Bit;
+  UINT32 VicBaseAddr = VIC0_BASE;
 
   if (Source > MAX_VECTOR) {
     ASSERT(FALSE);
     return EFI_UNSUPPORTED;
   }
 
-  Bank = Source / 32;
-  Bit  = 1UL << (Source % 32);
+  if (Source > 31) {
+    VicBaseAddr = VIC1_BASE;
+    Source -= 32;
+  }
 
-  MmioWrite32 (INTCPS_MIR_CLEAR(Bank), Bit);
+  MmioOr32 (VicBaseAddr + VICxINTENABLE, 1 << Source);
 
   return EFI_SUCCESS;
 }
@@ -157,18 +167,19 @@ DisableInterruptSource (
   IN HARDWARE_INTERRUPT_SOURCE          Source
   )
 {
-  UINTN Bank;
-  UINTN Bit;
+  UINT32 VicBaseAddr = VIC0_BASE;
 
   if (Source > MAX_VECTOR) {
     ASSERT(FALSE);
     return EFI_UNSUPPORTED;
   }
 
-  Bank = Source / 32;
-  Bit  = 1UL << (Source % 32);
+  if (Source > 31) {
+    VicBaseAddr = VIC1_BASE;
+    Source -= 32;
+  }
 
-  MmioWrite32 (INTCPS_MIR_SET(Bank), Bit);
+  MmioAnd32 (VicBaseAddr + VICxINTENCLEAR, 1 << Source);
 
   return EFI_SUCCESS;
 }
@@ -194,8 +205,7 @@ GetInterruptSourceState (
   IN BOOLEAN                            *InterruptState
   )
 {
-  UINTN Bank;
-  UINTN Bit;
+  UINT32 VicBaseAddr = VIC0_BASE;
 
   if (InterruptState == NULL) {
     return EFI_INVALID_PARAMETER;
@@ -206,13 +216,15 @@ GetInterruptSourceState (
     return EFI_UNSUPPORTED;
   }
 
-  Bank = Source / 32;
-  Bit  = 1UL << (Source % 32);
+  if (Source > 31) {
+    VicBaseAddr = VIC1_BASE;
+    Source -= 32;
+  }
 
-  if ((MmioRead32(INTCPS_MIR(Bank)) & Bit) == Bit) {
-    *InterruptState = FALSE;
-  } else {
+  if ((MmioRead32(VicBaseAddr + VICxIRQSTATUS) >> Source) & BIT0) {
     *InterruptState = TRUE;
+  } else {
+    *InterruptState = FALSE;
   }
 
   return EFI_SUCCESS;
@@ -236,8 +248,6 @@ EndOfInterrupt (
   IN HARDWARE_INTERRUPT_SOURCE          Source
   )
 {
-  MmioWrite32 (INTCPS_CONTROL, INTCPS_CONTROL_NEWIRQAGR);
-  ArmDataSyncronizationBarrier ();
   return EFI_SUCCESS;
 }
 
@@ -260,24 +270,24 @@ IrqInterruptHandler (
   IN EFI_SYSTEM_CONTEXT           SystemContext
   )
 {
-  UINT32                     Vector;
+
   HARDWARE_INTERRUPT_HANDLER InterruptHandler;
 
-  Vector = MmioRead32 (INTCPS_SIR_IRQ) & INTCPS_SIR_IRQ_MASK;
+  InterruptHandler = (HARDWARE_INTERRUPT_HANDLER)MmioRead32(VIC0_BASE + VICxADDRESS);
+  if (InterruptHandler == NULL) {
+    InterruptHandler = (HARDWARE_INTERRUPT_HANDLER)MmioRead32(VIC1_BASE + VICxADDRESS);
+  }
 
-  // Needed to prevent infinite nesting when Time Driver lowers TPL
-  MmioWrite32 (INTCPS_CONTROL, INTCPS_CONTROL_NEWIRQAGR);
-  ArmDataSyncronizationBarrier ();
+  //DEBUG ((DEBUG_INFO, "InterruptHandler: 0x%x\n", InterruptHandler));
 
-  InterruptHandler = gRegisteredInterruptHandlers[Vector];
   if (InterruptHandler != NULL) {
     // Call the registered interrupt handler.
-    InterruptHandler (Vector, SystemContext);
+    InterruptHandler (0, SystemContext);
   }
 
   // Needed to clear after running the handler
-  MmioWrite32 (INTCPS_CONTROL, INTCPS_CONTROL_NEWIRQAGR);
-  ArmDataSyncronizationBarrier ();
+  MmioWrite32 (VIC0_BASE + VICxADDRESS, 0);
+  MmioWrite32 (VIC1_BASE + VICxADDRESS, 0);
 }
 
 //
@@ -314,16 +324,20 @@ InterruptDxeInitialize (
   )
 {
   EFI_STATUS  Status;
-  EFI_CPU_ARCH_PROTOCOL   *Cpu;
 
   // Make sure the Interrupt Controller Protocol is not already installed in the system.
   ASSERT_PROTOCOL_ALREADY_INSTALLED (NULL, &gHardwareInterruptProtocolGuid);
 
   // Make sure all interrupts are disabled by default.
-  MmioWrite32 (INTCPS_MIR(0), 0xFFFFFFFF);
-  MmioWrite32 (INTCPS_MIR(1), 0xFFFFFFFF);
-  MmioWrite32 (INTCPS_MIR(2), 0xFFFFFFFF);
-  MmioOr32 (INTCPS_CONTROL, INTCPS_CONTROL_NEWIRQAGR);
+  MmioWrite32 (VIC0_BASE + VICxINTENCLEAR, 0xFFFFFFFF);
+  MmioWrite32 (VIC1_BASE + VICxINTENCLEAR, 0xFFFFFFFF);
+
+  // Set all interrupts to IRQ
+  MmioWrite32 (VIC0_BASE + VICxINTSELECT, 0x0);
+  MmioWrite32 (VIC1_BASE + VICxINTSELECT, 0x0);
+
+  MmioWrite32 (VIC0_BASE + VICxADDRESS, 0);
+  MmioWrite32 (VIC1_BASE + VICxADDRESS, 0);
 
   Status = gBS->InstallMultipleProtocolInterfaces(&gHardwareInterruptHandle,
                                                   &gHardwareInterruptProtocolGuid,   &gHardwareInterruptProtocol,
@@ -351,6 +365,8 @@ InterruptDxeInitialize (
   // Register for an ExitBootServicesEvent
   Status = gBS->CreateEvent(EVT_SIGNAL_EXIT_BOOT_SERVICES, TPL_NOTIFY, ExitBootServicesEvent, NULL, &EfiExitBootServicesEvent);
   ASSERT_EFI_ERROR(Status);
+
+  Cpu->EnableInterrupt(Cpu);
 
   return Status;
 }

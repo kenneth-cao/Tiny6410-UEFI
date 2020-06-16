@@ -52,10 +52,10 @@ _Reset:
 
   // Disable Interrupt
   mvn   r1, #0x0
-  LoadConstantToReg(VIC0INTENCLEAR, r0)
-  str   r1, [r0]
-  LoadConstantToReg(VIC1INTENCLEAR, r0)
-  str   r1, [r0]
+  LoadConstantToReg(VIC0_BASE, r0)
+  str   r1, [r0, #VICxINTENCLEAR]
+  LoadConstantToReg(VIC1_BASE, r0)
+  str   r1, [r0, #VICxINTENCLEAR]
 
   // Peripheral Port Memory Remap
   LoadConstantToReg (SOC_REGISTERS_PHYSICAL_BASE, r0)

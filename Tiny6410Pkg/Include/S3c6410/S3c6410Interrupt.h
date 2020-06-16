@@ -16,18 +16,37 @@
 #define __S3C6410INTERRUPT_H__
 
 // Interrupt
-#define VIC0_BASE 0x71200000
-#define VIC1_BASE 0x71300000
+#define VIC0_BASE           0x71200000
+#define VIC1_BASE           0x71300000
 
-#define INTENCLEAR_OFFSET 0x14
+#define INTMOD              0x00C    // VIC INT SELECT (IRQ or FIQ)
+#define INTUNMSK            0x010    // VIC INT EN (Unmask by writing 1)
+#define INTMSK              0x014    // VIC INT EN CLEAR (Mask by writing 1)
+#define INTSUBMSK           0x01C    // VIC SOFT INT CLEAR
+#define VECTADDR            0xF00    // VIC ADDRESS
 
-#define VIC0INTENCLEAR 0x71200014
-#define VIC1INTENCLEAR 0x71300014
+#define VICxIRQSTATUS       0x000
+#define VICxFIQSTATUS       0x004
+#define VICxRAWINTR         0x008
+#define VICxINTSELECT       0x00C
+#define VICxINTENABLE       0x010
+#define VICxINTENCLEAR      0x014
+#define VICxSOFTINT         0x018
+#define VICxSOFTINTCLEAR    0x01C
+#define VICxPROTECTION      0x020
+#define VICxSWPRIORITYMASK  0x024
+#define VICxPRIORITYDAISY   0x028
+#define VICxADDRESS         0xF00
+
+#define VICxVECTADDR(x)     (0x100 + 4 * (x))
+#define VICxVECPRIORITY(x)  (0x200 + 4 * (x))
+
+#define INT_NROF_VECTORS    64
+#define MAX_VECTOR          (INT_NROF_VECTORS - 1)
+
 
 #define INTERRUPT_BASE (0x48200000)
 
-#define INT_NROF_VECTORS      (96)
-#define MAX_VECTOR            (INT_NROF_VECTORS - 1)
 #define INTCPS_SYSCONFIG      (INTERRUPT_BASE + 0x0010)
 #define INTCPS_SYSSTATUS      (INTERRUPT_BASE + 0x0014)
 #define INTCPS_SIR_IRQ        (INTERRUPT_BASE + 0x0040)
