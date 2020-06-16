@@ -31,33 +31,28 @@ TimerConstructor (
 {
   UINTN  TconBits      = 0;
   UINTN  Timer         = PcdGet32(PcdTiny6410FreeTimer);
-  UINT32 TimerBaseAddr = TimerBase(Timer);
-  static BOOLEAN IsPrescalerInit = FALSE;
+  UINT32 TCNTB         = TimerBase(Timer) + TIMER_CNTB;
 
   if (Timer > 0) {
     TconBits = 4 * Timer + 4;
   }
 
   if ((MmioRead32(TIMER_CON) & (1 << TconBits)) == 0) {
-
-    if (!IsPrescalerInit) {
-      IsPrescalerInit = TRUE;
-      MmioWrite32(TIMER_CFG0, (MmioRead32(TIMER_CFG0) & 0xFFFF0000) | (TCFG0_PRESCALER << 8) | TCFG0_PRESCALER);
-    }
-
-    MmioWrite32(TIMER_CFG1, MmioRead32(TIMER_CFG1) & ~(0xF << 4 * Timer));
+    MmioAnd32(TIMER_CFG0, 0xFFFF0000);
+    MmioOr32(TIMER_CFG0, (TCFG0_PRESCALER << 8) | TCFG0_PRESCALER);
+    MmioAnd32(TIMER_CFG1, ~(0xF << 4 * Timer));
     // Disable interrupts
     MmioAnd32(TIMER_INT_CSTAT, ~(1 << Timer));
-    MmioWrite32(TimerBaseAddr + TIMER_CNTB, (UINT32)-1);
+    MmioWrite32(TCNTB, (UINT32)-1);
     // Enable auto-reload, set manual update
     if (Timer < 4) {
       MmioOr32(TIMER_CON, 10 << TconBits);
-    }
-    else {
+    } else {
       MmioOr32(TIMER_CON, 6 << TconBits);
     }
     // Clear manual update and Start Timer
-    MmioWrite32(TIMER_CON, (MmioRead32(TIMER_CON) & ~(3 << TconBits)) | (1 << TconBits));
+    MmioAnd32(TIMER_CON, ~(3 << TconBits));
+    MmioOr32(TIMER_CON, 1 << TconBits);
   }
   return EFI_SUCCESS;
 }

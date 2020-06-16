@@ -270,7 +270,8 @@ CommonCExceptionHandler (
   )
 
 */
-  blx       ASM_PFX(CommonCExceptionHandler)  @ Call exception handler
+  ldr       R5, CommonCExcHandler
+  blx       R5  @ Call exception handler
 
   mov       SP, R4                  @ Restore SP
 
@@ -306,3 +307,4 @@ CommonCExceptionHandler (
   ldmfd     SP!,{LR}                @ restore the link register for this context
   rfefd     SP!                     @ return from exception via srsfd stack slot
 
+CommonCExcHandler:       .word  CommonCExceptionHandler

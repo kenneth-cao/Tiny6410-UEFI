@@ -83,9 +83,6 @@ RegisterInterruptHandler (
   return EFI_SUCCESS;
 }
 
-
-
-
 VOID
 EFIAPI
 CommonCExceptionHandler (
@@ -130,7 +127,7 @@ InitializeExceptions (
   UINT32               *VectorBase;
 
   Status = EFI_SUCCESS;
-  ZeroMem (gExceptionHandlers,sizeof(*gExceptionHandlers));
+  ZeroMem (gExceptionHandlers,sizeof(gExceptionHandlers));
 
   //
   // Disable interrupts

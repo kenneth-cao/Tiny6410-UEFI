@@ -41,16 +41,8 @@ volatile UINT64 mTimerPeriod = 0;
 // Cached copy of the Hardware Interrupt protocol instance
 EFI_HARDWARE_INTERRUPT_PROTOCOL *gInterrupt = NULL;
 
-// Cached registers
-volatile UINT32 TISR;
-volatile UINT32 TCLR;
-volatile UINT32 TLDR;
-volatile UINT32 TCRR;
-volatile UINT32 TIER;
-
 // Cached interrupt vector
 volatile UINTN  gVector;
-
 
 /**
 
@@ -88,10 +80,10 @@ TimerInterruptHandler (
   }
 
   // Clear all timer interrupts
-  MmioWrite32 (TISR, TISR_CLEAR_ALL);
+  MmioOr32 (TIMER_INT_CSTAT, 0x1F << 5);
 
   // Poll interrupt status bits to ensure clearing
-  while ((MmioRead32 (TISR) & TISR_ALL_INTERRUPT_MASK) != TISR_NO_INTERRUPTS_PENDING);
+  //while (((MmioRead32 (TIMER_INT_CSTAT) & 0x3FF) >> 5) != 0x1F);
 
   gBS->RestoreTPL (OriginalTPL);
 }
@@ -181,29 +173,39 @@ TimerDriverSetTimerPeriod (
 {
   EFI_STATUS  Status;
   UINT64      TimerCount;
-  INT32       LoadValue;
+  UINT32      TconBits = 0;
+
+  UINT32 Timer = FixedPcdGet32(PcdTiny6410ArchTimer);
+  UINT32 TCNTB = TimerBase (Timer) + TIMER_CNTB;
+
+  if (Timer > 0) {
+    TconBits = 4 * Timer + 4;
+  }
+
 
   if (TimerPeriod == 0) {
     // Turn off GPTIMER3
-    MmioWrite32 (TCLR, TCLR_ST_OFF);
-
+    MmioAnd32(TIMER_CON, ~(1 << TconBits));
+    MmioAnd32(TIMER_INT_CSTAT, ~(1 << Timer));
     Status = gInterrupt->DisableInterruptSource(gInterrupt, gVector);
   } else {
     // Calculate required timer count
     TimerCount = DivU64x32(TimerPeriod * 100, PcdGet32(PcdEmbeddedPerformanceCounterPeriodInNanoseconds));
+    MmioWrite32 (TCNTB, (UINT32) TimerCount);
 
-    // Set GPTIMER3 Load register
-    LoadValue = (INT32) -TimerCount;
-    MmioWrite32 (TLDR, LoadValue);
-    MmioWrite32 (TCRR, LoadValue);
-
-    // Enable Overflow interrupt
-    MmioWrite32 (TIER, TIER_TCAR_IT_DISABLE | TIER_OVF_IT_ENABLE | TIER_MAT_IT_DISABLE);
-
-    // Turn on GPTIMER3, it will reload at overflow
-    MmioWrite32 (TCLR, TCLR_AR_AUTORELOAD | TCLR_ST_ON);
-
+    // Enable auto-reload, set manual update
+    if (Timer < 4) {
+      MmioOr32(TIMER_CON, 10 << TconBits);
+    } else {
+      MmioOr32(TIMER_CON, 6 << TconBits);
+    }
+    // Enable interrupt
+    MmioOr32 (TIMER_INT_CSTAT, 1 << Timer);
     Status = gInterrupt->EnableInterruptSource(gInterrupt, gVector);
+
+    // Clear manual update and Start Timer
+    MmioOr32(TIMER_CON, 1 << TconBits);
+    MmioAnd32(TIMER_CON, ~(2 << TconBits));
   }
 
   //
@@ -333,31 +335,25 @@ TimerInitialize (
 {
   EFI_HANDLE  Handle = NULL;
   EFI_STATUS  Status;
-  UINT32      TimerBaseAddress;
+
+  UINT32 Timer = FixedPcdGet32(PcdTiny6410ArchTimer);
 
   // Find the interrupt controller protocol.  ASSERT if not found.
   Status = gBS->LocateProtocol (&gHardwareInterruptProtocolGuid, NULL, (VOID **)&gInterrupt);
   ASSERT_EFI_ERROR (Status);
 
   // Set up the timer registers
-  TimerBaseAddress = TimerBase (FixedPcdGet32(PcdTiny6410ArchTimer));
-  TISR = TimerBaseAddress + GPTIMER_TISR;
-  TCLR = TimerBaseAddress + GPTIMER_TCLR;
-  TLDR = TimerBaseAddress + GPTIMER_TLDR;
-  TCRR = TimerBaseAddress + GPTIMER_TCRR;
-  TIER = TimerBaseAddress + GPTIMER_TIER;
+  MmioAnd32(TIMER_CFG1, ~(0xF << 4 * Timer));
+
+  // Install interrupt handler
+  gVector = InterruptVectorForTimer (Timer);
 
   // Disable the timer
   Status = TimerDriverSetTimerPeriod (&gTimer, 0);
   ASSERT_EFI_ERROR (Status);
 
-  // Install interrupt handler
-  gVector = InterruptVectorForTimer (FixedPcdGet32(PcdTiny6410ArchTimer));
   Status = gInterrupt->RegisterInterruptSource (gInterrupt, gVector, TimerInterruptHandler);
   ASSERT_EFI_ERROR (Status);
-
-  // Turn on the functional clock for Timer
-  MmioOr32 (CM_FCLKEN_PER, CM_FCLKEN_PER_EN_GPT3_ENABLE);
 
   // Set up default timer
   Status = TimerDriverSetTimerPeriod (&gTimer, FixedPcdGet32(PcdTimerPeriod));

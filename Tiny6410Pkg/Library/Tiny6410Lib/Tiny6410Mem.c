@@ -57,9 +57,9 @@ ArmPlatformGetVirtualMemoryMap (
 
   // I-RAM, Stepping Store
   VirtualMemoryTable[Index].PhysicalBase = SOC_STEPPING_STONE_PHYSICAL_BASE;
-  VirtualMemoryTable[Index].VirtualBase  = 0;
+  VirtualMemoryTable[Index].VirtualBase  = 0x0;
   VirtualMemoryTable[Index].Length       = SOC_STEPPING_STONE_PHYSICAL_LENGTH;
-  VirtualMemoryTable[Index].Attributes   = CacheAttributes;
+  VirtualMemoryTable[Index].Attributes   = DDR_ATTRIBUTES_UNCACHED;
 
   // ReMap DRAM
   VirtualMemoryTable[++Index].PhysicalBase = PcdGet64 (PcdSystemMemoryBase);

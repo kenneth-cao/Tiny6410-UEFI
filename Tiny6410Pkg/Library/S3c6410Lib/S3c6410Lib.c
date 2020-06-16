@@ -64,12 +64,16 @@ InterruptVectorForTimer (
   IN  UINTN Timer
   )
 {
+  static UINTN IntVector[] = {
+    23, 24, 25, 27, 28
+  };
+
   if (Timer > 4) {
     ASSERT(FALSE);
     return 0;
   }
 
-  return 36 + Timer;
+  return IntVector[Timer];
 }
 
 UINT32
