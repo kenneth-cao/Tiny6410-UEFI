@@ -20,14 +20,9 @@
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 
-#include <Protocol/RealTimeClock.h>
-#include <Protocol/EmbeddedExternalDevice.h>
-
 #include <S3c6410.h>
-#include <TPS65950.h>
 
 
-EMBEDDED_EXTERNAL_DEVICE   *gTPS65950;
 INT16                      TimeZone = EFI_UNSPECIFIED_TIMEZONE;
 
 /**
@@ -50,8 +45,8 @@ LibGetTime (
   OUT EFI_TIME_CAPABILITIES   *Capabilities
   )
 {
-  EFI_STATUS            Status;
-  UINT8                 Data;
+  EFI_STATUS            Status = EFI_SUCCESS;
+  //UINT8                 Data;
   EFI_TPL               OldTpl;
 
   if (Time == NULL) {
@@ -64,7 +59,7 @@ LibGetTime (
   ZeroMem(Time, sizeof(EFI_TIME));
 
   // Latch values
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
+  /*Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
   if (Status != EFI_SUCCESS) goto EXIT;
   Data |= BIT6;
   Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
@@ -106,9 +101,9 @@ LibGetTime (
     Capabilities->Resolution = 1;
     Capabilities->Accuracy = 50000000;
     Capabilities->SetsToZero = FALSE;
-  }
+  }*/
 
-EXIT:
+//EXIT:
   gBS->RestoreTPL(OldTpl);
 
   return (Status == EFI_SUCCESS) ? Status : EFI_DEVICE_ERROR;
@@ -130,8 +125,8 @@ LibSetTime (
   IN EFI_TIME                *Time
   )
 {
-  EFI_STATUS Status;
-  UINT8      Data;
+  EFI_STATUS Status = EFI_SUCCESS;
+  //UINT8      Data;
   UINT8      MonthDayCount[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
   EFI_TPL    OldTpl;
 
@@ -152,8 +147,8 @@ LibSetTime (
 
   OldTpl = gBS->RaiseTPL(TPL_NOTIFY);
 
-  Data = Time->Year - 2000;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, YEARS_REG), 1, &Data);
+  //Data = Time->Year - 2000;
+  /*Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, YEARS_REG), 1, &Data);
   if (Status != EFI_SUCCESS) goto EXIT;
 
   Data = ((Time->Month / 10) << 4) | (Time->Month % 10);
@@ -176,12 +171,12 @@ LibSetTime (
   Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, SECONDS_REG), 1, &Data);
   if (Status != EFI_SUCCESS) goto EXIT;
 
-  TimeZone = Time->TimeZone;
+  TimeZone = Time->TimeZone;*/
 
-EXIT:
+//EXIT:
   gBS->RestoreTPL(OldTpl);
 
-  return (Status == EFI_SUCCESS) ? Status : EFI_DEVICE_ERROR;
+  return Status;
 }
 
 /**
@@ -247,18 +242,18 @@ LibRtcInitialize (
   IN EFI_SYSTEM_TABLE                      *SystemTable
   )
 {
-  EFI_STATUS    Status;
-  EFI_HANDLE    Handle;
-  UINT8         Data;
+  EFI_STATUS    Status = EFI_SUCCESS;
+  //EFI_HANDLE    Handle;
+  //UINT8         Data;
   EFI_TPL       OldTpl;
 
-  Status = gBS->LocateProtocol (&gEmbeddedExternalDeviceProtocolGuid, NULL, (VOID **)&gTPS65950);
-  ASSERT_EFI_ERROR(Status);
+  //Status = gBS->LocateProtocol (&gEmbeddedExternalDeviceProtocolGuid, NULL, (VOID **)&gTPS65950);
+  //ASSERT_EFI_ERROR(Status);
 
   OldTpl = gBS->RaiseTPL(TPL_NOTIFY);
-  Data = 1;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
-  ASSERT_EFI_ERROR(Status);
+  //Data = 1;
+  //Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
+  //ASSERT_EFI_ERROR(Status);
   gBS->RestoreTPL(OldTpl);
 
   // Setup the setters and getters
@@ -266,14 +261,6 @@ LibRtcInitialize (
   gRT->SetTime       = LibSetTime;
   gRT->GetWakeupTime = LibGetWakeupTime;
   gRT->SetWakeupTime = LibSetWakeupTime;
-
-  // Install the protocol
-  Handle = NULL;
-  Status = gBS->InstallMultipleProtocolInterfaces (
-                  &Handle,
-                  &gEfiRealTimeClockArchProtocolGuid,  NULL,
-                  NULL
-                 );
 
   return Status;
 }

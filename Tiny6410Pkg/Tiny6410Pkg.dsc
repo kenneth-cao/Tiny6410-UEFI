@@ -423,7 +423,7 @@
   #
   # USB
   #
-  Tiny6410Pkg/Drivers/PciEmulation/PciEmulation.inf
+  #Tiny6410Pkg/Drivers/PciEmulation/PciEmulation.inf
 
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf {
     <PcdsFixedAtBuild>
@@ -442,7 +442,7 @@
   # MMC/SD
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  Tiny6410Pkg/Drivers/MmcHostDxe/MmcHostDxe.inf
+  #Tiny6410Pkg/Drivers/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
@@ -455,12 +455,7 @@
   Tiny6410Pkg/Drivers/Gpio/Gpio.inf
   Tiny6410Pkg/Drivers/InterruptDxe/InterruptDxe.inf
   Tiny6410Pkg/Drivers/TimerDxe/TimerDxe.inf
-  Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
-
-  #
-  # Power IC
-  #
-  Tiny6410Pkg/Drivers/TPS65950Dxe/TPS65950.inf
+  #Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Bds
