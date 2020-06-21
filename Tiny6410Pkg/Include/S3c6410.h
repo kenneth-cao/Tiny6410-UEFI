@@ -28,7 +28,7 @@
 #include "S3c6410/S3c6410WatchDog.h"
 #include "S3c6410/S3c6410ClkPower.h"
 #include "S3c6410/S3c6410Dramc.h"
-
+#include "S3c6410/S3c6410Rtc.h"
 // Device Copy Function Pointer
 #define GLOBAL_BLOCK_CNT    0x0C003FFC
 #define COPY_MMC_TO_MEM     0x0C004008

@@ -45,8 +45,7 @@ LibGetTime (
   OUT EFI_TIME_CAPABILITIES   *Capabilities
   )
 {
-  EFI_STATUS            Status = EFI_SUCCESS;
-  //UINT8                 Data;
+  UINT8                 Data;
   EFI_TPL               OldTpl;
 
   if (Time == NULL) {
@@ -58,37 +57,47 @@ LibGetTime (
   /* Get time and date */
   ZeroMem(Time, sizeof(EFI_TIME));
 
-  // Latch values
-  /*Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
-  Data |= BIT6;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioOr32(RTC_CON, 0x1);
+  Data = MmioRead32(RTC_BCDSEC);
+  Time->Second = ((Data >> 4) & 0x7) * 10 + (Data & 0xF);
 
-  // Read registers
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, YEARS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
-  Time->Year = 2000 + ((Data >> 4) & 0xF) * 10 + (Data & 0xF);
-
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, MONTHS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
-  Time->Month = ((Data >> 4) & 0x1) * 10 + (Data & 0xF);
-
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, DAYS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
-  Time->Day = ((Data >> 4) & 0x3) * 10 + (Data & 0xF);
-
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, HOURS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
-  Time->Hour = ((Data >> 4) & 0x3) * 10 + (Data & 0xF);
-
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, MINUTES_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  Data = MmioRead32(RTC_BCDMIN);
   Time->Minute = ((Data >> 4) & 0x7) * 10 + (Data & 0xF);
 
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, SECONDS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
-  Time->Second = ((Data >> 4) & 0x7) * 10 + (Data & 0xF);
+  Data = MmioRead32(RTC_BCDHOUR);
+  Time->Hour = ((Data >> 4) & 0x3) * 10 + (Data & 0xF);
+
+  Data = MmioRead32(RTC_BCDDATE);
+  Time->Day = ((Data >> 4) & 0x3) * 10 + (Data & 0xF);
+
+  Data = MmioRead32(RTC_BCDMON);
+  Time->Month = ((Data >> 4) & 0x1) * 10 + (Data & 0xF);
+
+  Data = MmioRead32(RTC_BCDYEAR);
+  Time->Year = 2000 + ((Data >> 4) & 0xF) * 10 + (Data & 0xF);
+  MmioAnd32(RTC_CON, ~(0x1));
+
+  if (Time->Second == 0) {
+    MmioOr32(RTC_CON, 0x1);
+    Data = MmioRead32(RTC_BCDSEC);
+    Time->Second = ((Data >> 4) & 0x7) * 10 + (Data & 0xF);
+
+    Data = MmioRead32(RTC_BCDMIN);
+    Time->Minute = ((Data >> 4) & 0x7) * 10 + (Data & 0xF);
+
+    Data = MmioRead32(RTC_BCDHOUR);
+    Time->Hour = ((Data >> 4) & 0x3) * 10 + (Data & 0xF);
+
+    Data = MmioRead32(RTC_BCDDATE);
+    Time->Day = ((Data >> 4) & 0x3) * 10 + (Data & 0xF);
+
+    Data = MmioRead32(RTC_BCDMON);
+    Time->Month = ((Data >> 4) & 0x1) * 10 + (Data & 0xF);
+
+    Data = MmioRead32(RTC_BCDYEAR);
+    Time->Year = 2000 + ((Data >> 4) & 0xF) * 10 + (Data & 0xF);
+    MmioAnd32(RTC_CON, ~(0x1));
+  }
 
   Time->TimeZone = TimeZone;
   // TODO: check what to use here
@@ -101,12 +110,11 @@ LibGetTime (
     Capabilities->Resolution = 1;
     Capabilities->Accuracy = 50000000;
     Capabilities->SetsToZero = FALSE;
-  }*/
+  }
 
-//EXIT:
   gBS->RestoreTPL(OldTpl);
 
-  return (Status == EFI_SUCCESS) ? Status : EFI_DEVICE_ERROR;
+  return EFI_SUCCESS;
 }
 
 /**
@@ -125,8 +133,7 @@ LibSetTime (
   IN EFI_TIME                *Time
   )
 {
-  EFI_STATUS Status = EFI_SUCCESS;
-  //UINT8      Data;
+  UINT8      Data;
   UINT8      MonthDayCount[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
   EFI_TPL    OldTpl;
 
@@ -147,36 +154,32 @@ LibSetTime (
 
   OldTpl = gBS->RaiseTPL(TPL_NOTIFY);
 
-  //Data = Time->Year - 2000;
-  /*Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, YEARS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioOr32(RTC_CON, 0x1);
+
+  Data = Time->Year - 2000;
+  MmioWrite32(RTC_BCDYEAR, Data);
 
   Data = ((Time->Month / 10) << 4) | (Time->Month % 10);
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, MONTHS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioWrite32(RTC_BCDMON, Data);
 
   Data = ((Time->Day / 10) << 4) | (Time->Day % 10);
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, DAYS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioWrite32(RTC_BCDDATE, Data);
 
   Data = ((Time->Hour / 10) << 4) | (Time->Hour % 10);
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, HOURS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioWrite32(RTC_BCDHOUR, Data);
 
   Data = ((Time->Minute / 10) << 4) | (Time->Minute % 10);
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, MINUTES_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioWrite32(RTC_BCDMIN, Data);
 
   Data = ((Time->Second / 10) << 4) | (Time->Second % 10);
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, SECONDS_REG), 1, &Data);
-  if (Status != EFI_SUCCESS) goto EXIT;
+  MmioWrite32(RTC_BCDSEC, Data);
 
-  TimeZone = Time->TimeZone;*/
+  TimeZone = Time->TimeZone;
 
-//EXIT:
+  MmioAnd32(RTC_CON, ~(0x1));
   gBS->RestoreTPL(OldTpl);
 
-  return Status;
+  return EFI_SUCCESS;
 }
 
 /**
@@ -242,27 +245,8 @@ LibRtcInitialize (
   IN EFI_SYSTEM_TABLE                      *SystemTable
   )
 {
-  EFI_STATUS    Status = EFI_SUCCESS;
-  //EFI_HANDLE    Handle;
-  //UINT8         Data;
-  EFI_TPL       OldTpl;
 
-  //Status = gBS->LocateProtocol (&gEmbeddedExternalDeviceProtocolGuid, NULL, (VOID **)&gTPS65950);
-  //ASSERT_EFI_ERROR(Status);
-
-  OldTpl = gBS->RaiseTPL(TPL_NOTIFY);
-  //Data = 1;
-  //Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, RTC_CTRL_REG), 1, &Data);
-  //ASSERT_EFI_ERROR(Status);
-  gBS->RestoreTPL(OldTpl);
-
-  // Setup the setters and getters
-  gRT->GetTime       = LibGetTime;
-  gRT->SetTime       = LibSetTime;
-  gRT->GetWakeupTime = LibGetWakeupTime;
-  gRT->SetWakeupTime = LibSetWakeupTime;
-
-  return Status;
+  return EFI_SUCCESS;
 }
 
 /**
