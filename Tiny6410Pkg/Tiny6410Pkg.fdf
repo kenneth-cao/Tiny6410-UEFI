@@ -144,7 +144,7 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   #
   INF MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
   INF MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
-  INF FatBinPkg/EnhancedFatDxe/Fat.inf
+  INF FatPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 
   #
