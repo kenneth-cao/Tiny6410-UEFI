@@ -465,6 +465,16 @@
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
   ArmPlatformPkg/Bds/Bds.inf
 
+  #
+  # Shell
+  #
+  ShellPkg/Application/Shell/Shell.inf {
+    <LibraryClasses>
+      ShellCommandLib|ShellPkg/Library/UefiShellCommandLib/UefiShellCommandLib.inf
+      HandleParsingLib|ShellPkg/Library/UefiHandleParsingLib/UefiHandleParsingLib.inf
+  }
+
+
   # Legacy Linux Loader
   ArmPkg/Application/LinuxLoader/LinuxLoader.inf
 
