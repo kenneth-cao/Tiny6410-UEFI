@@ -18,7 +18,7 @@
 #include <Library/S3c6410Lib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
-#include <Protocol/EmbeddedGpio.h>
+#include <Protocol/Gpio.h>
 
 #include <S3c6410.h>
 
@@ -29,9 +29,9 @@ Get (
   OUT UINTN               *Value
   )
 {
-  UINTN  Port;
-  UINTN  Pin;
-  UINT32 DataInRegister;
+  UINTN   Port;
+  UINTN   Pin;
+  UINT32  DataInRegister;
 
   if (Value == NULL)
   {
@@ -41,7 +41,11 @@ Get (
   Port    = GPIO_PORT(Gpio);
   Pin     = GPIO_PIN(Gpio);
 
-  DataInRegister = GpioBase((CHAR8)Port) + GPIO_DATAIN;
+  if (IsGioHKL(Port)) {
+    DataInRegister = GpioBase((UINT8)Port) + GPIO_DAT;
+  } else {
+    DataInRegister = GpioBase((UINT8)Port) + GPIOHKL_DAT;
+  }
 
   if (MmioRead32 (DataInRegister) & GPIO_DATAIN_MASK(Pin)) {
     *Value = 1;
@@ -59,37 +63,26 @@ Set (
   IN  EMBEDDED_GPIO_MODE  Mode
   )
 {
-  UINTN  Port;
-  UINTN  Pin;
-  UINT32 OutputEnableRegister;
-  UINT32 SetDataOutRegister;
-  UINT32 ClearDataOutRegister;
+  UINTN   Port;
+  UINTN   Pin;
+  UINT32  GpCon;
+
+  if (Mode > GPIO_MODE_SPECIAL_FUNCTION_6) {
+    return EFI_UNSUPPORTED;
+  }
 
   Port    = GPIO_PORT(Gpio);
   Pin     = GPIO_PIN(Gpio);
+  GpCon   = GpioBase((UINT8)Port) + GPIO_CON;
 
-  OutputEnableRegister = GpioBase(Port) + GPIO_OE;
-  SetDataOutRegister   = GpioBase(Port) + GPIO_SETDATAOUT;
-  ClearDataOutRegister = GpioBase(Port) + GPIO_CLEARDATAOUT;
-
-  switch (Mode)
-  {
-    case GPIO_MODE_INPUT:
-      MmioAndThenOr32(OutputEnableRegister, ~GPIO_OE_MASK(Pin), GPIO_OE_INPUT(Pin));
-      break;
-
-    case GPIO_MODE_OUTPUT_0:
-      MmioWrite32 (ClearDataOutRegister, GPIO_CLEARDATAOUT_BIT(Pin));
-      MmioAndThenOr32(OutputEnableRegister, ~GPIO_OE_MASK(Pin), GPIO_OE_OUTPUT(Pin));
-      break;
-
-    case GPIO_MODE_OUTPUT_1:
-      MmioWrite32 (SetDataOutRegister, GPIO_SETDATAOUT_BIT(Pin));
-      MmioAndThenOr32(OutputEnableRegister, ~GPIO_OE_MASK(Pin), GPIO_OE_OUTPUT(Pin));
-      break;
-
-    default:
-      return EFI_UNSUPPORTED;
+  if (Con2Bits(Port)) {
+    MmioAndThenOr32(GpCon, ~(0x3 << Pin * 2), Mode << Pin * 2);
+  } else {
+    if (Pin > 7 && IsGioHKL(Port)) {
+      Pin -= 8;
+      GpCon += 0x4;
+    }
+    MmioAndThenOr32(GpCon, ~(0xF << Pin * 4), Mode << Pin * 4);
   }
 
   return EFI_SUCCESS;
@@ -112,7 +105,26 @@ SetPull (
   IN  EMBEDDED_GPIO_PULL  Direction
   )
 {
-  return EFI_UNSUPPORTED;
+  UINTN   Port;
+  UINTN   Pin;
+  UINT32  GpPud;
+
+  if (Direction > GPIO_PULL_UP) {
+    return EFI_UNSUPPORTED;
+  }
+
+  Port    = GPIO_PORT(Gpio);
+  Pin     = GPIO_PIN(Gpio);
+
+  if (IsGioHKL(Port)) {
+    GpPud = GpioBase((UINT8)Port) + GPIO_PUD;
+  } else {
+    GpPud = GpioBase((UINT8)Port) + GPIOHKL_PUD;
+  }
+
+  MmioAndThenOr32(GpPud, ~(0x3 << Pin * 2), Direction << Pin * 2);
+
+  return EFI_SUCCESS;
 }
 
 EMBEDDED_GPIO Gpio = {

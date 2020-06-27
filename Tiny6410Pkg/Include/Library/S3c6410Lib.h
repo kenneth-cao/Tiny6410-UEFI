@@ -12,13 +12,12 @@
 
 **/
 
-#ifndef __OMAPLIB_H__
-#define __OMAPLIB_H__
+#ifndef __S3C6410LIB_H__
+#define __S3C6410LIB_H__
 
 UINT32
-EFIAPI
 GpioBase (
-  IN  CHAR8 Port
+  IN  UINT8 Port
   );
 
 UINT32
@@ -40,5 +39,5 @@ UartBase (
   );
 
 
-#endif // __OMAPLIB_H__
+#endif // __S3C6410LIB_H__
 

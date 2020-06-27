@@ -19,7 +19,7 @@
 
 UINT32
 GpioBase (
-  IN  CHAR8 Port
+  IN  UINT8 Port
   )
 {
   switch (Port) {
