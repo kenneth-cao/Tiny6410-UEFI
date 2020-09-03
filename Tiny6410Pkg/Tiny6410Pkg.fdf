@@ -137,7 +137,7 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   INF Tiny6410Pkg/Drivers/Gpio/Gpio.inf
   INF Tiny6410Pkg/Drivers/InterruptDxe/InterruptDxe.inf
   INF Tiny6410Pkg/Drivers/TimerDxe/TimerDxe.inf
-  #INF Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  INF Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning

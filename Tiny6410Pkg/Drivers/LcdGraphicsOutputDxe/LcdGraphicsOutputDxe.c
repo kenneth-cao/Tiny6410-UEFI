@@ -13,26 +13,12 @@
 
 #include "LcdGraphicsOutputDxe.h"
 
-BOOLEAN mDisplayInitialized = FALSE;
 
 LCD_MODE LcdModes[] = {
   {
-    0, 640, 480,
-    9, 4,
-    96, 16, 48,
-    2, 10, 33
-  },
-  {
-    1, 800, 600,
-    11, 2,
-    120, 56, 64,
-    5, 37, 22
-  },
-  {
-    2, 1024, 768,
-    6, 2,
-    96, 16, 48,
-    2, 10, 33
+    0, 480, 272,
+    6, 4, 45,
+    2, 2, 3
   },
 };
 
@@ -45,15 +31,15 @@ LCD_INSTANCE mLcdTemplate = {
     0, // VerticalResolution
     PixelBltOnly, // PixelFormat
     {
-      0xF800, //RedMask;
-      0x7E0, //GreenMask;
-      0x1F, //BlueMask;
+      0x3F000, //RedMask;
+      0xFC0, //GreenMask;
+      0x3F, //BlueMask;
       0x0//ReservedMask
     }, // PixelInformation
     0, // PixelsPerScanLine
   },
   { // Mode
-    3, // MaxMode;
+    1, // MaxMode;
     0, // Mode;
     NULL, // Info;
     0, // SizeOfInfo;
@@ -112,8 +98,7 @@ LcdPlatformGetVram (
   EFI_CPU_ARCH_PROTOCOL  *Cpu;
   UINTN                  MaxSize;
 
-  MaxSize = 0x500000;
-  *VramSize = MaxSize;
+  MaxSize = LcdModes[0].HorizontalResolution * LcdModes[0].VerticalResolution * 4;
 
   // Allocate VRAM from DRAM
   Status = gBS->AllocatePages (AllocateAnyPages, EfiBootServicesData, EFI_SIZE_TO_PAGES((MaxSize)), VramBaseAddress);
@@ -126,122 +111,66 @@ LcdPlatformGetVram (
   ASSERT_EFI_ERROR(Status);
 
   // Mark the VRAM as un-cacheable. The VRAM is inside the DRAM, which is cacheable.
-  Status = Cpu->SetMemoryAttributes (Cpu, *VramBaseAddress, *VramSize, EFI_MEMORY_UC);
+  Status = Cpu->SetMemoryAttributes (Cpu, *VramBaseAddress, MaxSize, EFI_MEMORY_UC);
   if (EFI_ERROR(Status)) {
     gBS->FreePool (VramBaseAddress);
     return Status;
   }
 
-  return EFI_SUCCESS;
-}
-
-EFI_STATUS
-DssSetMode (
-  UINT32 VramBaseAddress,
-  UINTN  ModeNumber
-  )
-{
-  // Make sure the interface clock is running
-  MmioWrite32 (CM_ICLKEN_DSS, EN_DSS);
-
-  // Stop the functional clocks
-  MmioAnd32 (CM_FCLKEN_DSS, ~(EN_DSS1 | EN_DSS2 | EN_TV));
-
-  // Program the DSS clock divisor
-  MmioWrite32 (CM_CLKSEL_DSS, 0x1000 | (LcdModes[ModeNumber].DssDivisor));
-
-  // Start the functional clocks
-  MmioOr32 (CM_FCLKEN_DSS, (EN_DSS1 | EN_DSS2 | EN_TV));
-
-  // Wait for DSS to stabilize
-  gBS->Stall(1);
-
-  // Reset the subsystem
-  MmioWrite32(DSS_SYSCONFIG, DSS_SOFTRESET);
-  while (!(MmioRead32 (DSS_SYSSTATUS) & DSS_RESETDONE));
-
-  // Configure LCD parameters
-  MmioWrite32 (DISPC_SIZE_LCD,
-               ((LcdModes[ModeNumber].HorizontalResolution - 1)
-               | ((LcdModes[ModeNumber].VerticalResolution - 1) << 16))
-              );
-  MmioWrite32 (DISPC_TIMING_H,
-               ( (LcdModes[ModeNumber].HSync - 1)
-               | ((LcdModes[ModeNumber].HFrontPorch - 1) << 8)
-               | ((LcdModes[ModeNumber].HBackPorch - 1) << 20))
-              );
-  MmioWrite32 (DISPC_TIMING_V,
-               ( (LcdModes[ModeNumber].VSync - 1)
-               | ((LcdModes[ModeNumber].VFrontPorch - 1) << 8)
-               | ((LcdModes[ModeNumber].VBackPorch - 1) << 20))
-              );
-
-  // Set the framebuffer to only load frames (no gamma tables)
-  MmioAnd32 (DISPC_CONFIG, CLEARLOADMODE);
-  MmioOr32  (DISPC_CONFIG, LOAD_FRAME_ONLY);
-
-  // Divisor for the pixel clock
-  MmioWrite32(DISPC_DIVISOR, ((1 << 16) | LcdModes[ModeNumber].DispcDivisor) );
-
-  // Set up the graphics layer
-  MmioWrite32 (DISPC_GFX_PRELD, 0x2D8);
-  MmioWrite32 (DISPC_GFX_BA0, VramBaseAddress);
-  MmioWrite32 (DISPC_GFX_SIZE,
-               ((LcdModes[ModeNumber].HorizontalResolution - 1)
-               | ((LcdModes[ModeNumber].VerticalResolution - 1) << 16))
-              );
-
-  MmioWrite32(DISPC_GFX_ATTR, (GFXENABLE | RGB16 | BURSTSIZE16));
-
-  // Start it all
-  MmioOr32 (DISPC_CONTROL, (LCDENABLE | ACTIVEMATRIX | DATALINES24 | BYPASS_MODE | LCDENABLESIGNAL));
-  MmioOr32 (DISPC_CONTROL, GOLCD);
+  *VramSize = MaxSize;
 
   return EFI_SUCCESS;
 }
 
 EFI_STATUS
 HwInitializeDisplay (
-  UINTN VramBaseAddress,
-  UINTN VramSize
+  UINT32 VramBaseAddress
   )
 {
-  EFI_STATUS    Status;
-  UINT8         Data;
-  EFI_TPL       OldTpl;
-  EMBEDDED_EXTERNAL_DEVICE   *gTPS65950;
 
-  // Enable power lines used by TFP410
-  Status = gBS->LocateProtocol (&gEmbeddedExternalDeviceProtocolGuid, NULL, (VOID **)&gTPS65950);
-  ASSERT_EFI_ERROR (Status);
+  // GPIO Init
+  MmioWrite32(GPIOI_BASE + GPIO_CON, 0xaaaaaaaa);
+  MmioWrite32(GPIOJ_BASE + GPIO_CON, 0xaaaaaa);
 
-  OldTpl = gBS->RaiseTPL(TPL_NOTIFY);
-  Data = VAUX_DEV_GRP_P1;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, VPLL2_DEV_GRP), 1, &Data);
-  ASSERT_EFI_ERROR(Status);
+  // MOFPCON: SEL_BYPASS[3] value @ 0x7410800C must be set as ‘0’(normal mode) instead of ‘1’(by-pass mode)
+  MmioAnd32(MOFPCON, ~(1 << 3));
 
-  Data = VAUX_DEDICATED_18V;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID4, VPLL2_DEDICATED), 1, &Data);
-  ASSERT_EFI_ERROR (Status);
+  // SPCON: LCD_SEL[1:0] value @ 0x7F0081A0 must be set as ‘00’ to use Host I/F Style or as ‘01’ to use RGB I/F Style
+  MmioAndThenOr32(SPCON, 0xfffffffc, 1);
 
-  // Power up TFP410 (set GPIO2 on TPS - for BeagleBoard-xM)
-  Status = gTPS65950->Read (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID2, GPIODATADIR1), 1, &Data);
-  ASSERT_EFI_ERROR (Status);
-  Data |= BIT2;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID2, GPIODATADIR1), 1, &Data);
-  ASSERT_EFI_ERROR (Status);
+  // VIDCON0: configure Video output format and display enable/disable
+  MmioAndThenOr32(VIDCON0, ~(0xff << 6 | 3 << 2), (N43_CLKVAL << 6) | 0x13);
 
-  Data = BIT2;
-  Status = gTPS65950->Write (gTPS65950, EXTERNAL_DEVICE_REGISTER(I2C_ADDR_GRP_ID2, SETGPIODATAOUT1), 1, &Data);
-  ASSERT_EFI_ERROR (Status);
+  // VIDCON1: RGB I/F control signal.
+  MmioOr32(VIDCON1, 1 << 7); // Rise edge
 
-  gBS->RestoreTPL(OldTpl);
+  // VIDTCONx: configure Video output Timing and determine the size of display
+  MmioWrite32 (VIDTCON0,
+               ( (LcdModes[0].VSync - 1)
+               | ((LcdModes[0].VFrontPorch - 1) << 8)
+               | ((LcdModes[0].VBackPorch - 1) << 16))
+               );
+  MmioWrite32 (VIDTCON1,
+               ( (LcdModes[0].HSync - 1)
+               | ((LcdModes[0].HFrontPorch - 1) << 8)
+               | ((LcdModes[0].HBackPorch - 1) << 16))
+               );
+  MmioWrite32 (VIDTCON2, ((LcdModes[0].VerticalResolution - 1) << 11) | (LcdModes[0].HorizontalResolution - 1));
+  
+  // WINCONx: each window format setting
+   MmioAndThenOr32(WINCON0, ~(0xf << 2), (N43_BPP << 2) | 1);
 
-  // Power up TFP410 (set GPIO 170 - for older BeagleBoards)
-  MmioAnd32 (GPIO6_BASE + GPIO_OE, ~BIT10);
-  MmioOr32  (GPIO6_BASE + GPIO_SETDATAOUT, BIT10);
+  // VIDOSDxA, VIDOSDxB: Window position setting
+  MmioWrite32(VIDOSD0A, 0);
+  MmioWrite32(VIDOSD0B, (LcdModes[0].HorizontalResolution << 11) | LcdModes[0].VerticalResolution);
+  MmioWrite32(VIDOSD0C, LcdModes[0].HorizontalResolution * LcdModes[0].VerticalResolution * 4 / 2);
+
+  MmioWrite32(VIDW00ADD0B0, VramBaseAddress);
+  MmioWrite32(VIDW00ADD1B0, (VramBaseAddress + LcdModes[0].HorizontalResolution * LcdModes[0].VerticalResolution * 4) & 0xffffff);
+  MmioWrite32(VIDW00ADD2, LcdModes[0].HorizontalResolution * 4);
 
   return EFI_SUCCESS;
+
 }
 
 EFI_STATUS
@@ -261,12 +190,16 @@ InitializeDisplay (
   Instance->Mode.FrameBufferBase = VramBaseAddress;
   Instance->Mode.FrameBufferSize = VramSize;
 
-  Status = HwInitializeDisplay((UINTN)VramBaseAddress, VramSize);
-  if (!EFI_ERROR (Status)) {
-    mDisplayInitialized = TRUE;
+  Status = HwInitializeDisplay((UINT32)VramBaseAddress);
+  if (EFI_ERROR (Status)) {
+    gBS->FreePool ((void*)VramBaseAddress);
+    return Status;
   }
 
-  return Status;
+  Instance->ModeInfo.HorizontalResolution = LcdModes[0].HorizontalResolution;
+  Instance->ModeInfo.VerticalResolution = LcdModes[0].VerticalResolution;
+
+  return EFI_SUCCESS;
 }
 
 EFI_STATUS
@@ -281,10 +214,6 @@ LcdGraphicsQueryMode (
   LCD_INSTANCE  *Instance;
 
   Instance = LCD_INSTANCE_FROM_GOP_THIS(This);
-
-  if (!mDisplayInitialized) {
-    InitializeDisplay (Instance);
-  }
 
   // Error checking
   if ( (This == NULL) || (Info == NULL) || (SizeOfInfo == NULL) || (ModeNumber >= This->Mode->MaxMode) ) {
@@ -314,25 +243,7 @@ LcdGraphicsSetMode (
   IN UINT32                         ModeNumber
   )
 {
-  LCD_INSTANCE  *Instance;
-
-  Instance = LCD_INSTANCE_FROM_GOP_THIS(This);
-
-  if (ModeNumber >= Instance->Mode.MaxMode) {
-    return EFI_UNSUPPORTED;
-  }
-
-  if (!mDisplayInitialized) {
-    InitializeDisplay (Instance);
-  }
-
-  DssSetMode((UINT32)Instance->Mode.FrameBufferBase, ModeNumber);
-
-  Instance->Mode.Mode = ModeNumber;
-  Instance->ModeInfo.HorizontalResolution = LcdModes[ModeNumber].HorizontalResolution;
-  Instance->ModeInfo.VerticalResolution = LcdModes[ModeNumber].VerticalResolution;
-
-  return EFI_SUCCESS;
+  return EFI_UNSUPPORTED;
 }
 
 EFI_STATUS
@@ -347,6 +258,12 @@ LcdGraphicsOutputDxeInitialize (
 
   Status = LcdInstanceContructor (&Instance);
   if (EFI_ERROR(Status)) {
+    goto EXIT;
+  }
+
+  Status = InitializeDisplay (Instance);
+  if (EFI_ERROR(Status)) {
+    gBS->FreePool (Instance);
     goto EXIT;
   }
 

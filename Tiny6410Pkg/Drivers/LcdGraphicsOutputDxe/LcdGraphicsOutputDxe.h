@@ -11,8 +11,8 @@
 
 **/
 
-#ifndef __OMAP3_DSS_GRAPHICS__
-#define __OMAP3_DSS_GRAPHICS__
+#ifndef __S3C6410_GRAPHICS__
+#define __S3C6410_GRAPHICS__
 
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
@@ -21,13 +21,12 @@
 #include <Library/IoLib.h>
 
 #include <Protocol/DevicePathToText.h>
-#include <Protocol/EmbeddedExternalDevice.h>
 #include <Protocol/Cpu.h>
 
 #include <Guid/GlobalVariable.h>
 
 #include <S3c6410.h>
-#include <TPS65950.h>
+
 
 typedef struct {
   VENDOR_DEVICE_PATH            Guid;
@@ -51,9 +50,6 @@ typedef struct {
   UINTN             Mode;
   UINTN             HorizontalResolution;
   UINTN             VerticalResolution;
-
-  UINT32            DssDivisor;
-  UINT32            DispcDivisor;
 
   UINT32            HSync;
   UINT32            HFrontPorch;
@@ -101,57 +97,29 @@ LcdGraphicsBlt (
 );
 
 // HW registers
-#define CM_FCLKEN_DSS   0x48004E00
-#define CM_ICLKEN_DSS   0x48004E10
+#define VIDCON0       0x77100000
+#define VIDCON1       0x77100004
 
-#define DSS_CONTROL     0x48050040
-#define DSS_SYSCONFIG   0x48050010
-#define DSS_SYSSTATUS   0x48050014
+#define VIDTCON0      0x77100010
+#define VIDTCON1      0x77100014
+#define VIDTCON2      0x77100018
 
-#define DISPC_CONTROL   0x48050440
-#define DISPC_CONFIG    0x48050444
-#define DISPC_SIZE_LCD  0x4805047C
-#define DISPC_TIMING_H  0x48050464
-#define DISPC_TIMING_V  0x48050468
+#define WINCON0       0x77100020
 
-#define CM_CLKSEL_DSS   0x48004E40
-#define DISPC_DIVISOR   0x48050470
-#define DISPC_POL_FREQ  0x4805046C
+#define VIDOSD0A      0x77100040
+#define VIDOSD0B      0x77100044
+#define VIDOSD0C      0x77100048
 
-#define DISPC_GFX_TABLE_BA 0x480504B8
-#define DISPC_GFX_BA0   0x48050480
-#define DISPC_GFX_BA1   0x48050484
-#define DISPC_GFX_POS   0x48050488
-#define DISPC_GFX_SIZE  0x4805048C
-#define DISPC_GFX_ATTR  0x480504A0
-#define DISPC_GFX_PRELD 0x4805062C
+#define VIDW00ADD0B0  0x771000A0
+#define VIDW00ADD1B0  0x771000A4
 
-#define DISPC_DEFAULT_COLOR_0 0x4805044C
+#define VIDW00ADD2    0x77100100
 
-//#define DISPC_IRQSTATUS
+#define MOFPCON       0x7410800C
+#define SPCON         0x7F0081A0
 
-// Bits
-#define EN_TV           0x4
-#define EN_DSS2         0x2
-#define EN_DSS1         0x1
-#define EN_DSS          0x1
-
-#define DSS_SOFTRESET   0x2
-#define DSS_RESETDONE   0x1
-
-#define BYPASS_MODE     (BIT15 | BIT16)
-
-#define LCDENABLE       BIT0
-#define ACTIVEMATRIX    BIT3
-#define GOLCD           BIT5
-#define DATALINES24     (BIT8 | BIT9)
-#define LCDENABLESIGNAL BIT28
-
-#define GFXENABLE       BIT0
-#define RGB16           (0x6 << 1)
-#define BURSTSIZE16     (0x2 << 6)
-
-#define CLEARLOADMODE   ~(BIT2 | BIT1)
-#define LOAD_FRAME_ONLY BIT2
+// NEC LCD-N43i-1043
+#define N43_CLKVAL  11
+#define N43_BPP     8
 
 #endif

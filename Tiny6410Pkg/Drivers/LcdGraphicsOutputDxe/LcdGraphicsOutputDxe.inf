@@ -50,3 +50,6 @@
 
 [Depex]
   gEfiCpuArchProtocolGuid AND gEfiTimerArchProtocolGuid
+
+[BuildOptions]
+ GCC:*_*_ARM_CC_FLAGS      = -Wno-int-to-pointer-cast

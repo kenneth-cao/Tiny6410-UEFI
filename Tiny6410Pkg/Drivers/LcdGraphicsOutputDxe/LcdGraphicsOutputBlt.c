@@ -22,7 +22,6 @@
 
 #include "LcdGraphicsOutputDxe.h"
 
-extern BOOLEAN mDisplayInitialized;
 
 //
 // Function Definitions
@@ -63,10 +62,10 @@ VideoCopyNoHorizontalOverlap (
     Step             = -1;
   }
 
-  WidthInBytes = Width * 2;
+  WidthInBytes = Width * 4;
 
   for( LineCount = 0; LineCount < Height; LineCount++ ) {
-    // Update the start addresses of source & destination using 16bit pointer arithmetic
+    // Update the start addresses of source & destination using 32bit pointer arithmetic
     SourceAddr      = (VOID *)((UINT16 *)FrameBufferBase + SourceLine      * HorizontalResolution + SourceX     );
     DestinationAddr = (VOID *)((UINT16 *)FrameBufferBase + DestinationLine * HorizontalResolution + DestinationX);
 
@@ -97,52 +96,52 @@ VideoCopyHorizontalOverlap (
 {
   EFI_STATUS      Status = EFI_SUCCESS;
 
-  UINT16 *PixelBuffer16bit;
-  UINT16 *SourcePixel16bit;
-  UINT16 *DestinationPixel16bit;
+  UINT32 *PixelBuffer32bit;
+  UINT32 *SourcePixel32bit;
+  UINT32 *DestinationPixel32bit;
 
   UINT32          SourcePixelY;
   UINT32          DestinationPixelY;
-  UINTN           SizeIn16Bits;
+  UINTN           SizeIn32bits;
 
   // Allocate a temporary buffer
-  PixelBuffer16bit = (UINT16 *) AllocatePool((Height * Width) * sizeof(UINT16));
+  PixelBuffer32bit = (UINT32 *) AllocatePool((Height * Width) * 4);
 
-  if (PixelBuffer16bit == NULL) {
+  if (PixelBuffer32bit == NULL) {
     Status = EFI_OUT_OF_RESOURCES;
     goto EXIT;
   }
 
   // Access each pixel inside the source area of the Video Memory and copy it to the temp buffer
 
-  SizeIn16Bits = Width * 2;
+  SizeIn32bits = Width * 4;
 
-  for (SourcePixelY = SourceY, DestinationPixel16bit = PixelBuffer16bit;
+  for (SourcePixelY = SourceY, DestinationPixel32bit = PixelBuffer32bit;
        SourcePixelY < SourceY + Height;
-       SourcePixelY++, DestinationPixel16bit += Width)
+       SourcePixelY++, DestinationPixel32bit += Width)
   {
     // Calculate the source address:
-    SourcePixel16bit = (UINT16 *)FrameBufferBase + SourcePixelY * HorizontalResolution + SourceX;
+    SourcePixel32bit = (UINT32 *)FrameBufferBase + SourcePixelY * HorizontalResolution + SourceX;
 
     // Copy the entire line Y from Video to the temp buffer
-    CopyMem( (VOID *)DestinationPixel16bit, (CONST VOID *)SourcePixel16bit, SizeIn16Bits);
+    CopyMem( (VOID *)DestinationPixel32bit, (CONST VOID *)SourcePixel32bit, SizeIn32bits);
   }
 
   // Copy from the temp buffer into the destination area of the Video Memory
 
-  for (DestinationPixelY = DestinationY, SourcePixel16bit = PixelBuffer16bit;
+  for (DestinationPixelY = DestinationY, SourcePixel32bit = PixelBuffer32bit;
        DestinationPixelY < DestinationY + Height;
-       DestinationPixelY++, SourcePixel16bit += Width)
+       DestinationPixelY++, SourcePixel32bit += Width)
   {
     // Calculate the target address:
-    DestinationPixel16bit = (UINT16 *)FrameBufferBase + (DestinationPixelY * HorizontalResolution + DestinationX);
+    DestinationPixel32bit = (UINT32 *)FrameBufferBase + (DestinationPixelY * HorizontalResolution + DestinationX);
 
     // Copy the entire line Y from the temp buffer to Video
-    CopyMem( (VOID *)DestinationPixel16bit, (CONST VOID *)SourcePixel16bit, SizeIn16Bits);
+    CopyMem( (VOID *)DestinationPixel32bit, (CONST VOID *)SourcePixel32bit, SizeIn32bits);
   }
 
   // Free the allocated memory
-  FreePool((VOID *) PixelBuffer16bit);
+  FreePool((VOID *) PixelBuffer32bit);
 
 
 EXIT:
@@ -167,8 +166,8 @@ BltVideoFill (
   EFI_STATUS          Status;
   UINT32              HorizontalResolution;
   VOID                *FrameBufferBase;
-  UINT16              *DestinationPixel16bit;
-  UINT16              Pixel16bit;
+  UINT32              *DestinationPixel32bit;
+  UINT32              Pixel32bit;
   UINT32              DestinationPixelX;
   UINT32              DestinationLine;
 
@@ -178,10 +177,10 @@ BltVideoFill (
   HorizontalResolution = This->Mode->Info->HorizontalResolution;
 
   // Convert the EFI pixel at the start of the BltBuffer(0,0) into a video display pixel
-  Pixel16bit = (UINT16) (
-      ( (EfiSourcePixel->Red      <<  8) & PixelInformation->RedMask      )
-    | ( (EfiSourcePixel->Green    <<  3) & PixelInformation->GreenMask    )
-    | ( (EfiSourcePixel->Blue     >>  3) & PixelInformation->BlueMask     )
+  Pixel32bit = (UINT32) (
+      ( (EfiSourcePixel->Red      <<  12) & PixelInformation->RedMask      )
+    | ( (EfiSourcePixel->Green    <<  6 )  & PixelInformation->GreenMask   )
+    | ( (EfiSourcePixel->Blue     <<  0 )  & PixelInformation->BlueMask    )
    );
 
   // Copy the SourcePixel into every pixel inside the target rectangle
@@ -194,10 +193,10 @@ BltVideoFill (
          DestinationPixelX++)
     {
       // Calculate the target address:
-      DestinationPixel16bit =  (UINT16 *)FrameBufferBase + DestinationLine * HorizontalResolution  + DestinationPixelX;
+      DestinationPixel32bit =  (UINT32 *)FrameBufferBase + DestinationLine * HorizontalResolution  + DestinationPixelX;
 
       // Copy the pixel into the new target
-      *DestinationPixel16bit = Pixel16bit;
+      *DestinationPixel32bit = Pixel32bit;
     }
   }
 
@@ -224,8 +223,8 @@ BltVideoToBltBuffer (
   EFI_PIXEL_BITMASK  *PixelInformation;
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL *EfiDestinationPixel;
   VOID               *FrameBufferBase;
-  UINT16             *SourcePixel16bit;
-  UINT16             Pixel16bit;
+  UINT32             *SourcePixel32bit;
+  UINT32             Pixel32bit;
   UINT32             SourcePixelX;
   UINT32             SourceLine;
   UINT32             DestinationPixelX;
@@ -255,17 +254,17 @@ BltVideoToBltBuffer (
          SourcePixelX++, DestinationPixelX++)
     {
       // Calculate the source and target addresses:
-      SourcePixel16bit = (UINT16 *)FrameBufferBase + SourceLine * HorizontalResolution + SourcePixelX;
+      SourcePixel32bit = (UINT32 *)FrameBufferBase + SourceLine * HorizontalResolution + SourcePixelX;
       EfiDestinationPixel = BltBuffer + DestinationLine * BltBufferHorizontalResolution + DestinationPixelX;
 
       // Snapshot the pixel from the video buffer once, to speed up the operation.
       // If we were dereferencing the pointer, as it is volatile, we would perform 3 memory read operations.
-      Pixel16bit = *SourcePixel16bit;
+      Pixel32bit = *SourcePixel32bit;
 
       // Copy the pixel into the new target
-      EfiDestinationPixel->Red      = (UINT8) ( (Pixel16bit & PixelInformation->RedMask     ) >>  8 );
-      EfiDestinationPixel->Green    = (UINT8) ( (Pixel16bit & PixelInformation->GreenMask   ) >>  3 );
-      EfiDestinationPixel->Blue     = (UINT8) ( (Pixel16bit & PixelInformation->BlueMask    ) <<  3 );
+      EfiDestinationPixel->Red      = (UINT8) ( (Pixel32bit & PixelInformation->RedMask     ) >>  12 );
+      EfiDestinationPixel->Green    = (UINT8) ( (Pixel32bit & PixelInformation->GreenMask   ) >>  6  );
+      EfiDestinationPixel->Blue     = (UINT8) ( (Pixel32bit & PixelInformation->BlueMask    ) >>  0  );
     }
   }
 
@@ -291,7 +290,7 @@ BltBufferToVideo (
   EFI_PIXEL_BITMASK  *PixelInformation;
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL *EfiSourcePixel;
   VOID               *FrameBufferBase;
-  UINT16             *DestinationPixel16bit;
+  UINT32             *DestinationPixel32bit;
   UINT32             SourcePixelX;
   UINT32             SourceLine;
   UINT32             DestinationPixelX;
@@ -322,15 +321,15 @@ BltBufferToVideo (
     {
       // Calculate the source and target addresses:
       EfiSourcePixel  = BltBuffer + SourceLine * BltBufferHorizontalResolution + SourcePixelX;
-      DestinationPixel16bit = (UINT16 *)FrameBufferBase + DestinationLine * HorizontalResolution + DestinationPixelX;
+      DestinationPixel32bit = (UINT32 *)FrameBufferBase + DestinationLine * HorizontalResolution + DestinationPixelX;
 
       // Copy the pixel into the new target
       // Only the most significant bits will be copied across:
       // To convert from 8 bits to 5 bits per pixel we throw away the 3 least significant bits
-        *DestinationPixel16bit = (UINT16) (
-              ( (EfiSourcePixel->Red      <<  8) & PixelInformation->RedMask      )
-            | ( (EfiSourcePixel->Green    <<  3) & PixelInformation->GreenMask    )
-            | ( (EfiSourcePixel->Blue     >>  3) & PixelInformation->BlueMask     )
+        *DestinationPixel32bit = (UINT32) (
+              ( (EfiSourcePixel->Red      <<  12) & PixelInformation->RedMask      )
+            | ( (EfiSourcePixel->Green    <<  6 )  & PixelInformation->GreenMask   )
+            | ( (EfiSourcePixel->Blue     <<  0 )  & PixelInformation->BlueMask    )
             );
       }
     }
@@ -357,7 +356,7 @@ BltVideoToVideo (
   UINTN              BitsPerPixel;
   VOID               *FrameBufferBase;
 
-  BitsPerPixel = 16;
+  BitsPerPixel = 32;
 
   HorizontalResolution = This->Mode->Info->HorizontalResolution;
   FrameBufferBase = (UINTN *)((UINTN)(This->Mode->FrameBufferBase));
@@ -409,13 +408,6 @@ LcdGraphicsBlt (
   )
 {
   EFI_STATUS    Status;
-  LCD_INSTANCE  *Instance;
-
-  Instance = LCD_INSTANCE_FROM_GOP_THIS(This);
-
-  if (!mDisplayInitialized) {
-    InitializeDisplay (Instance);
-  }
 
   switch (BltOperation) {
   case EfiBltVideoFill:

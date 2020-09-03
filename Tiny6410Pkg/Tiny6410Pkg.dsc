@@ -356,6 +356,11 @@
   gArmPlatformTokenSpaceGuid.PcdDefaultConOutPaths|L"VenHw(D3987D4B-971A-435F-8CAF-4967EB627241)/Uart(115200,8,N,1)/VenPcAnsi();VenHw(E68088EF-D1A4-4336-C1DB-4D3A204730A6)"
   gArmPlatformTokenSpaceGuid.PcdDefaultConInPaths|L"VenHw(D3987D4B-971A-435F-8CAF-4967EB627241)/Uart(115200,8,N,1)/VenPcAnsi()"
 
+[PcdsPatchableInModule]
+  # Console Resolution (Full HD)
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|480
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|272
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform
@@ -451,7 +456,7 @@
   Tiny6410Pkg/Drivers/Gpio/Gpio.inf
   Tiny6410Pkg/Drivers/InterruptDxe/InterruptDxe.inf
   Tiny6410Pkg/Drivers/TimerDxe/TimerDxe.inf
-  #Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  Tiny6410Pkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Bds
