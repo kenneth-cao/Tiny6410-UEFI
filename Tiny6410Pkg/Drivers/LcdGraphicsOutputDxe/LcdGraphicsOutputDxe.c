@@ -296,7 +296,7 @@ LcdGraphicsOutputDxeInitialize (
   }*/
 
   // To get here, everything must be fine, so just exit
-  goto EXIT;
+  // goto EXIT;
 
 //EXIT_ERROR_UNINSTALL_PROTOCOL:
   /* The following function could return an error message,
