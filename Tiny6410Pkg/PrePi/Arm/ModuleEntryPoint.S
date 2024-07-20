@@ -27,13 +27,6 @@ GCC_ASM_EXPORT(_ModuleEntryPoint)
 GCC_ASM_EXPORT(mSystemMemoryEnd)
 
 ASM_PFX(_ModuleEntryPoint):
-  b     _Reset
-
-StartupAddr:       .word  CEntryPoint
-mSystemMemoryEnd:  .word 0
-_SystemMemoryEnd:  .word mSystemMemoryEnd
-
-_Reset:
   // Enter SVC mode, Disable FIQ and IRQ
   mov   r1, #(CPSR_MODE_SVC | CPSR_IRQ | CPSR_FIQ)
   msr   CPSR_c, r1
@@ -401,3 +394,8 @@ _CopyMMCtoMem:
 
   ldr   lr, [sp, #4]
   bx    lr
+
+
+StartupAddr:       .word  CEntryPoint
+mSystemMemoryEnd:  .word 0
+_SystemMemoryEnd:  .word mSystemMemoryEnd

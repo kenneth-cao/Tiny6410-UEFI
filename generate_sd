@@ -26,10 +26,12 @@ else
 fi
 
 dd if=/dev/zero of=$1 seek=$BL1 count=18
-
+sleep 1
 split -b 8k $FIRMWARE TinyPrefix
 dd if=TinyPrefixaa of=$1 seek=$BL1 count=16
+sleep 1
 dd if=$FIRMWARE of=$1 seek=$BL2 count=1408
+sleep 5
 
 rm -rf TinyPrefix*
 
