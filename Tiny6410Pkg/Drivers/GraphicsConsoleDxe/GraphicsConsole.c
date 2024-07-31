@@ -46,7 +46,6 @@ GRAPHICS_CONSOLE_DEV    mGraphicsConsoleDevTemplate = {
 };
 
 GRAPHICS_CONSOLE_MODE_DATA mGraphicsConsoleModeData[] = {
-  {100, 31},
   //
   // New modes can be added here.
   // The last entry is specific for full screen mode.
@@ -240,10 +239,10 @@ InitializeGraphicsConsoleTextMode (
 {
   UINTN                       Index;
   UINTN                       Count;
-  GRAPHICS_CONSOLE_MODE_DATA  *ModeBuffer;
+  //GRAPHICS_CONSOLE_MODE_DATA  *ModeBuffer;
   GRAPHICS_CONSOLE_MODE_DATA  *NewModeBuffer;
   UINTN                       ValidCount;
-  UINTN                       ValidIndex;
+  //UINTN                       ValidIndex;
   UINTN                       MaxColumns;
   UINTN                       MaxRows;  
   
@@ -263,7 +262,7 @@ InitializeGraphicsConsoleTextMode (
   //
   // According to UEFI spec, all output devices support at least 80x25 text mode.
   //
-  ASSERT ((MaxColumns >= 80) && (MaxRows >= 25));
+  //ASSERT ((MaxColumns >= 80) && (MaxRows >= 25));
 
   //
   // Add full screen mode to the last entry.
@@ -274,20 +273,31 @@ InitializeGraphicsConsoleTextMode (
   //
   // Get defined mode buffer pointer.
   //
-  ModeBuffer = mGraphicsConsoleModeData;
+  //ModeBuffer = mGraphicsConsoleModeData;
 
   //
   // Here we make sure that the final mode exposed does not include the duplicated modes,
   // and does not include the invalid modes which exceed the max column and row.
   // Reserve 2 modes for 80x25, 80x50 of graphics console.
   //
-  NewModeBuffer = AllocateZeroPool (sizeof (GRAPHICS_CONSOLE_MODE_DATA) * (Count + 2));
+  NewModeBuffer = AllocateZeroPool (sizeof (GRAPHICS_CONSOLE_MODE_DATA));
   ASSERT (NewModeBuffer != NULL);
+
+  ValidCount = 0;
+
+  NewModeBuffer[ValidCount].Columns       = MaxColumns;
+  NewModeBuffer[ValidCount].Rows          = MaxRows;
+  NewModeBuffer[ValidCount].GopWidth      = HorizontalResolution;
+  NewModeBuffer[ValidCount].GopHeight     = VerticalResolution;
+  NewModeBuffer[ValidCount].GopModeNumber = GopModeNumber;
+  NewModeBuffer[ValidCount].DeltaX        = (HorizontalResolution - (NewModeBuffer[ValidCount].Columns * EFI_GLYPH_WIDTH)) >> 1;
+  NewModeBuffer[ValidCount].DeltaY        = (VerticalResolution - (NewModeBuffer[ValidCount].Rows * EFI_GLYPH_HEIGHT)) >> 1;
+  ValidCount++;
 
   //
   // Mode 0 and mode 1 is for 80x25, 80x50 according to UEFI spec.
   //
-  ValidCount = 0;  
+  /*ValidCount = 0;
 
   NewModeBuffer[ValidCount].Columns       = 80;
   NewModeBuffer[ValidCount].Rows          = 25;
@@ -339,7 +349,7 @@ InitializeGraphicsConsoleTextMode (
       NewModeBuffer[ValidCount].DeltaY        = (VerticalResolution - (NewModeBuffer[ValidCount].Rows * EFI_GLYPH_HEIGHT)) >> 1;
       ValidCount++;
     }
-  }
+  }*/
  
   DEBUG_CODE (
     for (Index = 0; Index < ValidCount; Index++) {
@@ -347,7 +357,7 @@ InitializeGraphicsConsoleTextMode (
                            Index, NewModeBuffer[Index].Columns, NewModeBuffer[Index].Rows));  
     }
   );
-  
+
   //
   // Return valid mode count and mode information buffer.
   //
@@ -432,6 +442,9 @@ GraphicsConsoleControllerDriverStart (
 
   HorizontalResolution  = PcdGet32 (PcdVideoHorizontalResolution);
   VerticalResolution    = PcdGet32 (PcdVideoVerticalResolution);
+
+  DEBUG ((EFI_D_INFO, "GraphicsConsoleControllerDriverStart %d, %d\n", 
+                           HorizontalResolution, VerticalResolution));
 
   if (Private->GraphicsOutput != NULL) {
     //
@@ -626,6 +639,8 @@ Error:
     //
     FreePool (Private);
   }
+
+ DEBUG ((EFI_D_INFO, "GraphicsConsole %r, Mode %d,  resolution %d x %d\n", Status, ModeNumber, HorizontalResolution, VerticalResolution));
 
   return Status;
 }

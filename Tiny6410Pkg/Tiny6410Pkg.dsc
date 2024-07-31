@@ -129,7 +129,6 @@
   ArmLib|ArmPkg/Library/ArmLib/Arm11/Arm11LibPrePi.inf
   ArmPlatformGlobalVariableLib|ArmPlatformPkg/Library/ArmPlatformGlobalVariableLib/PrePi/PrePiArmPlatformGlobalVariableLib.inf
 
-  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   ReportStatusCodeLib|IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
   UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
   ExtractGuidedSectionLib|EmbeddedPkg/Library/PrePiExtractGuidedSectionLib/PrePiExtractGuidedSectionLib.inf
@@ -151,7 +150,6 @@
   #DebugAgentLib|EmbeddedPkg/Library/GdbDebugAgent/GdbDebugAgent.inf
 
 [LibraryClasses.common.PEI_CORE]
-  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   ReportStatusCodeLib|IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
 
 [LibraryClasses.common.DXE_CORE]
@@ -196,7 +194,6 @@
 #  PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
   PeCoffLib|EmbeddedPkg/Library/DxeHobPeCoffLib/DxeHobPeCoffLib.inf
 
-
 [LibraryClasses.ARM]
   #
   # It is not possible to prevent the ARM compiler for generic intrinsic functions.
@@ -225,6 +222,17 @@
   gEfiMdePkgTokenSpaceGuid.PcdDriverDiagnosticsDisable|TRUE
   gEfiMdePkgTokenSpaceGuid.PcdComponentName2Disable|TRUE
   gEfiMdePkgTokenSpaceGuid.PcdDriverDiagnostics2Disable|TRUE
+  ## If TRUE, Graphics Output Protocol will be installed on virtual handle created by ConsplitterDxe.
+  #  It could be set FALSE to save size.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdTurnOffUsbLegacySupport|TRUE
+
+  gEmbeddedTokenSpaceGuid.PcdCacheEnable|TRUE
+  gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob|TRUE
+
+  # Use the Vector Table location in CpuDxe. We will not copy the Vector Table at PcdCpuVectorBaseAddress
+  gArmTokenSpaceGuid.PcdRelocateVectorTable|TRUE
+  gArmTokenSpaceGuid.PcdCpuDxeProduceDebugSupport|FALSE
 
   #
   # Control what commands are supported from the UI
@@ -238,23 +246,7 @@
   gEmbeddedTokenSpaceGuid.PcdEmbeddedIoEnable|FALSE
   gEmbeddedTokenSpaceGuid.PcdEmbeddedScriptCmd|FALSE
 
-  gEmbeddedTokenSpaceGuid.PcdCacheEnable|TRUE
-
-  # Use the Vector Table location in CpuDxe. We will not copy the Vector Table at PcdCpuVectorBaseAddress
-  gArmTokenSpaceGuid.PcdRelocateVectorTable|TRUE
-
-  gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob|TRUE
-  gArmTokenSpaceGuid.PcdCpuDxeProduceDebugSupport|FALSE
-
-  gEfiMdeModulePkgTokenSpaceGuid.PcdTurnOffUsbLegacySupport|TRUE
-
-  ## If TRUE, Graphics Output Protocol will be installed on virtual handle created by ConsplitterDxe.
-  #  It could be set FALSE to save size.
-  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
-
 [PcdsFixedAtBuild.common]
-  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"Tiny6410"
-
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"Tiny6410Edk2"
   gEfiMdePkgTokenSpaceGuid.PcdMaximumUnicodeStringLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdMaximumAsciiStringLength|1000000
@@ -293,7 +285,7 @@
 #  DEBUG_LOADFILE  0x00020000  // UNDI Driver
 #  DEBUG_EVENT     0x00080000  // Event messages
 #  DEBUG_ERROR     0x80000000  // Error
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004F
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x800fffcf
 
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
@@ -321,7 +313,6 @@
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderCode|10
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderData|0
 
-
 #
 # Tiny6410 Specific PCDs
 #
@@ -330,6 +321,7 @@
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x50000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x10000000
 
+  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"Tiny6410"
   # Size of the region used by UEFI in permanent memory (Reserved 16MB)
   gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x01000000
 
@@ -357,9 +349,26 @@
   gArmPlatformTokenSpaceGuid.PcdDefaultConInPaths|L"VenHw(D3987D4B-971A-435F-8CAF-4967EB627241)/Uart(115200,8,N,1)/VenPcAnsi()"
 
 [PcdsPatchableInModule]
-  # Console Resolution (Full HD)
-  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|480
-  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|272
+
+  ## This PCD defines the Console output row. The default value is 25 according to UEFI spec.
+  #  This PCD could be set to 0 then console output would be at max column and max row.
+  # @Prompt Console output row.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutRow|0
+
+  ## This PCD defines the Console output column. The default value is 80 according to UEFI spec.
+  #  This PCD could be set to 0 then console output would be at max column and max row.
+  # @Prompt Console output column.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutColumn|0
+
+  ## This PCD defines the video horizontal resolution.
+  #  If this PCD is set to 0 then video resolution would be at highest resolution.
+  # @Prompt Video horizontal resolution.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0
+
+  ## This PCD defines the video vertical resolution.
+  #  If this PCD is set to 0 then video resolution would be at highest resolution.
+  # @Prompt Video vertical resolution.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|0
 
 ################################################################################
 #
@@ -378,7 +387,6 @@
   #
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>
-      PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
       NULL|MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf
       NULL|EmbeddedPkg/Library/LzmaHobCustomDecompressLib/LzmaHobCustomDecompressLib.inf
   }
@@ -392,11 +400,11 @@
   MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   EmbeddedPkg/EmbeddedMonotonicCounter/EmbeddedMonotonicCounter.inf
 
-  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
-  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
-  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   EmbeddedPkg/SerialDxe/SerialDxe.inf
-  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
+  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
+  Tiny6410Pkg/Drivers/ConSplitterDxe/ConSplitterDxe.inf
+  Tiny6410Pkg/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  Tiny6410Pkg/Drivers/TerminalDxe/TerminalDxe.inf
 #
 # This version uses semi-hosting console
 #  EmbeddedPkg/SimpleTextInOutSerial/SimpleTextInOutSerial.inf {
