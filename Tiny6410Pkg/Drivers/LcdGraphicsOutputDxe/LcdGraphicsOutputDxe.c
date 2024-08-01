@@ -243,7 +243,14 @@ LcdGraphicsSetMode (
   IN UINT32                         ModeNumber
   )
 {
-  return EFI_UNSUPPORTED;
+
+  // Check if this mode is supported
+  if( ModeNumber >= This->Mode->MaxMode ) {
+    DEBUG((DEBUG_ERROR, "LcdGraphicsSetMode: ERROR - Unsupported mode number %d .\n", ModeNumber ));
+    return EFI_UNSUPPORTED;
+  }
+
+  return EFI_SUCCESS;
 }
 
 EFI_STATUS

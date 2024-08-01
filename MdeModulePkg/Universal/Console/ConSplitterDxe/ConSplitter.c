@@ -2944,10 +2944,11 @@ ConsplitterSetConsoleOutMode (
     // if current mode setting is failed, default 80x25 mode will be set.
     //
     Status = TextOut->SetMode (TextOut, BaseMode);
-    ASSERT(!EFI_ERROR(Status));
+    // N43 only support 480 x 272, ignore status check, serial console is ok for other mode
+    //ASSERT(!EFI_ERROR(Status));
 
-    PcdSet32 (PcdConOutColumn, 80);
-    PcdSet32 (PcdConOutRow, 25);
+    PcdSet32 (PcdConOutColumn, Col);
+    PcdSet32 (PcdConOutRow, Row);
   }
 
   return ;

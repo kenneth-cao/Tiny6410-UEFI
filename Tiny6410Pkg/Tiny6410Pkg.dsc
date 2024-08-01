@@ -225,6 +225,8 @@
   ## If TRUE, Graphics Output Protocol will be installed on virtual handle created by ConsplitterDxe.
   #  It could be set FALSE to save size.
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutUgaSupport|FALSE
+  gEfiMdePkgTokenSpaceGuid.PcdUgaConsumeSupport|FALSE
   gEfiMdeModulePkgTokenSpaceGuid.PcdTurnOffUsbLegacySupport|TRUE
 
   gEmbeddedTokenSpaceGuid.PcdCacheEnable|TRUE
@@ -285,7 +287,7 @@
 #  DEBUG_LOADFILE  0x00020000  // UNDI Driver
 #  DEBUG_EVENT     0x00080000  // Event messages
 #  DEBUG_ERROR     0x80000000  // Error
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x800fffcf
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004f
 
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
@@ -402,9 +404,9 @@
 
   EmbeddedPkg/SerialDxe/SerialDxe.inf
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
-  Tiny6410Pkg/Drivers/ConSplitterDxe/ConSplitterDxe.inf
-  Tiny6410Pkg/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
-  Tiny6410Pkg/Drivers/TerminalDxe/TerminalDxe.inf
+  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
+  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
 #
 # This version uses semi-hosting console
 #  EmbeddedPkg/SimpleTextInOutSerial/SimpleTextInOutSerial.inf {

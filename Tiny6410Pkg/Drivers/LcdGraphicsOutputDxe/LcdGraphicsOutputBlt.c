@@ -66,8 +66,8 @@ VideoCopyNoHorizontalOverlap (
 
   for( LineCount = 0; LineCount < Height; LineCount++ ) {
     // Update the start addresses of source & destination using 32bit pointer arithmetic
-    SourceAddr      = (VOID *)((UINT16 *)FrameBufferBase + SourceLine      * HorizontalResolution + SourceX     );
-    DestinationAddr = (VOID *)((UINT16 *)FrameBufferBase + DestinationLine * HorizontalResolution + DestinationX);
+    SourceAddr      = (VOID *)((UINT32 *)FrameBufferBase + SourceLine      * HorizontalResolution + SourceX     );
+    DestinationAddr = (VOID *)((UINT32 *)FrameBufferBase + DestinationLine * HorizontalResolution + DestinationX);
 
     // Copy the entire line Y from video ram to the temp buffer
     CopyMem( DestinationAddr, SourceAddr, WidthInBytes);
